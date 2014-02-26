@@ -79,6 +79,17 @@
 //The serial port speed
 #define BAUDRATE 115200
 
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+
+
+// Uses floating point, only use in constant expressions!
+#define CLOCKRATE 50000000
+#define ClocksToUS(clocks) (((float)clocks / CLOCKRATE)*1000000)
+#define USToClocks(us) ((unsigned int)((us/1000000.0f)*CLOCKRATE))
+#define SToClocks(s) ((unsigned int)((float)s*CLOCKRATE))
+#define FtoClocks(f) ((unsigned int)((float)CLOCKRATE/f))
+
 //*****************************************************************************
 //
 // The error routine that is called if the driver library encounters an error.
@@ -155,13 +166,11 @@ main(void)
 	IntMasterDisable(); //Turn off interrupts while we configure system.
 
 
-	ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
+	MAP_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
 					   SYSCTL_OSC_MAIN);
 
-	//
 	// Set the PWM clock to the system clock.
-	//
-	SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
+	MAP_SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
 
 	// Turn on all used peripherals
@@ -177,71 +186,73 @@ main(void)
 	//
 	ConfigureUART();
 
-	//
 	// Configure the GPIO pin muxing to select PWM functions for these pins.
-	// This step selects which alternate function is available for these pins.
-	// This is necessary if your part supports GPIO pin function muxing.
-	// Consult the data sheet to see which functions are allocated per pin.
-	// TODO: change this to select the port/pin you are using.
-	//
-	GPIOPinConfigure(GPIO_PH0_M0PWM0);
-	GPIOPinConfigure(GPIO_PH1_M0PWM1);
-	GPIOPinConfigure(GPIO_PH2_M0PWM2);
-	GPIOPinConfigure(GPIO_PH3_M0PWM3);
-	GPIOPinConfigure(GPIO_PG6_M0PWM6);
-	GPIOPinConfigure(GPIO_PG7_M0PWM7);
-
-	//GPIO_PH0_M0PWM0
-	//GPIO_PH1_M0PWM1
-	//GPIO_PH2_M0PWM2
-	//GPIO_PH3_M0PWM3
-	//GPIO_PG6_M0PWM6 //NOTE skip 4,5
-	//GPIO_PG7_M0PWM7
+	MAP_GPIOPinConfigure(GPIO_PH0_M0PWM0);
+	MAP_GPIOPinConfigure(GPIO_PH1_M0PWM1);
+	MAP_GPIOPinConfigure(GPIO_PH2_M0PWM2);
+	MAP_GPIOPinConfigure(GPIO_PH3_M0PWM3);
+	MAP_GPIOPinConfigure(GPIO_PG6_M0PWM6); //note skip of 4 and 5!
+	MAP_GPIOPinConfigure(GPIO_PG7_M0PWM7);
 
 	// Configure the GPIO pad for PWM function
-	GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_0);
-	GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_1);
-	GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_2);
-	GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_3);
-	GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_6);
-	GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_7);
+	MAP_GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_0);
+	MAP_GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_1);
+	MAP_GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_2);
+	MAP_GPIOPinTypePWM(GPIO_PORTH_BASE, GPIO_PIN_3);
+	MAP_GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_6); //note skip of 4 and 5!
+	MAP_GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_7);
 
 	//override above to set 8ma drive strength (since we are using long wires)
-	GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_0, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
-	GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_1, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
-	GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_2, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
-	GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_3, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
-	GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_6, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
-	GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_7, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
+	MAP_GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_0, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
+	MAP_GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_1, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
+	MAP_GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_2, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
+	MAP_GPIOPadConfigSet(GPIO_PORTH_BASE, GPIO_PIN_3, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
+	MAP_GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_6, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
+	MAP_GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_7, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
 
-	//
-	// Configure the PWM0 to count up/down without synchronization.
-	// Note: Enabling the dead-band generator automatically couples the 2
-	// outputs from the PWM block so we don't use the PWM synchronization.
-	//
-	PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_UP_DOWN |
-					PWM_GEN_MODE_NO_SYNC);
+	uint32_t PWMPeriod = FtoClocks(8000);
 
-	//
-	// Set the PWM period to 250Hz.  To calculate the appropriate parameter
-	// use the following equation: N = (1 / f) * SysClk.  Where N is the
-	// function parameter, f is the desired frequency, and SysClk is the
-	// system clock frequency.
-	// In this case you get: (1 / 250Hz) * 16MHz = 64000 cycles.  Note that
-	// the maximum period you can set is 2^16 - 1.
-	// TODO: modify this calculation to use the clock frequency that you are
-	// using.
-	//
-	PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 64000);
+	// Configure the PWM
+	uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
+	for (int i = 0; i < 3; ++i)
+	{
+		PWMGenConfigure(PWM0_BASE, PWMGENS[i],
+		PWM_GEN_MODE_UP_DOWN
+		| PWM_GEN_MODE_NO_SYNC //Local sync of CMP and load
+		| PWM_GEN_MODE_DBG_RUN
+		| PWM_GEN_MODE_GEN_NO_SYNC //No change when running
+		| PWM_GEN_MODE_DB_NO_SYNC //No change when running
+		| PWM_GEN_MODE_FAULT_LATCHED
+		| PWM_GEN_MODE_FAULT_EXT
+		);
 
-	//
-	// Set PWM0 PD0 to a duty cycle of 25%.  You set the duty cycle as a
-	// function of the period.  Since the period was set above, you can use the
-	// PWMGenPeriodGet() function.  For this example the PWM will be high for
-	// 25% of the time or 16000 clock cycles (64000 / 4).
-	//
-	PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,
-					 PWMGenPeriodGet(PWM0_BASE, PWM_OUT_0) / 4);
+		// Set the PWM period to 8kHz
+		PWMGenPeriodSet(PWM0_BASE, PWMGENS[i], PWMPeriod);
+	}
+
+	// Set to 50% pulse width by default
+	PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, PWMPeriod / 2); 
+	PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, PWMPeriod / 2);
+	PWMPulseWidthSet(PWM0_BASE, PWM_OUT_3, PWMPeriod / 2); //note skip of block 2!
+
+	// deadband timing. All units ns.
+	// tOn* = turn on delay
+	// tOff* = turn off delay
+	// tRise* = Rise time
+	// tFall* = Fall time
+	const float tOnFET = 20;
+	const float tRiseFET = 70;
+	const float tOffFET = 30;
+	const float tFallFET = 40;
+	const float tOnDriver = 160;
+	const float toffDriver = 150;
+	const float tRiseDriver = 100;
+	const float tFallDriver = 50;
+
+	const float tDelayMatchDriver = 50;
+	const float tSafety = 50;
+
+	const float asdf = tRiseFET + tRiseDriver;
 
 	//
 	// Enable the dead-band generation on the PWM0 output signal.  PWM bit 0
@@ -256,7 +267,7 @@ main(void)
 	// PD0.  Reference the datasheet for more information on dead-band
 	// generation.
 	//
-	PWMDeadBandEnable(PWM0_BASE, PWM_GEN_0, 160, 160);
+	PWMDeadBandEnable(PWM0_BASE, PWM_GEN_0, USToClocks(, USToClocks);
 
 	//
 	// Enable the PWM0 Bit 0 (PD0) and Bit 1 (PD1) output signals.
