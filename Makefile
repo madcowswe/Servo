@@ -49,6 +49,7 @@ VPATH+=../../../../utils
 #
 IPATH=..
 IPATH+=../../../..
+IPATH+=../../../../CMSIS/Include
 
 #
 # The default rule, which causes the servo example to be built.
@@ -84,6 +85,7 @@ ${COMPILER}/servo.axf: ${COMPILER}/ustdlib.o
 ${COMPILER}/servo.axf: ${COMPILER}/buttons.o
 ${COMPILER}/servo.axf: ${COMPILER}/cfal96x64x16.o
 ${COMPILER}/servo.axf: ${COMPILER}/servo.o
+${COMPILER}/servo.axf: ${ROOT}/CMSIS/Lib/GCC/libarm_cortexM4lf_math.a
 ${COMPILER}/servo.axf: ${COMPILER}/startup_${COMPILER}.o
 ${COMPILER}/servo.axf: ${COMPILER}/uartstdio.o
 ${COMPILER}/servo.axf: ${ROOT}/grlib/${COMPILER}/libgr.a
