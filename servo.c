@@ -384,9 +384,9 @@ main(void)
 	MAP_GPIOPinConfigure(GPIO_PF4_IDX0);
 
 	// Configure the GPIO pad for PWM function
-	GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_0);
-	GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_1);
-	GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_4);
+	MAP_GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_0);
+	MAP_GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_1);
+	MAP_GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_4);
 
 	// Config QEI
 	MAP_QEIConfigure(QEI0_BASE
@@ -394,8 +394,8 @@ main(void)
 		, 500*4 - 1);
 
 	// Config Velocity
-	QEIVelocityConfigure(QEI0_BASE, QEI_VELDIV_1, QEIVelocityPeriod);
-	QEIVelocityEnable(QEI0_BASE);
+	MAP_QEIVelocityConfigure(QEI0_BASE, QEI_VELDIV_1, QEIVelocityPeriod);
+	MAP_QEIVelocityEnable(QEI0_BASE);
 
 	// Reg Muxing Interrupt
 	QEIIntRegister(QEI0_BASE, &QEIHandler);
@@ -417,6 +417,7 @@ main(void)
 	//
 	while(1)
 	{
-		
+		UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
+		MAP_SysCtlDelay(CLOCKRATE/4);
 	}
 }
