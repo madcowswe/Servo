@@ -103,7 +103,7 @@
 #define FtoClocks(f) ((unsigned int)((float)CLOCKRATE/f))
 
 // PWM period (one half of a triangle, up one slope)
-static const uint32_t PWMPeriod = FtoClocks(8000);
+static const uint32_t PWMPeriod = FtoClocks(16000);
 uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
 
 // Encoder conversion constants
@@ -565,12 +565,17 @@ main(void)
 	//
 	// Loop forever while the PWM signals are generated.
 	//
+
+	float testphase = 0;
 	while(1)
 	{
 		//UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
 		//MAP_SysCtlDelay(CLOCKRATE/4);
 
-		SVM(0.1, 0);
-		while(1);
+		float ampl = 0.02;
+		ampl *= (sqrt(3)/2) * 0.99;
+		SVM(ampl*cos(testphase), ampl*sin(testphase));
+		testphase += 0.31415;//0.05; //half a radian per second
+		MAP_SysCtlDelay(CLOCKRATE/10);
 	}
 }
