@@ -101,6 +101,8 @@
 #define SToClocks(s) ((unsigned int)((float)s*CLOCKRATE))
 #define FtoClocks(f) ((unsigned int)((float)CLOCKRATE/f))
 
+const uint32_t PWMPeriod = FtoClocks(8000);
+
 // Encoder conversion constants
 #define VelUpdateRate 50 //Hz
 const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
@@ -182,6 +184,7 @@ void QEIHandler(){
 	}
 }
 
+
 //*****************************************************************************
 //
 // Configure the UART and its pins.  This must be called before UARTprintf().
@@ -217,6 +220,170 @@ ConfigureUART(void)
 	//
 	UARTStdioConfig(0, BAUDRATE, 16000000);
 }
+
+// Magnitude must not be larger than sqrt(3)/2, or 0.866
+void SVM(float alpha, float beta){
+
+	const float one_by_sqrt3 = 0.57735026919f;
+	const float two_by_sqrt3 = 1.15470053838f;
+
+	uint32_t Sextant;
+
+	if (beta >= 0.0f)
+	{
+		if (alpha >= 0.0f)
+		{
+			//quadrant I
+			if (one_by_sqrt3 * beta > alpha)
+				Sextant = 2;
+			else
+				Sextant = 1;
+
+		} else {
+			//quadrant II
+			if (-one_by_sqrt3 * beta > alpha)
+				Sextant = 3;
+			else
+				Sextant = 2;
+		}
+	} else {
+		if (alpha >= 0.0f)
+		{
+			//quadrant IV
+			if (-one_by_sqrt3 * beta > alpha)
+				Sextant = 5;
+			else
+				Sextant = 6;
+		} else {
+			//quadrant III
+			if (one_by_sqrt3 * beta > alpha)
+				Sextant = 4;
+			else
+				Sextant = 5;
+		}
+	}
+
+	switch (Sextant) {
+	
+		// sextant 1-2
+		case 1:
+		{
+			// Vector on times
+			uint32_t t1 = (alpha - one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t2 = (two_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			uint32_t tA = (PWMPeriod - t1 - t2) / 2;
+			uint32_t tB = tA + t1;
+			uint32_t tC = tB + t2;
+
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+
+			break;
+		}
+
+		// sextant 2-3
+		case 2:
+		{
+			// Vector on times
+			uint32_t t2 = (alpha + one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t3 = (-alpha + one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			uint32_t tB = (PWMPeriod - t2 - t3) / 2;
+			uint32_t tA = tB + t3;
+			uint32_t tC = tA + t2;
+
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+
+			break;
+		}
+
+		// sextant 3-4
+		case 3:
+		{
+			// Vector on times
+			uint32_t t3 = (two_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t4 = (-alpha - one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			uint32_t tB = (PWMPeriod - t3 - t4) / 2;
+			uint32_t tC = tB + t3;
+			uint32_t tA = tC + t4;
+
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+
+			break;
+		}
+
+		// sextant 4-5
+		case 4:
+		{
+			// Vector on times
+			uint32_t t4 = (-alpha + one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t5 = (-two_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			uint32_t tC = (PWMPeriod - t4 - t5) / 2;
+			uint32_t tB = tC + t5;
+			uint32_t tA = tB + t4;
+
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+
+			break;
+		}
+
+		// sextant 5-6
+		case 5:
+		{
+			// Vector on times
+			uint32_t t5 = (-alpha - one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t6 = (alpha - one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			uint32_t tC = (PWMPeriod - t5 - t6) / 2;
+			uint32_t tA = tC + t5;
+			uint32_t tB = tA + t6;
+
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+
+
+			break;
+		}
+
+		// sextant 6-1
+		case 6:
+		{
+			// Vector on times
+			uint32_t t6 = (-two_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t1 = (alpha + one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			uint32_t tA = (PWMPeriod - t6 - t1) / 2;
+			uint32_t tC = tA + t1;
+			uint32_t tB = tC + t6;
+
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
+			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+
+			break;
+		}
+
+	} //switch
+
+}
+
 
 
 //*****************************************************************************
@@ -298,8 +465,6 @@ main(void)
 	MAP_GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_6, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
 	MAP_GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_7, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
 
-	uint32_t PWMPeriod = FtoClocks(8000);
-
 	// Configure the PWM
 	uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
 	for (int i = 0; i < 3; ++i)
@@ -319,9 +484,11 @@ main(void)
 	}
 
 	// Set to 50% pulse width by default
-	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, PWMPeriod / 2); 
+	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, PWMPeriod / 2);
 	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, PWMPeriod / 2);
 	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, PWMPeriod / 2); //note skip of block 2!
+	
+	
 
 	// deadband timing. All units ns.
 	// tOn* = turn on delay
@@ -419,5 +586,8 @@ main(void)
 	{
 		UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
 		MAP_SysCtlDelay(CLOCKRATE/4);
+
+		volatile float a,b;
+		SVM(a,b);
 	}
 }
