@@ -51,6 +51,7 @@
 #include "utils/uartstdio.h"
 
 #include "driverlib/pwm.h"
+#include "inc/hw_pwm.h"
 #include "driverlib/qei.h"
 #include "inc/hw_qei.h"
 
@@ -101,19 +102,21 @@
 #define SToClocks(s) ((unsigned int)((float)s*CLOCKRATE))
 #define FtoClocks(f) ((unsigned int)((float)CLOCKRATE/f))
 
-const uint32_t PWMPeriod = FtoClocks(8000);
+// PWM period (one half of a triangle, up one slope)
+static const uint32_t PWMPeriod = FtoClocks(8000);
+uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
 
 // Encoder conversion constants
 #define VelUpdateRate 50 //Hz
-const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
+static const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
 #define CodewheelPPR 500
 #define EdgesPerPulse 4
 
 // Make sure this is an integer!
-const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate;
+static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate;
 
 // Drive Pulley dimensions
-const uint32_t RPS_to_mmPS = 5*10;
+static const uint32_t RPS_to_mmPS = 5*10;
 
 
 //*****************************************************************************
@@ -224,8 +227,8 @@ ConfigureUART(void)
 // Magnitude must not be larger than sqrt(3)/2, or 0.866
 void SVM(float alpha, float beta){
 
-	const float one_by_sqrt3 = 0.57735026919f;
-	const float two_by_sqrt3 = 1.15470053838f;
+	static const float one_by_sqrt3 = 0.57735026919f;
+	static const float two_by_sqrt3 = 1.15470053838f;
 
 	uint32_t Sextant;
 
@@ -263,23 +266,22 @@ void SVM(float alpha, float beta){
 		}
 	}
 
+	// PWM timings
+	uint32_t tA, tB, tC;
+
 	switch (Sextant) {
 	
 		// sextant 1-2
 		case 1:
 		{
-			// Vector on times
+			// Vector on-times
 			uint32_t t1 = (alpha - one_by_sqrt3 * beta) * PWMPeriod;
 			uint32_t t2 = (two_by_sqrt3 * beta) * PWMPeriod;
 
 			// PWM timings
-			uint32_t tA = (PWMPeriod - t1 - t2) / 2;
-			uint32_t tB = tA + t1;
-			uint32_t tC = tB + t2;
-
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+			tA = (PWMPeriod - t1 - t2) / 2;
+			tB = tA + t1;
+			tC = tB + t2;
 
 			break;
 		}
@@ -287,18 +289,14 @@ void SVM(float alpha, float beta){
 		// sextant 2-3
 		case 2:
 		{
-			// Vector on times
+			// Vector on-times
 			uint32_t t2 = (alpha + one_by_sqrt3 * beta) * PWMPeriod;
 			uint32_t t3 = (-alpha + one_by_sqrt3 * beta) * PWMPeriod;
 
 			// PWM timings
-			uint32_t tB = (PWMPeriod - t2 - t3) / 2;
-			uint32_t tA = tB + t3;
-			uint32_t tC = tA + t2;
-
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+			tB = (PWMPeriod - t2 - t3) / 2;
+			tA = tB + t3;
+			tC = tA + t2;
 
 			break;
 		}
@@ -306,18 +304,14 @@ void SVM(float alpha, float beta){
 		// sextant 3-4
 		case 3:
 		{
-			// Vector on times
+			// Vector on-times
 			uint32_t t3 = (two_by_sqrt3 * beta) * PWMPeriod;
 			uint32_t t4 = (-alpha - one_by_sqrt3 * beta) * PWMPeriod;
 
 			// PWM timings
-			uint32_t tB = (PWMPeriod - t3 - t4) / 2;
-			uint32_t tC = tB + t3;
-			uint32_t tA = tC + t4;
-
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+			tB = (PWMPeriod - t3 - t4) / 2;
+			tC = tB + t3;
+			tA = tC + t4;
 
 			break;
 		}
@@ -325,18 +319,14 @@ void SVM(float alpha, float beta){
 		// sextant 4-5
 		case 4:
 		{
-			// Vector on times
+			// Vector on-times
 			uint32_t t4 = (-alpha + one_by_sqrt3 * beta) * PWMPeriod;
 			uint32_t t5 = (-two_by_sqrt3 * beta) * PWMPeriod;
 
 			// PWM timings
-			uint32_t tC = (PWMPeriod - t4 - t5) / 2;
-			uint32_t tB = tC + t5;
-			uint32_t tA = tB + t4;
-
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+			tC = (PWMPeriod - t4 - t5) / 2;
+			tB = tC + t5;
+			tA = tB + t4;
 
 			break;
 		}
@@ -344,19 +334,14 @@ void SVM(float alpha, float beta){
 		// sextant 5-6
 		case 5:
 		{
-			// Vector on times
+			// Vector on-times
 			uint32_t t5 = (-alpha - one_by_sqrt3 * beta) * PWMPeriod;
 			uint32_t t6 = (alpha - one_by_sqrt3 * beta) * PWMPeriod;
 
 			// PWM timings
-			uint32_t tC = (PWMPeriod - t5 - t6) / 2;
-			uint32_t tA = tC + t5;
-			uint32_t tB = tA + t6;
-
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
-
+			tC = (PWMPeriod - t5 - t6) / 2;
+			tA = tC + t5;
+			tB = tA + t6;
 
 			break;
 		}
@@ -364,23 +349,23 @@ void SVM(float alpha, float beta){
 		// sextant 6-1
 		case 6:
 		{
-			// Vector on times
+			// Vector on-times
 			uint32_t t6 = (-two_by_sqrt3 * beta) * PWMPeriod;
 			uint32_t t1 = (alpha + one_by_sqrt3 * beta) * PWMPeriod;
 
 			// PWM timings
-			uint32_t tA = (PWMPeriod - t6 - t1) / 2;
-			uint32_t tC = tA + t1;
-			uint32_t tB = tC + t6;
-
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, tA);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, tB);
-			MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, tC); //note skip of block 2!
+			tA = (PWMPeriod - t6 - t1) / 2;
+			tC = tA + t1;
+			tB = tC + t6;
 
 			break;
 		}
 
 	} //switch
+
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = tA;
+	HWREG(PWM0_BASE + PWM_GEN_1 + PWM_O_X_CMPA) = tB;
+	HWREG(PWM0_BASE + PWM_GEN_3 + PWM_O_X_CMPA) = tC; //note skip of block 2!
 
 }
 
@@ -466,7 +451,6 @@ main(void)
 	MAP_GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_7, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
 
 	// Configure the PWM
-	uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
 	for (int i = 0; i < 3; ++i)
 	{
 		MAP_PWMGenConfigure(PWM0_BASE, PWMGENS[i],
@@ -479,16 +463,15 @@ main(void)
 		| PWM_GEN_MODE_FAULT_EXT
 		);
 
-		// Set the PWM period to 8kHz
-		MAP_PWMGenPeriodSet(PWM0_BASE, PWMGENS[i], PWMPeriod);
+		// Set the PWM period (one half of a triangle, up one slope)
+		HWREG(PWM0_BASE + PWMGENS[i] + PWM_O_X_LOAD) = PWMPeriod;
 	}
 
 	// Set to 50% pulse width by default
-	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, PWMPeriod / 2);
-	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, PWMPeriod / 2);
-	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, PWMPeriod / 2); //note skip of block 2!
-	
-	
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = PWMPeriod / 2;
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = PWMPeriod / 2;
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = PWMPeriod / 2;
+
 
 	// deadband timing. All units ns.
 	// tOn* = turn on delay
@@ -496,19 +479,19 @@ main(void)
 	// tRise* = Rise time
 	// tFall* = Fall time
 	
-	const float tOnFET = 20;
-	const float tRiseFET = 70;
-	const float tOffFET = 30;
-	const float tFallFET = 40;
-	const float tOnDriver = 160;
-	const float toffDriver = 150;
-	const float tRiseDriver = 100;
-	const float tFallDriver = 50;
+	static const float tOnFET = 20;
+	static const float tRiseFET = 70;
+	static const float tOffFET = 30;
+	static const float tFallFET = 40;
+	static const float tOnDriver = 160;
+	static const float toffDriver = 150;
+	static const float tRiseDriver = 100;
+	static const float tFallDriver = 50;
 
-	const float tDelayMatchDriver = 50;
-	const float tSafety = 50;
+	static const float tDelayMatchDriver = 50;
+	static const float tSafety = 50;
 
-	const float tDeadTime = tFallFET + tFallDriver + tDelayMatchDriver + tSafety;
+	static const float tDeadTime = tFallFET + tFallDriver + tDelayMatchDriver + tSafety;
 
 	// Enable dead-band generation
 	for (int i = 0; i < 3; ++i)
@@ -584,10 +567,10 @@ main(void)
 	//
 	while(1)
 	{
-		UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
-		MAP_SysCtlDelay(CLOCKRATE/4);
+		//UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
+		//MAP_SysCtlDelay(CLOCKRATE/4);
 
-		volatile float a,b;
-		SVM(a,b);
+		SVM(0.1, 0);
+		while(1);
 	}
 }
