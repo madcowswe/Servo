@@ -41,6 +41,7 @@
 #include <stdint.h>
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
+#include "inc/hw_gpio.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
@@ -379,6 +380,12 @@ main(void)
 	//
 	// QEI Setup
 	//
+
+	// Unlock changing purpose of PF0 (as it is a NMI)
+	HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = 0x4C4F434B; //Key
+	HWREG(GPIO_PORTF_BASE + GPIO_O_CR) |= GPIO_PIN_0;
+	HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = 0; // lock when done enabling change
+
 	MAP_GPIOPinConfigure(GPIO_PF0_PHA0);
 	MAP_GPIOPinConfigure(GPIO_PF1_PHB0);
 	MAP_GPIOPinConfigure(GPIO_PF4_IDX0);
