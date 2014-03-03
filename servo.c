@@ -576,6 +576,6 @@ main(void)
 		ampl *= (sqrt(3)/2) * 0.99;
 		SVM(ampl*cos(testphase), ampl*sin(testphase));
 		testphase += 0.31415;//0.05; //half a radian per second
-		MAP_SysCtlDelay(CLOCKRATE/10);
+		MAP_SysCtlDelay(CLOCKRATE/100);
 	}
 }
