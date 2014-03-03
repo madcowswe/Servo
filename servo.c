@@ -52,6 +52,7 @@
 #include "utils/uartstdio.h"
 
 #include "driverlib/pwm.h"
+#include "inc/hw_pwm.h"
 #include "driverlib/qei.h"
 #include "inc/hw_qei.h"
 
@@ -102,17 +103,21 @@
 #define SToClocks(s) ((unsigned int)((float)s*CLOCKRATE))
 #define FtoClocks(f) ((unsigned int)((float)CLOCKRATE/f))
 
+// PWM period (one half of a triangle, up one slope)
+static const uint32_t PWMPeriod = FtoClocks(16000);
+uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
+
 // Encoder conversion constants
 #define VelUpdateRate 50 //Hz
-const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
+static const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
 #define CodewheelPPR 500
 #define EdgesPerPulse 4
 
 // Make sure this is an integer!
-const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate;
+static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate;
 
 // Drive Pulley dimensions
-const uint32_t RPS_to_mmPS = 5*10;
+static const uint32_t RPS_to_mmPS = 5*10;
 
 
 //*****************************************************************************
@@ -186,6 +191,7 @@ void QEIHandler(){
 	}
 }
 
+
 //*****************************************************************************
 //
 // Configure the UART and its pins.  This must be called before UARTprintf().
@@ -221,6 +227,152 @@ ConfigureUART(void)
 	//
 	UARTStdioConfig(0, BAUDRATE, 16000000);
 }
+
+// Magnitude must not be larger than sqrt(3)/2, or 0.866
+void SVM(float alpha, float beta){
+
+	static const float one_by_sqrt3 = 0.57735026919f;
+	static const float two_by_sqrt3 = 1.15470053838f;
+
+	uint32_t Sextant;
+
+	if (beta >= 0.0f)
+	{
+		if (alpha >= 0.0f)
+		{
+			//quadrant I
+			if (one_by_sqrt3 * beta > alpha)
+				Sextant = 2;
+			else
+				Sextant = 1;
+
+		} else {
+			//quadrant II
+			if (-one_by_sqrt3 * beta > alpha)
+				Sextant = 3;
+			else
+				Sextant = 2;
+		}
+	} else {
+		if (alpha >= 0.0f)
+		{
+			//quadrant IV
+			if (-one_by_sqrt3 * beta > alpha)
+				Sextant = 5;
+			else
+				Sextant = 6;
+		} else {
+			//quadrant III
+			if (one_by_sqrt3 * beta > alpha)
+				Sextant = 4;
+			else
+				Sextant = 5;
+		}
+	}
+
+	// PWM timings
+	uint32_t tA, tB, tC;
+
+	switch (Sextant) {
+	
+		// sextant 1-2
+		case 1:
+		{
+			// Vector on-times
+			uint32_t t1 = (alpha - one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t2 = (two_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			tA = (PWMPeriod - t1 - t2) / 2;
+			tB = tA + t1;
+			tC = tB + t2;
+
+			break;
+		}
+
+		// sextant 2-3
+		case 2:
+		{
+			// Vector on-times
+			uint32_t t2 = (alpha + one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t3 = (-alpha + one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			tB = (PWMPeriod - t2 - t3) / 2;
+			tA = tB + t3;
+			tC = tA + t2;
+
+			break;
+		}
+
+		// sextant 3-4
+		case 3:
+		{
+			// Vector on-times
+			uint32_t t3 = (two_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t4 = (-alpha - one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			tB = (PWMPeriod - t3 - t4) / 2;
+			tC = tB + t3;
+			tA = tC + t4;
+
+			break;
+		}
+
+		// sextant 4-5
+		case 4:
+		{
+			// Vector on-times
+			uint32_t t4 = (-alpha + one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t5 = (-two_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			tC = (PWMPeriod - t4 - t5) / 2;
+			tB = tC + t5;
+			tA = tB + t4;
+
+			break;
+		}
+
+		// sextant 5-6
+		case 5:
+		{
+			// Vector on-times
+			uint32_t t5 = (-alpha - one_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t6 = (alpha - one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			tC = (PWMPeriod - t5 - t6) / 2;
+			tA = tC + t5;
+			tB = tA + t6;
+
+			break;
+		}
+
+		// sextant 6-1
+		case 6:
+		{
+			// Vector on-times
+			uint32_t t6 = (-two_by_sqrt3 * beta) * PWMPeriod;
+			uint32_t t1 = (alpha + one_by_sqrt3 * beta) * PWMPeriod;
+
+			// PWM timings
+			tA = (PWMPeriod - t6 - t1) / 2;
+			tC = tA + t1;
+			tB = tC + t6;
+
+			break;
+		}
+
+	} //switch
+
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = tA;
+	HWREG(PWM0_BASE + PWM_GEN_1 + PWM_O_X_CMPA) = tB;
+	HWREG(PWM0_BASE + PWM_GEN_3 + PWM_O_X_CMPA) = tC; //note skip of block 2!
+
+}
+
 
 
 //*****************************************************************************
@@ -302,10 +454,7 @@ main(void)
 	MAP_GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_6, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
 	MAP_GPIOPadConfigSet(GPIO_PORTG_BASE, GPIO_PIN_7, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
 
-	uint32_t PWMPeriod = FtoClocks(8000);
-
 	// Configure the PWM
-	uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
 	for (int i = 0; i < 3; ++i)
 	{
 		MAP_PWMGenConfigure(PWM0_BASE, PWMGENS[i],
@@ -318,14 +467,15 @@ main(void)
 		| PWM_GEN_MODE_FAULT_EXT
 		);
 
-		// Set the PWM period to 8kHz
-		MAP_PWMGenPeriodSet(PWM0_BASE, PWMGENS[i], PWMPeriod);
+		// Set the PWM period (one half of a triangle, up one slope)
+		HWREG(PWM0_BASE + PWMGENS[i] + PWM_O_X_LOAD) = PWMPeriod;
 	}
 
 	// Set to 50% pulse width by default
-	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, PWMPeriod / 2); 
-	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, PWMPeriod / 2);
-	MAP_PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, PWMPeriod / 2); //note skip of block 2!
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = PWMPeriod / 2;
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = PWMPeriod / 2;
+	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = PWMPeriod / 2;
+
 
 	// deadband timing. All units ns.
 	// tOn* = turn on delay
@@ -333,19 +483,19 @@ main(void)
 	// tRise* = Rise time
 	// tFall* = Fall time
 	
-	const float tOnFET = 20;
-	const float tRiseFET = 70;
-	const float tOffFET = 30;
-	const float tFallFET = 40;
-	const float tOnDriver = 160;
-	const float toffDriver = 150;
-	const float tRiseDriver = 100;
-	const float tFallDriver = 50;
+	static const float tOnFET = 20;
+	static const float tRiseFET = 70;
+	static const float tOffFET = 30;
+	static const float tFallFET = 40;
+	static const float tOnDriver = 160;
+	static const float toffDriver = 150;
+	static const float tRiseDriver = 100;
+	static const float tFallDriver = 50;
 
-	const float tDelayMatchDriver = 50;
-	const float tSafety = 50;
+	static const float tDelayMatchDriver = 50;
+	static const float tSafety = 50;
 
-	const float tDeadTime = tFallFET + tFallDriver + tDelayMatchDriver + tSafety;
+	static const float tDeadTime = tFallFET + tFallDriver + tDelayMatchDriver + tSafety;
 
 	// Enable dead-band generation
 	for (int i = 0; i < 3; ++i)
@@ -425,9 +575,17 @@ main(void)
 	//
 	// Loop forever while the PWM signals are generated.
 	//
+
+	float testphase = 0;
 	while(1)
 	{
-		UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
-		MAP_SysCtlDelay(CLOCKRATE/4);
+		//UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
+		//MAP_SysCtlDelay(CLOCKRATE/4);
+
+		float ampl = 0.02;
+		ampl *= (sqrt(3)/2) * 0.99;
+		SVM(ampl*cos(testphase), ampl*sin(testphase));
+		testphase += 0.31415;//0.05; //half a radian per second
+		MAP_SysCtlDelay(CLOCKRATE/100);
 	}
 }

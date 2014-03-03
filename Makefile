@@ -51,6 +51,10 @@ IPATH=..
 IPATH+=../../../..
 IPATH+=../../../../CMSIS/Include
 
+
+#Debug symbols for disassembly
+CFLAGS+= -g
+
 #
 # The default rule, which causes the servo example to be built.
 #
