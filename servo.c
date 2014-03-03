@@ -579,13 +579,17 @@ main(void)
 	float testphase = 0;
 	while(1)
 	{
-		//UARTprintf("%d\n", QEIPositionGet(QEI0_BASE));
+		int32_t encPhase = QEIPositionGet(QEI0_BASE);
 		//MAP_SysCtlDelay(CLOCKRATE/4);
 
 		float ampl = 0.02;
 		ampl *= (sqrt(3)/2) * 0.99;
 		SVM(ampl*cos(testphase), ampl*sin(testphase));
-		testphase += 0.31415;//0.05; //half a radian per second
+		const float tunegain = 0.2 * ((3.14159f*7.0f)/1000.0f);
+		testphase -= MAX(MIN(tunegain * encPhase, 20*tunegain), -20*tunegain);
+
+		UARTprintf("%d\t%d\n", encPhase, (int32_t)(testphase*(1000.0f/(3.14159f*7.0f))));
+
 		MAP_SysCtlDelay(CLOCKRATE/100);
 	}
 }
