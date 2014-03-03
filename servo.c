@@ -154,6 +154,9 @@ void QEIIdxPulseHandler(){
 	// Turn off idx reset
 	HWREG(QEI0_BASE + QEI_O_CTL) &= ~QEI_CTL_RESMODE;
 
+	// No wrapping
+	HWREG(QEI0_BASE + QEI_O_MAXPOS) = -1;
+
 	// Mask further interrupts as we are now synced
 	MAP_QEIIntDisable(QEI0_BASE, QEI_INTINDEX);
 }
@@ -396,8 +399,8 @@ main(void)
 	MAP_GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_4);
 
 	// Config QEI
-	MAP_QEIConfigure(QEI0_BASE
-		, QEI_CONFIG_CAPTURE_A_B | QEI_CONFIG_RESET_IDX | QEI_CONFIG_QUADRATURE | QEI_CONFIG_NO_SWAP
+	QEIConfigure(QEI0_BASE
+		, QEI_CONFIG_CAPTURE_A_B | QEI_CONFIG_RESET_IDX | QEI_CONFIG_QUADRATURE | QEI_CONFIG_SWAP
 		, 500*4 - 1);
 
 	// Config Velocity
@@ -417,7 +420,7 @@ main(void)
 	MAP_QEIEnable(QEI0_BASE);
 
 
-	MAP_IntMasterDisable(); //Turn interrupts back on
+	MAP_IntMasterEnable(); //Turn interrupts back on
 
 	//
 	// Loop forever while the PWM signals are generated.
