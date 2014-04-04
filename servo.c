@@ -120,6 +120,10 @@ static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / Vel
 static const uint32_t RPS_to_mmPS = 5*10;
 
 
+// Encoder synced
+volatile bool encSync = 0;
+
+
 //*****************************************************************************
 //
 // The error routine that is called if the driver library encounters an error.
@@ -164,6 +168,9 @@ void QEIIdxPulseHandler(){
 
 	// Mask further interrupts as we are now synced
 	MAP_QEIIntDisable(QEI0_BASE, QEI_INTINDEX);
+
+	// Inform rest of software that we are now synced
+	encSync = 1;
 }
 
 void QEIHandler(){
@@ -572,24 +579,50 @@ main(void)
 
 	MAP_IntMasterEnable(); //Turn interrupts back on
 
+
+
 	//
 	// Loop forever while the PWM signals are generated.
 	//
 
+	const float amplMult = (sqrt(3)/2) * 0.99;
+
+	// Open loop search
+	float searchphase = 0;
+	while(!encSync){
+
+		float ampl = 0.02 * amplMult;
+		SVM(ampl*cos(searchphase), ampl*sin(searchphase));
+
+		searchphase++;
+		MAP_SysCtlDelay(CLOCKRATE/100);
+	}
+
+	//Lock in drive to 0 test loop
 	float testphase = 0;
-	while(1)
+	uint32_t encOffset = 133+29;
+	while(0)
 	{
-		int32_t encPhase = QEIPositionGet(QEI0_BASE);
+		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
 		//MAP_SysCtlDelay(CLOCKRATE/4);
 
-		float ampl = 0.02;
-		ampl *= (sqrt(3)/2) * 0.99;
+		float ampl = 0.02 * amplMult;
 		SVM(ampl*cos(testphase), ampl*sin(testphase));
+
 		const float tunegain = 0.2 * ((3.14159f*7.0f)/1000.0f);
-		testphase -= MAX(MIN(tunegain * encPhase, 20*tunegain), -20*tunegain);
+		testphase -= MAX(MIN(tunegain * encPhase, 100*tunegain), -100*tunegain);
 
 		UARTprintf("%d\t%d\n", encPhase, (int32_t)(testphase*(1000.0f/(3.14159f*7.0f))));
 
 		MAP_SysCtlDelay(CLOCKRATE/100);
+	}
+
+	//full speed ahead ;D
+	while(1){
+		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
+		float ampl = 0.1 * amplMult;
+		float rotorPhase = (float)encPhase * ((3.14159f*7.0f)/1000.0f);
+		float drivephase = rotorPhase + 3.14159f/2;
+		SVM(ampl*cos(drivephase), ampl*sin(drivephase));
 	}
 }
