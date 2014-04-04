@@ -402,8 +402,8 @@ main(void)
 	// instructions to be used within interrupt handlers, but at the expense of
 	// extra stack usage.
 	//
-	//MAP_FPULazyStackingEnable();
-	MAP_FPUStackingDisable(); // we are not using floating point in ISR's.
+	MAP_FPULazyStackingEnable();
+	//MAP_FPUStackingDisable(); // we are not using floating point in ISR's.
 
 	MAP_IntMasterDisable(); //Turn off interrupts while we configure system.
 
@@ -591,8 +591,8 @@ main(void)
 	float searchphase = 0;
 	while(!encSync){
 
-		float ampl = 0.02 * amplMult;
-		SVM(ampl*cos(searchphase), ampl*sin(searchphase));
+		float ampl = 0.02f * amplMult;
+		SVM(ampl*cosf(searchphase), ampl*sinf(searchphase));
 
 		searchphase++;
 		MAP_SysCtlDelay(CLOCKRATE/100);
@@ -606,10 +606,10 @@ main(void)
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
 		//MAP_SysCtlDelay(CLOCKRATE/4);
 
-		float ampl = 0.02 * amplMult;
-		SVM(ampl*cos(testphase), ampl*sin(testphase));
+		float ampl = 0.02f * amplMult;
+		SVM(ampl*cosf(testphase), ampl*sinf(testphase));
 
-		const float tunegain = 0.2 * ((3.14159f*7.0f)/1000.0f);
+		const float tunegain = 0.2f * ((3.14159f*7.0f)/1000.0f);
 		testphase -= MAX(MIN(tunegain * encPhase, 100*tunegain), -100*tunegain);
 
 		UARTprintf("%d\t%d\n", encPhase, (int32_t)(testphase*(1000.0f/(3.14159f*7.0f))));
@@ -620,9 +620,18 @@ main(void)
 	//full speed ahead ;D
 	while(1){
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
-		float ampl = 0.1 * amplMult;
+		float ampl = 0.05f * amplMult;
 		float rotorPhase = (float)encPhase * ((3.14159f*7.0f)/1000.0f);
-		float drivephase = rotorPhase + 3.14159f/2;
-		SVM(ampl*cos(drivephase), ampl*sin(drivephase));
+
+		float Vd = 0;
+		float Vq = ampl;
+		SVM(Vd*cosf(rotorPhase) - Vq*sinf(rotorPhase), Vd*sinf(rotorPhase) + Vq*cosf(rotorPhase));
+
+		static unsigned d = 0;
+		if (++d == CLOCKRATE/1000)
+		{
+			d = 0;
+			UARTprintf("%d\n", QEIVelocityGet(QEI0_BASE));///VelCount_to_RPS_DIV);
+		}
 	}
 }
