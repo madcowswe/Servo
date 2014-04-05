@@ -577,6 +577,9 @@ main(void)
 	MAP_QEIEnable(QEI0_BASE);
 
 
+
+
+
 	MAP_IntMasterEnable(); //Turn interrupts back on
 
 
@@ -620,6 +623,7 @@ main(void)
 	//full speed ahead ;D
 	while(1){
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
+		encPhase %= 2000;
 		float ampl = 0.05f * amplMult;
 		float rotorPhase = (float)encPhase * ((3.14159f*7.0f)/1000.0f);
 
@@ -627,11 +631,13 @@ main(void)
 		float Vq = ampl;
 		SVM(Vd*cosf(rotorPhase) - Vq*sinf(rotorPhase), Vd*sinf(rotorPhase) + Vq*cosf(rotorPhase));
 
-		static unsigned d = 0;
+		static uint32_t d = 0;
 		if (++d == CLOCKRATE/1000)
 		{
 			d = 0;
-			UARTprintf("%d\n", QEIVelocityGet(QEI0_BASE));///VelCount_to_RPS_DIV);
+			int32_t ivel = QEIVelocityGet(QEI0_BASE);
+			float rps = (float)ivel / VelCount_to_RPS_DIV;
+			UARTprintf("%d\n", (uint32_t)(1000*rps) );
 		}
 	}
 }
