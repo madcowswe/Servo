@@ -55,6 +55,7 @@
 #include "inc/hw_pwm.h"
 #include "driverlib/qei.h"
 #include "inc/hw_qei.h"
+#include "driverlib/adc.h"
 
 #define ARM_MATH_CM4
 #define __FPU_PRESENT 1
@@ -422,6 +423,7 @@ main(void)
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_QEI0);
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK); //ADC: AIN16+
 
 	// wait for units to power on
 	MAP_SysCtlDelay(10);
@@ -577,8 +579,13 @@ main(void)
 	MAP_QEIEnable(QEI0_BASE);
 
 
-
-
+	//
+	//ADC setup
+	//
+	GPIOPinTypeADC(GPIO_PORTK_BASE, GPIO_PIN_0);
+	ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
+	ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_CH16 | ADC_CTL_IE | ADC_CTL_END);
+	ADCSequenceEnable(ADC0_BASE, 3);
 
 	MAP_IntMasterEnable(); //Turn interrupts back on
 
@@ -621,23 +628,41 @@ main(void)
 	}
 
 	//full speed ahead ;D
+	uint32_t adcval = 0;
+	ADCProcessorTrigger(ADC0_BASE, 3);
 	while(1){
+
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
 		encPhase %= 2000;
-		float ampl = 0.05f * amplMult;
 		float rotorPhase = (float)encPhase * ((3.14159f*7.0f)/1000.0f);
+		float phaseoffset = 0.6f * (-0.5f + ((float)adcval/4096.0f)); // +/- 0.3rad
+		rotorPhase += phaseoffset;
 
+		float ampl = 0.3f * amplMult;
+		//float ampl = ((0.4f * (float)adcval/4096.0f) + 0.01) * amplMult;
 		float Vd = 0;
 		float Vq = ampl;
+
 		SVM(Vd*cosf(rotorPhase) - Vq*sinf(rotorPhase), Vd*sinf(rotorPhase) + Vq*cosf(rotorPhase));
+		int32_t encPhasePSVM = QEIPositionGet(QEI0_BASE) - encOffset;
+		encPhasePSVM %= 2000;
+
+		if (ADCIntStatus(ADC0_BASE, 3, false))
+		{
+			ADCIntClear(ADC0_BASE, 3);
+			ADCSequenceDataGet(ADC0_BASE, 3, &adcval);
+			ADCProcessorTrigger(ADC0_BASE, 3);
+		}
 
 		static uint32_t d = 0;
-		if (++d == CLOCKRATE/1000)
+		if (++d == CLOCKRATE/10000)
 		{
 			d = 0;
 			int32_t ivel = QEIVelocityGet(QEI0_BASE);
 			float rps = (float)ivel / VelCount_to_RPS_DIV;
-			UARTprintf("%d\n", (uint32_t)(1000*rps) );
+			//UARTprintf("%d\n", (uint32_t)(1000*rps));
+			//UARTprintf("%d\n", (int32_t)(phaseoffset*1000));
+			UARTprintf("%d\n", encPhasePSVM-encPhase);
 		}
 	}
 }
