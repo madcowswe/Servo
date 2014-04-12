@@ -56,6 +56,7 @@
 #include "driverlib/qei.h"
 #include "inc/hw_qei.h"
 #include "driverlib/adc.h"
+#include "driverlib/timer.h"
 
 #define ARM_MATH_CM4
 #define __FPU_PRESENT 1
@@ -114,8 +115,9 @@ static const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
 #define CodewheelPPR 500
 #define EdgesPerPulse 4
 
-// Make sure this is an integer!
-static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate;
+static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate; // Make sure this is an integer!
+static const float VelCount_to_RPS_f = VelUpdateRate/(CodewheelPPR * EdgesPerPulse);
+
 
 // Drive Pulley dimensions
 static const uint32_t RPS_to_mmPS = 5*10;
@@ -424,6 +426,7 @@ main(void)
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_QEI0);
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK); //ADC: AIN16+
+	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
 
 	// wait for units to power on
 	MAP_SysCtlDelay(10);
@@ -582,10 +585,20 @@ main(void)
 	//
 	//ADC setup
 	//
-	GPIOPinTypeADC(GPIO_PORTK_BASE, GPIO_PIN_0);
-	ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
-	ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_CH16 | ADC_CTL_IE | ADC_CTL_END);
-	ADCSequenceEnable(ADC0_BASE, 3);
+	MAP_GPIOPinTypeADC(GPIO_PORTK_BASE, GPIO_PIN_0);
+	MAP_ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
+	MAP_ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_CH16 | ADC_CTL_IE | ADC_CTL_END);
+	MAP_ADCSequenceEnable(ADC0_BASE, 3);
+
+
+	//set up timer
+	MAP_TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
+	//set period
+	MAP_TimerLoadSet(TIMER0_BASE, TIMER_A, -1);
+	//GO!
+	MAP_TimerEnable(TIMER0_BASE, TIMER_A);
+
+
 
 	MAP_IntMasterEnable(); //Turn interrupts back on
 
@@ -632,6 +645,8 @@ main(void)
 	ADCProcessorTrigger(ADC0_BASE, 3);
 	while(1){
 
+		uint32_t t_start = TimerValueGet(TIMER0_BASE, TIMER_A); //note counts backwards
+
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
 		encPhase %= 2000;
 		float rotorPhase = (float)encPhase * ((3.14159f*7.0f)/1000.0f);
@@ -644,6 +659,8 @@ main(void)
 		float Vq = ampl;
 
 		SVM(Vd*cosf(rotorPhase) - Vq*sinf(rotorPhase), Vd*sinf(rotorPhase) + Vq*cosf(rotorPhase));
+		uint32_t t_end = TimerValueGet(TIMER0_BASE, TIMER_A); //note counts backwards
+
 		int32_t encPhasePSVM = QEIPositionGet(QEI0_BASE) - encOffset;
 		encPhasePSVM %= 2000;
 
@@ -654,15 +671,21 @@ main(void)
 			ADCProcessorTrigger(ADC0_BASE, 3);
 		}
 
+		static t_end_last = 0;
+
 		static uint32_t d = 0;
 		if (++d == CLOCKRATE/10000)
 		{
 			d = 0;
 			int32_t ivel = QEIVelocityGet(QEI0_BASE);
-			float rps = (float)ivel / VelCount_to_RPS_DIV;
+			//float rps = (float)ivel / VelCount_to_RPS_DIV;
+			float omega = 7.0f * VelCount_to_RPS_f * (float)ivel;
 			//UARTprintf("%d\n", (uint32_t)(1000*rps));
 			//UARTprintf("%d\n", (int32_t)(phaseoffset*1000));
-			UARTprintf("%d\n", encPhasePSVM-encPhase);
+			//UARTprintf("%d\n", encPhasePSVM-encPhase);
+			UARTprintf("%d\t%d\n", t_start-t_end, t_end_last-t_end);
 		}
+
+		t_end_last = t_end;
 	}
 }
