@@ -109,6 +109,8 @@
 static const uint32_t PWMPeriod = FtoClocks(16000);
 uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
 
+#define PIf 3.1415926535897932384626433832795f
+
 // Encoder conversion constants
 #define VelUpdateRate 50 //Hz
 static const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
@@ -116,7 +118,7 @@ static const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
 #define EdgesPerPulse 4
 
 static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate; // Make sure this is an integer!
-static const float VelCount_to_RPS_f = VelUpdateRate/(CodewheelPPR * EdgesPerPulse);
+static const float VelCount_to_RPS_f = (float)VelUpdateRate/(CodewheelPPR * EdgesPerPulse);
 
 
 // Drive Pulley dimensions
@@ -632,7 +634,7 @@ main(void)
 		float ampl = 0.02f * amplMult;
 		SVM(ampl*cosf(testphase), ampl*sinf(testphase));
 
-		const float tunegain = 0.2f * ((3.14159f*7.0f)/1000.0f);
+		const float tunegain = 0.2f * ((PIf*7.0f)/1000.0f);
 		testphase -= MAX(MIN(tunegain * encPhase, 100*tunegain), -100*tunegain);
 
 		UARTprintf("%d\t%d\n", encPhase, (int32_t)(testphase*(1000.0f/(3.14159f*7.0f))));
@@ -642,6 +644,8 @@ main(void)
 
 	//full speed ahead ;D
 	uint32_t adcval = 0;
+	uint32_t t_latency = 0;
+	uint32_t t_period = 0;
 	ADCProcessorTrigger(ADC0_BASE, 3);
 	while(1){
 
@@ -650,10 +654,19 @@ main(void)
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
 		encPhase %= 2000;
 		float rotorPhase = (float)encPhase * ((3.14159f*7.0f)/1000.0f);
-		float phaseoffset = 0.6f * (-0.5f + ((float)adcval/4096.0f)); // +/- 0.3rad
-		rotorPhase += phaseoffset;
 
-		float ampl = 0.3f * amplMult;
+		//Latency compensation
+		uint32_t t_compensation = t_latency + t_period/2 + PWMPeriod; //TODO: add LR
+		int32_t ivel = QEIDirectionGet(QEI0_BASE) * (int32_t)QEIVelocityGet(QEI0_BASE);
+		float omega = 7.0f * 2.0f * PIf * VelCount_to_RPS_f * (float)ivel;
+		float compPhase = omega * (float)t_compensation/CLOCKRATE;
+		rotorPhase += compPhase;
+
+		//Manual phase injection
+		float phaseoffset_man = 0.1f * ((float)adcval/4096.0f); // +/- 0.3rad
+		rotorPhase += phaseoffset_man;
+
+		float ampl = 0.1f * amplMult;
 		//float ampl = ((0.4f * (float)adcval/4096.0f) + 0.01) * amplMult;
 		float Vd = 0;
 		float Vq = ampl;
@@ -661,6 +674,7 @@ main(void)
 		SVM(Vd*cosf(rotorPhase) - Vq*sinf(rotorPhase), Vd*sinf(rotorPhase) + Vq*cosf(rotorPhase));
 		uint32_t t_end = TimerValueGet(TIMER0_BASE, TIMER_A); //note counts backwards
 
+		//Debug
 		int32_t encPhasePSVM = QEIPositionGet(QEI0_BASE) - encOffset;
 		encPhasePSVM %= 2000;
 
@@ -671,21 +685,26 @@ main(void)
 			ADCProcessorTrigger(ADC0_BASE, 3);
 		}
 
-		static t_end_last = 0;
+		t_latency = t_start-t_end;
+		static uint32_t t_end_last = 0;
+		t_period = t_end_last-t_end;
+		t_end_last = t_end;
+
+		static float manphasefiltstate = 0;
+		manphasefiltstate += (phaseoffset_man - manphasefiltstate)*0.001;
 
 		static uint32_t d = 0;
 		if (++d == CLOCKRATE/10000)
 		{
 			d = 0;
-			int32_t ivel = QEIVelocityGet(QEI0_BASE);
+			
 			//float rps = (float)ivel / VelCount_to_RPS_DIV;
-			float omega = 7.0f * VelCount_to_RPS_f * (float)ivel;
+			
 			//UARTprintf("%d\n", (uint32_t)(1000*rps));
-			//UARTprintf("%d\n", (int32_t)(phaseoffset*1000));
+			//UARTprintf("%d\n", (int32_t)(phaseoffset_man*1000));
 			//UARTprintf("%d\n", encPhasePSVM-encPhase);
-			UARTprintf("%d\t%d\n", t_start-t_end, t_end_last-t_end);
+			//UARTprintf("%d\t%d\n",t_latency ,t_period );
+			UARTprintf("%d\t%d\n",(int32_t)(manphasefiltstate*1000), (int32_t)(compPhase*1000) );
 		}
-
-		t_end_last = t_end;
 	}
 }
