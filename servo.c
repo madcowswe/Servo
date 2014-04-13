@@ -120,9 +120,13 @@ static const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
 static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate; // Make sure this is an integer!
 static const float VelCount_to_RPS_f = (float)VelUpdateRate/(CodewheelPPR * EdgesPerPulse);
 
-
 // Drive Pulley dimensions
 static const uint32_t RPS_to_mmPS = 5*10;
+
+// Motor parameters
+static const float lambda = 0.002238f;
+static const float phaseR = 0.032f;
+static const float phaseL = 23.0e-6f;
 
 
 // Encoder synced
@@ -646,6 +650,10 @@ main(void)
 	uint32_t adcval = 0;
 	uint32_t t_latency = 0;
 	uint32_t t_period = 0;
+
+	float speedKP = 0.01;
+	float testOmegaSetpoint = 0;//300;
+
 	ADCProcessorTrigger(ADC0_BASE, 3);
 	while(1){
 
@@ -663,13 +671,32 @@ main(void)
 		rotorPhase += compPhase;
 
 		//Manual phase injection
-		float phaseoffset_man = 0.1f * ((float)adcval/4096.0f); // +/- 0.3rad
+		float phaseoffset_man = 0.1f * ((float)adcval/4096.0f);
 		rotorPhase += phaseoffset_man;
 
-		float ampl = 0.1f * amplMult;
+		//Current control
+		float eOmega = testOmegaSetpoint - omega;
+		float Iq = speedKP * eOmega;
+
+		float Vd = -Iq * phaseL * omega;
+		float Vq = lambda * omega + Iq * phaseR;
+
+		float BusVoltage = 12.0f; //TODO measure properly
+		float VtoModulation = 1.0f / ((2.0f/3.0f) * BusVoltage);
+
+		Vd *= VtoModulation;
+		Vq *= VtoModulation;
+
+		Vd = MIN(MAX(Vd, -0.4*amplMult), 0.4*amplMult);
+		Vq = MIN(MAX(Vq, -0.4*amplMult), 0.4*amplMult);
+
+		//float ampl = 0.1f;
 		//float ampl = ((0.4f * (float)adcval/4096.0f) + 0.01) * amplMult;
-		float Vd = 0;
-		float Vq = ampl;
+		// float Vd = 0;
+		// float Vq = ampl;
+
+		// Vd *= amplMult; //map 1.0 to max modulation
+		// Vq *= amplMult;
 
 		SVM(Vd*cosf(rotorPhase) - Vq*sinf(rotorPhase), Vd*sinf(rotorPhase) + Vq*cosf(rotorPhase));
 		uint32_t t_end = TimerValueGet(TIMER0_BASE, TIMER_A); //note counts backwards
@@ -704,7 +731,8 @@ main(void)
 			//UARTprintf("%d\n", (int32_t)(phaseoffset_man*1000));
 			//UARTprintf("%d\n", encPhasePSVM-encPhase);
 			//UARTprintf("%d\t%d\n",t_latency ,t_period );
-			UARTprintf("%d\t%d\n",(int32_t)(manphasefiltstate*1000), (int32_t)(compPhase*1000) );
+			//UARTprintf("%d\t%d\n",(int32_t)(manphasefiltstate*1000), (int32_t)(compPhase*1000) );
+			UARTprintf("%d\n",(int32_t)(Iq*1000));
 		}
 	}
 }
