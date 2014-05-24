@@ -501,13 +501,13 @@ main(void)
 	// tRise* = Rise time
 	// tFall* = Fall time
 	
-	static const float tOnFET = 20;
-	static const float tRiseFET = 70;
-	static const float tOffFET = 30;
+	//static const float tOnFET = 20;
+	//static const float tRiseFET = 70;
+	//static const float tOffFET = 30;
 	static const float tFallFET = 40;
-	static const float tOnDriver = 160;
-	static const float toffDriver = 150;
-	static const float tRiseDriver = 100;
+	//static const float tOnDriver = 160;
+	//static const float toffDriver = 150;
+	//static const float tRiseDriver = 100;
 	static const float tFallDriver = 50;
 
 	static const float tDelayMatchDriver = 50;
@@ -627,9 +627,12 @@ main(void)
 		MAP_SysCtlDelay(CLOCKRATE/100);
 	}
 
+	//while(1);
+
 	//Lock in drive to 0 test loop
 	float testphase = 0;
-	uint32_t encOffset = 133+29;
+	//uint32_t encOffset = 133+29; //Clamp
+	uint32_t encOffset = 86; //Base
 	while(0)
 	{
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
@@ -646,21 +649,31 @@ main(void)
 		MAP_SysCtlDelay(CLOCKRATE/100);
 	}
 
+	//while(1);
+
 	//full speed ahead ;D
 	uint32_t adcval = 0;
 	uint32_t t_latency = 0;
 	uint32_t t_period = 0;
 
-	float speedKP = 0.01;
-	float testOmegaSetpoint = 0;//300;
+	float speedKP = 0.2; // A/(rad/s)
+	float maxspeed = 0.2f; // m/s
+
+	float posKP = 4.0f; // m/s per m
+	float posSetpoint = 0.35f; //m from left (basline at encSync)
+
+	float testOmegaSetpoint = 0.0f;
+
+	float maxcurrent = 20.0f;
+	float maxmod = 0.4f;
 
 	ADCProcessorTrigger(ADC0_BASE, 3);
 	while(1){
 
 		uint32_t t_start = TimerValueGet(TIMER0_BASE, TIMER_A); //note counts backwards
 
-		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
-		encPhase %= 2000;
+		int32_t encPos = QEIPositionGet(QEI0_BASE) - encOffset;
+		int32_t encPhase = encPos % 2000;
 		float rotorPhase = (float)encPhase * ((3.14159f*7.0f)/1000.0f);
 
 		//Latency compensation
@@ -674,9 +687,18 @@ main(void)
 		float phaseoffset_man = 0.1f * ((float)adcval/4096.0f);
 		rotorPhase += phaseoffset_man;
 
+		//Position control
+		float currpos = encPos * (1.0f/2000.0f * 10.0f * 5.0f/1000.0f); //m
+		float velSetpoint = MIN(MAX(posKP * (posSetpoint - currpos), -maxspeed), maxspeed);
+		float omegaSetpoint = (7.0f * 2.0f * PIf * 1.0f/(10.0f*0.005f)) * velSetpoint;
+
 		//Current control
-		float eOmega = testOmegaSetpoint - omega;
+		//TODO useless omega scaling, do direct m/s to A
+		float eOmega = omegaSetpoint - omega;
+		//float eOmega = testOmegaSetpoint - omega;
 		float Iq = speedKP * eOmega;
+
+		Iq = MIN(MAX(Iq, -maxcurrent), maxcurrent);
 
 		float Vd = -Iq * phaseL * omega;
 		float Vq = lambda * omega + Iq * phaseR;
@@ -687,8 +709,8 @@ main(void)
 		Vd *= VtoModulation;
 		Vq *= VtoModulation;
 
-		Vd = MIN(MAX(Vd, -0.4*amplMult), 0.4*amplMult);
-		Vq = MIN(MAX(Vq, -0.4*amplMult), 0.4*amplMult);
+		Vd = MIN(MAX(Vd, -maxmod*amplMult), maxmod*amplMult);
+		Vq = MIN(MAX(Vq, -maxmod*amplMult), maxmod*amplMult);
 
 		//float ampl = 0.1f;
 		//float ampl = ((0.4f * (float)adcval/4096.0f) + 0.01) * amplMult;
@@ -732,7 +754,8 @@ main(void)
 			//UARTprintf("%d\n", encPhasePSVM-encPhase);
 			//UARTprintf("%d\t%d\n",t_latency ,t_period );
 			//UARTprintf("%d\t%d\n",(int32_t)(manphasefiltstate*1000), (int32_t)(compPhase*1000) );
-			UARTprintf("%d\n",(int32_t)(Iq*1000));
+			//UARTprintf("%d\n",(int32_t)(Iq*1000));
+			UARTprintf("%d\t%d\t%d\n",(int32_t)(Iq*1000), (int32_t)(velSetpoint*1000), (int32_t)(currpos*1000));
 		}
 	}
 }
