@@ -431,6 +431,7 @@ main(void)
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_QEI0);
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC1);
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK); //ADC: AIN16+
 	MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
 
@@ -488,6 +489,9 @@ main(void)
 		// Set the PWM period (one half of a triangle, up one slope)
 		HWREG(PWM0_BASE + PWMGENS[i] + PWM_O_X_LOAD) = PWMPeriod;
 	}
+
+	// turn on triggering for ADC trig during inactive SVs
+	PWMGenIntTrigEnable(PWM0_BASE, PWM_GEN_0, PWM_TR_CNT_ZERO | PWM_TR_CNT_LOAD);
 
 	// Set to 50% pulse width by default
 	HWREG(PWM0_BASE + PWM_GEN_0 + PWM_O_X_CMPA) = PWMPeriod / 2;
@@ -589,12 +593,20 @@ main(void)
 
 
 	//
-	//ADC setup
+	//ADC 0 setup (manually pumped)
 	//
 	MAP_GPIOPinTypeADC(GPIO_PORTK_BASE, GPIO_PIN_0);
 	MAP_ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
 	MAP_ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_CH16 | ADC_CTL_IE | ADC_CTL_END);
 	MAP_ADCSequenceEnable(ADC0_BASE, 3);
+
+	//
+	//ADC 1 setup (PWM triggered)
+	//
+	MAP_GPIOPinTypeADC(GPIO_PORTK_BASE, GPIO_PIN_1);
+	MAP_ADCSequenceConfigure(ADC1_BASE, 3, ADC_TRIGGER_PWM0, 0);
+	MAP_ADCSequenceStepConfigure(ADC1_BASE, 3, 0, ADC_CTL_CH17 | ADC_CTL_IE | ADC_CTL_END);
+	MAP_ADCSequenceEnable(ADC1_BASE, 3);
 
 
 	//set up timer
@@ -605,6 +617,10 @@ main(void)
 	MAP_TimerEnable(TIMER0_BASE, TIMER_A);
 
 
+	//Home button
+	GPIODirModeSet(GPIO_PORTF_BASE, GPIO_PIN_6, GPIO_DIR_MODE_IN);
+	GPIOPadConfigSet(GPIO_PORTF_BASE, GPIO_PIN_6,
+                         GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 
 	MAP_IntMasterEnable(); //Turn interrupts back on
 
@@ -651,22 +667,26 @@ main(void)
 
 	//while(1);
 
+
 	//full speed ahead ;D
 	uint32_t adcval = 0;
 	uint32_t t_latency = 0;
 	uint32_t t_period = 0;
 
-	float speedKP = 0.2; // A/(rad/s)
+	float speedKP = 0.2f; // A/(rad/s)
 	float maxspeed = 0.2f; // m/s
 
 	float posKP = 4.0f; // m/s per m
 	float posSetpoint = 0.35f; //m from left (basline at encSync)
 
-	float testOmegaSetpoint = 0.0f;
+	float goHomeOmega = -30.0f;
+	bool homed = 0;
+	int32_t homeencPos = 0;
 
+	float BusVoltage = 12.0f;
 	float maxcurrent = 20.0f;
 	float maxmod = 0.4f;
-
+	
 	ADCProcessorTrigger(ADC0_BASE, 3);
 	while(1){
 
@@ -688,14 +708,25 @@ main(void)
 		rotorPhase += phaseoffset_man;
 
 		//Position control
-		float currpos = encPos * (1.0f/2000.0f * 10.0f * 5.0f/1000.0f); //m
+		float currpos = (encPos - homeencPos) * (1.0f/2000.0f * 10.0f * 5.0f/1000.0f); //m
 		float velSetpoint = MIN(MAX(posKP * (posSetpoint - currpos), -maxspeed), maxspeed);
 		float omegaSetpoint = (7.0f * 2.0f * PIf * 1.0f/(10.0f*0.005f)) * velSetpoint;
 
+		//homing or position control
+		if (!homed && GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_6))
+		{
+			homeencPos = encPos;
+			homed = 1;
+		}
+
 		//Current control
 		//TODO useless omega scaling, do direct m/s to A
-		float eOmega = omegaSetpoint - omega;
-		//float eOmega = testOmegaSetpoint - omega;
+		float eOmega;
+		if (homed)
+			eOmega = omegaSetpoint - omega;
+		else
+			eOmega = goHomeOmega - omega;
+
 		float Iq = speedKP * eOmega;
 
 		Iq = MIN(MAX(Iq, -maxcurrent), maxcurrent);
@@ -703,7 +734,6 @@ main(void)
 		float Vd = -Iq * phaseL * omega;
 		float Vq = lambda * omega + Iq * phaseR;
 
-		float BusVoltage = 12.0f; //TODO measure properly
 		float VtoModulation = 1.0f / ((2.0f/3.0f) * BusVoltage);
 
 		Vd *= VtoModulation;
@@ -734,6 +764,14 @@ main(void)
 			ADCProcessorTrigger(ADC0_BASE, 3);
 		}
 
+		if (ADCIntStatus(ADC1_BASE, 3, false))
+		{
+			ADCIntClear(ADC1_BASE, 3);
+			uint32_t temp;
+			ADCSequenceDataGet(ADC1_BASE, 3, &temp);
+			BusVoltage = temp * ((4.0f * 3.3f) / (float)(1<<12));
+		}
+
 		t_latency = t_start-t_end;
 		static uint32_t t_end_last = 0;
 		t_period = t_end_last-t_end;
@@ -754,8 +792,7 @@ main(void)
 			//UARTprintf("%d\n", encPhasePSVM-encPhase);
 			//UARTprintf("%d\t%d\n",t_latency ,t_period );
 			//UARTprintf("%d\t%d\n",(int32_t)(manphasefiltstate*1000), (int32_t)(compPhase*1000) );
-			//UARTprintf("%d\n",(int32_t)(Iq*1000));
-			UARTprintf("%d\t%d\t%d\n",(int32_t)(Iq*1000), (int32_t)(velSetpoint*1000), (int32_t)(currpos*1000));
+			UARTprintf("%d\t%d\n", (int32_t)(Iq*1000), (int32_t)(BusVoltage*1000));
 		}
 	}
 }
