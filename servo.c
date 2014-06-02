@@ -112,12 +112,12 @@ uint32_t PWMGENS[] = { PWM_GEN_0, PWM_GEN_1, PWM_GEN_3}; //note skip of block 2!
 #define PIf 3.1415926535897932384626433832795f
 
 // Encoder conversion constants
-#define VelUpdateRate 50 //Hz
+#define VelUpdateRate 150 //Hz
 static const uint32_t QEIVelocityPeriod = FtoClocks(VelUpdateRate);
 #define CodewheelPPR 500
 #define EdgesPerPulse 4
 
-static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate; // Make sure this is an integer!
+//static const uint32_t VelCount_to_RPS_DIV = (CodewheelPPR * EdgesPerPulse) / VelUpdateRate; // Make sure this is an integer!
 static const float VelCount_to_RPS_f = (float)VelUpdateRate/(CodewheelPPR * EdgesPerPulse);
 
 // Drive Pulley dimensions
@@ -622,6 +622,11 @@ main(void)
 	GPIOPadConfigSet(GPIO_PORTF_BASE, GPIO_PIN_6,
                          GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 
+	//Waypoint button
+	GPIODirModeSet(GPIO_PORTF_BASE, GPIO_PIN_7, GPIO_DIR_MODE_IN);
+	GPIOPadConfigSet(GPIO_PORTF_BASE, GPIO_PIN_7,
+                         GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
+
 	MAP_IntMasterEnable(); //Turn interrupts back on
 
 
@@ -648,7 +653,7 @@ main(void)
 	//Lock in drive to 0 test loop
 	float testphase = 0;
 	//uint32_t encOffset = 133+29; //Clamp
-	uint32_t encOffset = 86; //Base
+	int32_t encOffset = -2; //Base
 	while(0)
 	{
 		int32_t encPhase = QEIPositionGet(QEI0_BASE) - encOffset;
@@ -668,24 +673,28 @@ main(void)
 	//while(1);
 
 
+	float targets[] = {0.6f, 0.05f}; //m from left
+	uint32_t numtargets = sizeof(targets)/sizeof(targets[0]);
+	uint32_t currtarget = 0;
+
 	//full speed ahead ;D
 	uint32_t adcval = 0;
 	uint32_t t_latency = 0;
 	uint32_t t_period = 0;
 
-	float speedKP = 0.2f; // A/(rad/s)
-	float maxspeed = 0.2f; // m/s
+	float speedKP = 0.12f; // A/(rad/s)
+	float maxspeed = 2.5f; // m/s
 
-	float posKP = 4.0f; // m/s per m
-	float posSetpoint = 0.35f; //m from left (basline at encSync)
+	float posKP = 14.0f; // m/s per m
+	float posSetpoint = targets[0]; //m from left
 
 	float goHomeOmega = -30.0f;
 	bool homed = 0;
 	int32_t homeencPos = 0;
 
 	float BusVoltage = 12.0f;
-	float maxcurrent = 20.0f;
-	float maxmod = 0.4f;
+	float maxcurrent = 30.0f;//50.0f;
+	float maxmod = 0.95f;
 	
 	ADCProcessorTrigger(ADC0_BASE, 3);
 	while(1){
@@ -711,6 +720,19 @@ main(void)
 		float currpos = (encPos - homeencPos) * (1.0f/2000.0f * 10.0f * 5.0f/1000.0f); //m
 		float velSetpoint = MIN(MAX(posKP * (posSetpoint - currpos), -maxspeed), maxspeed);
 		float omegaSetpoint = (7.0f * 2.0f * PIf * 1.0f/(10.0f*0.005f)) * velSetpoint;
+
+		//Waypoint update
+		if (!GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_7) && fabs(posSetpoint - currpos) < 0.005f)
+		{
+			currtarget = (currtarget+1) % numtargets;
+			posSetpoint = targets[currtarget];
+
+			//For some reason this is required. Not sure why, either bug in compiler, or me overwriting memory somewhere...
+			if (currtarget == 0)
+			{
+				posSetpoint = targets[0];
+			}
+		}
 
 		//homing or position control
 		if (!homed && GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_6))
@@ -792,7 +814,9 @@ main(void)
 			//UARTprintf("%d\n", encPhasePSVM-encPhase);
 			//UARTprintf("%d\t%d\n",t_latency ,t_period );
 			//UARTprintf("%d\t%d\n",(int32_t)(manphasefiltstate*1000), (int32_t)(compPhase*1000) );
-			UARTprintf("%d\t%d\n", (int32_t)(Iq*1000), (int32_t)(BusVoltage*1000));
+			//UARTprintf("%d\t%d\n", (int32_t)(Iq*1000), (int32_t)(BusVoltage*1000));
+			//UARTprintf("%d\t%d\n", !GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_7), abs(posSetpoint - currpos) < 0.005f);
+			UARTprintf("%d\t%d\n", currtarget, (int32_t)(posSetpoint*1000));
 		}
 	}
 }
