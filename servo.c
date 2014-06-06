@@ -124,8 +124,8 @@ static const float VelCount_to_RPS_f = (float)VelUpdateRate/(CodewheelPPR * Edge
 static const uint32_t RPS_to_mmPS = 5*10;
 
 // Motor parameters
-static const float lambda = 0.002238f;
-static const float phaseR = 0.032f;
+static const float lambda = 0.002333f;//0.002238f;
+static const float phaseR = 0.033f;
 static const float phaseL = 23.0e-6f;
 
 
@@ -673,7 +673,7 @@ main(void)
 	//while(1);
 
 
-	float targets[] = {0.6f, 0.05f}; //m from left
+	float targets[] = {0.7f, 0.05f}; //m from left
 	uint32_t numtargets = sizeof(targets)/sizeof(targets[0]);
 	uint32_t currtarget = 0;
 
@@ -682,10 +682,10 @@ main(void)
 	uint32_t t_latency = 0;
 	uint32_t t_period = 0;
 
-	float speedKP = 0.12f; // A/(rad/s)
+	float speedKP = 0.15f; // A/(rad/s)
 	float maxspeed = 2.5f; // m/s
 
-	float posKP = 14.0f; // m/s per m
+	float posKP = 12.0f; // m/s per m
 	float posSetpoint = targets[0]; //m from left
 
 	float goHomeOmega = -30.0f;
@@ -713,8 +713,8 @@ main(void)
 		rotorPhase += compPhase;
 
 		//Manual phase injection
-		float phaseoffset_man = 0.1f * ((float)adcval/4096.0f);
-		rotorPhase += phaseoffset_man;
+		//float phaseoffset_man = 0.1f * ((float)adcval/4096.0f);
+		//rotorPhase += phaseoffset_man;
 
 		//Position control
 		float currpos = (encPos - homeencPos) * (1.0f/2000.0f * 10.0f * 5.0f/1000.0f); //m
@@ -782,7 +782,8 @@ main(void)
 		if (ADCIntStatus(ADC0_BASE, 3, false))
 		{
 			ADCIntClear(ADC0_BASE, 3);
-			ADCSequenceDataGet(ADC0_BASE, 3, &adcval);
+			uint32_t bullshit;
+			ADCSequenceDataGet(ADC0_BASE, 3, &bullshit);//adcval);
 			ADCProcessorTrigger(ADC0_BASE, 3);
 		}
 
@@ -816,7 +817,10 @@ main(void)
 			//UARTprintf("%d\t%d\n",(int32_t)(manphasefiltstate*1000), (int32_t)(compPhase*1000) );
 			//UARTprintf("%d\t%d\n", (int32_t)(Iq*1000), (int32_t)(BusVoltage*1000));
 			//UARTprintf("%d\t%d\n", !GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_7), abs(posSetpoint - currpos) < 0.005f);
-			UARTprintf("%d\t%d\n", currtarget, (int32_t)(posSetpoint*1000));
+			//UARTprintf("%d\t%d\n", currtarget, (int32_t)(posSetpoint*1000));
+			UARTprintf("%d\n", homeencPos);
+			//UARTprintf("%d\t%d\n", (int32_t)(rotorPhase*10), (int32_t)(Iq*1000));
+			
 		}
 	}
 }
