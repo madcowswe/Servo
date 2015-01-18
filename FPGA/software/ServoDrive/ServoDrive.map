@@ -1,0 +1,868 @@
+Archive member included because of file (symbol)
+
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+                              obj/default/Servo.o (__mulsi3)
+../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+                              ../ServoDrive_bsp//obj/HAL/src/crt0.o (alt_load)
+../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+                              ../ServoDrive_bsp//obj/HAL/src/crt0.o (alt_main)
+../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+                              obj/default/Servo.o (usleep)
+../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_main.o) (alt_irq_init)
+../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o) (altera_avalon_jtag_uart_read_fd)
+../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o) (altera_avalon_jtag_uart_read)
+../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o) (altera_avalon_jtag_uart_write)
+../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o) (alt_busy_sleep)
+../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_main.o) (close)
+../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_load.o) (alt_dcache_flush_all)
+../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o) (alt_dev_list)
+../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o) (alt_dev_llist_insert)
+../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_main.o) (_do_ctors)
+../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_main.o) (_do_dtors)
+../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_close.o) (alt_errno)
+../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_load.o) (alt_icache_flush_all)
+../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_main.o) (alt_io_redirect)
+../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o) (open)
+../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_close.o) (alt_release_fd)
+../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o) (altera_nios2_qsys_irq_init)
+../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_open.o) (alt_find_dev)
+../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_open.o) (alt_find_file)
+../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_open.o) (alt_get_fd)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_main.o) (atexit)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_main.o) (exit)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_close.o) (errno)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o) (memcmp)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o) (strlen)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+                              /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o) (__register_exitproc)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+                              /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o) (__call_exitprocs)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+                              /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o) (_global_impure_ptr)
+/home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+                              ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o) (__udivsi3)
+../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+                              /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o) (_exit)
+
+Allocating common symbols
+Common symbol       size              file
+
+errno               0x4               /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+_atexit0            0x8c              /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+reset            0x00008000         0x00000020
+onchip_memory2_0 0x00008020         0x00004fe0
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ../ServoDrive_bsp//obj/HAL/src/crt0.o
+LOAD obj/default/Servo.o
+LOAD /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libstdc++.a
+LOAD /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libm.a
+LOAD /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a
+START GROUP
+LOAD /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a
+LOAD /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a
+LOAD ../ServoDrive_bsp//libhal_bsp.a
+END GROUP
+LOAD /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a
+                0x00008000                __alt_mem_onchip_memory2_0 = 0x8000
+
+.entry          0x00008000       0x20
+ *(.entry)
+ .entry         0x00008000       0x20 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+                0x00008000                __reset
+
+.exceptions     0x00008020        0x0
+                0x00008020                PROVIDE (__ram_exceptions_start, ABSOLUTE (.))
+                0x00008020                . = ALIGN (0x20)
+ *(.irq)
+ *(.exceptions.entry.label)
+ *(.exceptions.entry.user)
+ *(.exceptions.entry.ecc_fatal)
+ *(.exceptions.entry)
+ *(.exceptions.irqtest.user)
+ *(.exceptions.irqtest)
+ *(.exceptions.irqhandler.user)
+ *(.exceptions.irqhandler)
+ *(.exceptions.irqreturn.user)
+ *(.exceptions.irqreturn)
+ *(.exceptions.notirq.label)
+ *(.exceptions.notirq.user)
+ *(.exceptions.notirq)
+ *(.exceptions.soft.user)
+ *(.exceptions.soft)
+ *(.exceptions.unknown.user)
+ *(.exceptions.unknown)
+ *(.exceptions.exit.label)
+ *(.exceptions.exit.user)
+ *(.exceptions.exit)
+ *(.exceptions)
+                0x00008020                PROVIDE (__ram_exceptions_end, ABSOLUTE (.))
+                0x00008020                PROVIDE (__flash_exceptions_start, LOADADDR (.exceptions))
+
+.text           0x00008020     0x16a8
+                0x00008020                PROVIDE (stext, ABSOLUTE (.))
+ *(.interp)
+ *(.hash)
+ *(.dynsym)
+ *(.dynstr)
+ *(.gnu.version)
+ *(.gnu.version_d)
+ *(.gnu.version_r)
+ *(.rel.init)
+ *(.rela.init)
+ *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+ *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+ *(.rel.fini)
+ *(.rela.fini)
+ *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+ *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+ *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+ *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+ *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+ *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+ *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+ *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+ *(.rel.ctors)
+ *(.rela.ctors)
+ *(.rel.dtors)
+ *(.rela.dtors)
+ *(.rel.got)
+ *(.rela.got)
+ *(.rel.sdata .rel.sdata.* .rel.gnu.linkonce.s.*)
+ *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+ *(.rel.sbss .rel.sbss.* .rel.gnu.linkonce.sb.*)
+ *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+ *(.rel.sdata2 .rel.sdata2.* .rel.gnu.linkonce.s2.*)
+ *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+ *(.rel.sbss2 .rel.sbss2.* .rel.gnu.linkonce.sb2.*)
+ *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+ *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+ *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+ *(.rel.plt)
+ *(.rela.plt)
+ *(.rel.dyn)
+ *(.init)
+ *(.plt)
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x00008020       0x3c ../ServoDrive_bsp//obj/HAL/src/crt0.o
+                0x00008020                _start
+ .text          0x0000805c       0xd0 obj/default/Servo.o
+                0x0000805c                main
+ .text          0x0000812c       0x28 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+                0x0000812c                __mulsi3
+ .text          0x00008154       0xec ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+                0x000081c0                alt_load
+ .text          0x00008240       0x78 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+                0x00008240                alt_main
+ .text          0x000082b8       0x30 ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+                0x000082b8                usleep
+ .text          0x000082e8       0xa0 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+                0x00008320                alt_irq_init
+                0x00008354                alt_sys_init
+ .text          0x00008388       0xc0 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+                0x00008388                altera_avalon_jtag_uart_read_fd
+                0x000083e8                altera_avalon_jtag_uart_write_fd
+ .text          0x00008448       0xf4 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+                0x00008448                altera_avalon_jtag_uart_read
+ .text          0x0000853c       0x98 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                0x0000853c                altera_avalon_jtag_uart_write
+ .text          0x000085d4      0x154 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+                0x000085d4                alt_busy_sleep
+ .text          0x00008728      0x11c ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+                0x00008778                close
+ .text          0x00008844       0x1c ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+                0x00008844                alt_dcache_flush_all
+ .text          0x00008860       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .text          0x0000888c       0xf0 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+                0x000088dc                alt_dev_llist_insert
+ .text          0x0000897c       0x5c ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+                0x0000897c                _do_ctors
+ .text          0x000089d8       0x5c ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+                0x000089d8                _do_dtors
+ .text          0x00008a34        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .text          0x00008a34       0x1c ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+                0x00008a34                alt_icache_flush_all
+ .text          0x00008a50      0x158 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+                0x00008b30                alt_io_redirect
+ .text          0x00008ba8      0x298 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+                0x00008ce8                open
+ .text          0x00008e40       0x80 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+                0x00008e40                alt_release_fd
+ .text          0x00008ec0       0x20 ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+                0x00008ec0                altera_nios2_qsys_irq_init
+ .text          0x00008ee0       0x90 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+                0x00008ee0                alt_find_dev
+ .text          0x00008f70      0x114 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+                0x00008f70                alt_find_file
+ .text          0x00009084       0xd4 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+                0x00009084                alt_get_fd
+ .text          0x00009158       0x14 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+                0x00009158                atexit
+ .text          0x0000916c       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+                0x0000916c                exit
+ .text          0x0000918c        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .text          0x0000918c       0x48 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+                0x0000918c                memcmp
+ .text          0x000091d4       0x28 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+                0x000091d4                strlen
+ .text          0x000091fc      0x188 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+                0x000091fc                __register_exitproc
+ .text          0x00009384      0x1d8 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+                0x00009384                __call_exitprocs
+ .text          0x0000955c        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .text          0x0000955c      0x130 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+                0x000095d0                __divsi3
+                0x00009620                __modsi3
+                0x0000967c                __udivsi3
+                0x00009684                __umodsi3
+ .text          0x0000968c       0x3c ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+                0x0000968c                _exit
+ *(.gnu.warning.*)
+ *(.fini)
+                0x000096c8                PROVIDE (__etext, ABSOLUTE (.))
+                0x000096c8                PROVIDE (_etext, ABSOLUTE (.))
+                0x000096c8                PROVIDE (etext, ABSOLUTE (.))
+ *(.eh_frame_hdr)
+                0x000096c8                . = ALIGN (0x4)
+                0x000096c8                PROVIDE (__preinit_array_start, ABSOLUTE (.))
+ *(.preinit_array)
+                0x000096c8                PROVIDE (__preinit_array_end, ABSOLUTE (.))
+                0x000096c8                PROVIDE (__init_array_start, ABSOLUTE (.))
+ *(.init_array)
+                0x000096c8                PROVIDE (__init_array_end, ABSOLUTE (.))
+                0x000096c8                PROVIDE (__fini_array_start, ABSOLUTE (.))
+ *(.fini_array)
+                0x000096c8                PROVIDE (__fini_array_end, ABSOLUTE (.))
+ *(.eh_frame)
+ *(.gcc_except_table .gcc_except_table.*)
+ *(.dynamic)
+                0x000096c8                PROVIDE (__CTOR_LIST__, ABSOLUTE (.))
+ *(.ctors)
+ *(SORT(.ctors.*))
+                0x000096c8                PROVIDE (__CTOR_END__, ABSOLUTE (.))
+                0x000096c8                PROVIDE (__DTOR_LIST__, ABSOLUTE (.))
+ *(.dtors)
+ *(SORT(.dtors.*))
+                0x000096c8                PROVIDE (__DTOR_END__, ABSOLUTE (.))
+ *(.jcr)
+                0x000096c8                . = ALIGN (0x4)
+
+.rodata         0x000096c8       0x34
+                0x000096c8                PROVIDE (__ram_rodata_start, ABSOLUTE (.))
+                0x000096c8                . = ALIGN (0x4)
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x000096c8       0x14 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .rodata        0x000096dc       0x14 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .rodata        0x000096f0        0xc ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ *(.rodata1)
+                0x000096fc                . = ALIGN (0x4)
+                0x000096fc                PROVIDE (__ram_rodata_end, ABSOLUTE (.))
+                0x000096c8                PROVIDE (__flash_rodata_start, LOADADDR (.rodata))
+
+.rwdata         0x000096fc      0x2d4 load address 0x000099d0
+                0x000096fc                PROVIDE (__ram_rwdata_start, ABSOLUTE (.))
+                0x000096fc                . = ALIGN (0x4)
+ *(.got.plt)
+ *(.got)
+ *(.data1)
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x000096fc        0x0 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .data          0x000096fc        0x0 obj/default/Servo.o
+ .data          0x000096fc        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .data          0x000096fc        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .data          0x000096fc        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .data          0x000096fc        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .data          0x000096fc       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .data          0x00009728        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .data          0x00009728        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .data          0x00009728        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .data          0x00009728        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .data          0x00009728        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .data          0x00009728        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .data          0x00009728      0x1a8 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+                0x00009728                alt_dev_null
+                0x00009750                alt_fd_list
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .data          0x000098d0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .data          0x000098d0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .data          0x000098d0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .data          0x000098d0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .data          0x000098d0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .data          0x000098d0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .data          0x000098d0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .data          0x000098d0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .data          0x000098d0       0xe0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .data          0x000099b0        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .data          0x000099b0        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+                0x000119b0                _gp = ABSOLUTE ((. + 0x8000))
+                0x000119b0                PROVIDE (gp, _gp)
+ *(.rwdata .rwdata.*)
+ *(.sdata .sdata.* .gnu.linkonce.s.*)
+ .sdata         0x000099b0       0x14 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+                0x000099b0                alt_fs_list
+                0x000099b8                alt_dev_list
+                0x000099c0                alt_max_fd
+ .sdata         0x000099c4        0x4 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+                0x000099c4                alt_errno
+ .sdata         0x000099c8        0x8 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+                0x000099c8                _global_impure_ptr
+                0x000099cc                _impure_ptr
+ *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+                0x000099d0                . = ALIGN (0x4)
+                0x000099d0                _edata = ABSOLUTE (.)
+                0x000099d0                PROVIDE (edata, ABSOLUTE (.))
+                0x000099d0                PROVIDE (__ram_rwdata_end, ABSOLUTE (.))
+                0x000099d0                PROVIDE (__flash_rwdata_start, LOADADDR (.rwdata))
+
+.bss            0x00009ca4       0x9c
+                0x00009ca4                __bss_start = ABSOLUTE (.)
+                0x00009ca4                PROVIDE (__sbss_start, ABSOLUTE (.))
+                0x00009ca4                PROVIDE (___sbss_start, ABSOLUTE (.))
+ *(.dynsbss)
+ *(.sbss .sbss.* .gnu.linkonce.sb.*)
+ .sbss          0x00009ca4        0xc ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+                0x00009ca4                alt_argc
+                0x00009ca8                alt_argv
+                0x00009cac                alt_envp
+ .sbss          0x00009cb0        0x4 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+                0x00009cb0                errno
+ *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+ *(.scommon)
+                0x00009cb4                PROVIDE (__sbss_end, ABSOLUTE (.))
+                0x00009cb4                PROVIDE (___sbss_end, ABSOLUTE (.))
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .bss           0x00009cb4        0x0 obj/default/Servo.o
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .bss           0x00009cb4        0x0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .bss           0x00009cb4        0x0 ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+ *(COMMON)
+ COMMON         0x00009cb4       0x8c /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+                0x00009cb4                _atexit0
+                0x00009d40                . = ALIGN (0x4)
+                0x00009d40                __bss_end = ABSOLUTE (.)
+
+.onchip_memory2_0
+                0x00009d40        0x0
+                0x00009d40                PROVIDE (_alt_partition_onchip_memory2_0_start, ABSOLUTE (.))
+ *(.onchip_memory2_0 .onchip_memory2_0. onchip_memory2_0.*)
+                0x00009d40                . = ALIGN (0x4)
+                0x00009d40                PROVIDE (_alt_partition_onchip_memory2_0_end, ABSOLUTE (.))
+                0x00009d40                _end = ABSOLUTE (.)
+                0x00009d40                end = ABSOLUTE (.)
+                0x00009d40                __alt_stack_base = ABSOLUTE (.)
+                0x00009d40                PROVIDE (_alt_partition_onchip_memory2_0_load_addr, LOADADDR (.onchip_memory2_0))
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x23
+ *(.comment)
+ .comment       0x00000000       0x23 obj/default/Servo.o
+                                 0x24 (size before relaxing)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .comment       0x00000000       0x24 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .comment       0x00000000       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x470
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x28 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .debug_aranges
+                0x00000028       0x20 obj/default/Servo.o
+ .debug_aranges
+                0x00000048       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .debug_aranges
+                0x00000068       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .debug_aranges
+                0x00000088       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .debug_aranges
+                0x000000a8       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .debug_aranges
+                0x000000c8       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_aranges
+                0x000000e8       0x20 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_aranges
+                0x00000108       0x20 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_aranges
+                0x00000128       0x20 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_aranges
+                0x00000148       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .debug_aranges
+                0x00000168       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .debug_aranges
+                0x00000188       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_aranges
+                0x000001a8       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .debug_aranges
+                0x000001c8       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_aranges
+                0x000001e8       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .debug_aranges
+                0x00000208       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .debug_aranges
+                0x00000228       0x18 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .debug_aranges
+                0x00000240       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_aranges
+                0x00000260       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .debug_aranges
+                0x00000280       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .debug_aranges
+                0x000002a0       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .debug_aranges
+                0x000002c0       0x20 ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .debug_aranges
+                0x000002e0       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .debug_aranges
+                0x00000300       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .debug_aranges
+                0x00000320       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .debug_aranges
+                0x00000340       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .debug_aranges
+                0x00000360       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .debug_aranges
+                0x00000380       0x18 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .debug_aranges
+                0x00000398       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .debug_aranges
+                0x000003b8       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .debug_aranges
+                0x000003d8       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .debug_aranges
+                0x000003f8       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .debug_aranges
+                0x00000418       0x18 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .debug_aranges
+                0x00000430       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .debug_aranges
+                0x00000450       0x20 ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x5125
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000       0x62 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .debug_info    0x00000062       0xda obj/default/Servo.o
+ .debug_info    0x0000013c       0xb8 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .debug_info    0x000001f4      0x135 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .debug_info    0x00000329      0x163 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .debug_info    0x0000048c       0xad ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .debug_info    0x00000539      0x420 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_info    0x00000959      0x3da ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_info    0x00000d33      0x1d6 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_info    0x00000f09      0x1b9 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_info    0x000010c2       0xd5 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .debug_info    0x00001197      0x350 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .debug_info    0x000014e7       0x90 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_info    0x00001577      0x4e3 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .debug_info    0x00001a5a      0x1b9 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_info    0x00001c13       0x8d ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .debug_info    0x00001ca0       0x8d ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .debug_info    0x00001d2d       0xa3 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .debug_info    0x00001dd0       0x90 ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_info    0x00001e60      0x4f0 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .debug_info    0x00002350      0x3f0 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .debug_info    0x00002740      0x2dd ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .debug_info    0x00002a1d       0xba ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .debug_info    0x00002ad7      0x30d ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .debug_info    0x00002de4      0x30c ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .debug_info    0x000030f0      0x339 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .debug_info    0x00003429      0x1eb /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .debug_info    0x00003614       0xf8 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .debug_info    0x0000370c       0x84 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .debug_info    0x00003790       0xf1 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .debug_info    0x00003881       0xc6 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .debug_info    0x00003947      0x6fc /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .debug_info    0x00004043      0x70e /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .debug_info    0x00004751      0x631 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .debug_info    0x00004d82      0x289 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .debug_info    0x0000500b      0x11a ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+
+.debug_abbrev   0x00000000     0x1c7e
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0x12 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .debug_abbrev  0x00000012       0x76 obj/default/Servo.o
+ .debug_abbrev  0x00000088       0x6f /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .debug_abbrev  0x000000f7       0x9d ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .debug_abbrev  0x00000194       0xc1 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .debug_abbrev  0x00000255       0x60 ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .debug_abbrev  0x000002b5      0x155 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_abbrev  0x0000040a       0xf7 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_abbrev  0x00000501       0xd5 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_abbrev  0x000005d6       0xd5 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_abbrev  0x000006ab       0x7e ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .debug_abbrev  0x00000729      0x11f ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .debug_abbrev  0x00000848       0x42 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_abbrev  0x0000088a       0xd9 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .debug_abbrev  0x00000963      0x114 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_abbrev  0x00000a77       0x79 ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .debug_abbrev  0x00000af0       0x79 ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .debug_abbrev  0x00000b69       0x5a ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .debug_abbrev  0x00000bc3       0x42 ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_abbrev  0x00000c05      0x114 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .debug_abbrev  0x00000d19      0x148 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .debug_abbrev  0x00000e61       0xde ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .debug_abbrev  0x00000f3f       0x67 ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .debug_abbrev  0x00000fa6       0xf0 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .debug_abbrev  0x00001096       0xf0 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .debug_abbrev  0x00001186      0x10d ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .debug_abbrev  0x00001293      0x115 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .debug_abbrev  0x000013a8       0xa9 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .debug_abbrev  0x00001451       0x37 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .debug_abbrev  0x00001488       0x7f /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .debug_abbrev  0x00001507       0x7f /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .debug_abbrev  0x00001586      0x1f5 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .debug_abbrev  0x0000177b      0x1e9 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .debug_abbrev  0x00001964      0x13b /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .debug_abbrev  0x00001a9f      0x112 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .debug_abbrev  0x00001bb1       0xcd ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+
+.debug_line     0x00000000     0x21e5
+ *(.debug_line)
+ .debug_line    0x00000000       0x66 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .debug_line    0x00000066       0x82 obj/default/Servo.o
+ .debug_line    0x000000e8       0x80 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .debug_line    0x00000168       0x92 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .debug_line    0x000001fa       0xd1 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .debug_line    0x000002cb       0xdb ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .debug_line    0x000003a6      0x13b ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_line    0x000004e1      0x114 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_line    0x000005f5      0x115 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_line    0x0000070a      0x10c ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_line    0x00000816       0xa2 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .debug_line    0x000008b8      0x193 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .debug_line    0x00000a4b       0x51 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_line    0x00000a9c      0x126 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .debug_line    0x00000bc2       0xd0 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_line    0x00000c92       0x59 ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .debug_line    0x00000ceb       0x59 ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .debug_line    0x00000d44       0x51 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+ .debug_line    0x00000d95       0x4f ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_line    0x00000de4      0x163 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .debug_line    0x00000f47      0x128 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .debug_line    0x0000106f       0xb0 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .debug_line    0x0000111f       0x8d ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .debug_line    0x000011ac       0xb9 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .debug_line    0x00001265       0xd5 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .debug_line    0x0000133a       0xd4 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .debug_line    0x0000140e      0x170 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .debug_line    0x0000157e      0x170 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .debug_line    0x000016ee       0x60 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+ .debug_line    0x0000174e      0x17f /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .debug_line    0x000018cd      0x174 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .debug_line    0x00001a41      0x24e /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .debug_line    0x00001c8f      0x267 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .debug_line    0x00001ef6      0x16c /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+ .debug_line    0x00002062       0xd6 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .debug_line    0x00002138       0xad ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+
+.debug_frame    0x00000000      0x6b0
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x30 obj/default/Servo.o
+ .debug_frame   0x00000030       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .debug_frame   0x00000050       0x48 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .debug_frame   0x00000098       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .debug_frame   0x000000c4       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .debug_frame   0x000000f0       0x64 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_frame   0x00000154       0x48 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_frame   0x0000019c       0x2c ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_frame   0x000001c8       0x2c ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_frame   0x000001f4       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .debug_frame   0x00000220       0x48 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .debug_frame   0x00000268       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_frame   0x00000294       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .debug_frame   0x000002c0       0x48 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_frame   0x00000308       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .debug_frame   0x00000334       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .debug_frame   0x00000360       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_frame   0x0000038c       0x4c ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .debug_frame   0x000003d8       0x68 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .debug_frame   0x00000440       0x30 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .debug_frame   0x00000470       0x2c ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .debug_frame   0x0000049c       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .debug_frame   0x000004c8       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .debug_frame   0x000004f4       0x30 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .debug_frame   0x00000524       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .debug_frame   0x00000544       0x28 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .debug_frame   0x0000056c       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .debug_frame   0x0000058c       0x20 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .debug_frame   0x000005ac       0x30 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .debug_frame   0x000005dc       0x38 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .debug_frame   0x00000614       0x70 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .debug_frame   0x00000684       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+
+.debug_str      0x00000000     0x11f0
+ *(.debug_str)
+ .debug_str     0x00000000       0xa9 obj/default/Servo.o
+                                 0xe7 (size before relaxing)
+ .debug_str     0x000000a9       0xd4 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+                                0x12b (size before relaxing)
+ .debug_str     0x0000017d      0x11f ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+                                0x1bd (size before relaxing)
+ .debug_str     0x0000029c       0x91 ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+                                0x171 (size before relaxing)
+ .debug_str     0x0000032d       0x27 ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+                                 0xf3 (size before relaxing)
+ .debug_str     0x00000354      0x157 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+                                0x2a0 (size before relaxing)
+ .debug_str     0x000004ab       0x77 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+                                0x280 (size before relaxing)
+ .debug_str     0x00000522       0x48 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+                                0x1eb (size before relaxing)
+ .debug_str     0x0000056a       0x4a ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                                0x1e1 (size before relaxing)
+ .debug_str     0x000005b4       0x42 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+                                0x116 (size before relaxing)
+ .debug_str     0x000005f6       0x44 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+                                0x1b6 (size before relaxing)
+ .debug_str     0x0000063a       0x34 ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+                                0x100 (size before relaxing)
+ .debug_str     0x0000066e      0x120 ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+                                0x2b0 (size before relaxing)
+ .debug_str     0x0000078e       0x4b ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+                                0x177 (size before relaxing)
+ .debug_str     0x000007d9       0x48 ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+                                 0x87 (size before relaxing)
+ .debug_str     0x00000821       0x4c ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+                                 0x86 (size before relaxing)
+ .debug_str     0x0000086d       0x14 ../ServoDrive_bsp//libhal_bsp.a(alt_errno.o)
+                                 0xf0 (size before relaxing)
+ .debug_str     0x00000881       0x34 ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+                                0x100 (size before relaxing)
+ .debug_str     0x000008b5       0x56 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+                                0x2c1 (size before relaxing)
+ .debug_str     0x0000090b       0x36 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+                                0x1f6 (size before relaxing)
+ .debug_str     0x00000941       0x28 ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+                                0x18a (size before relaxing)
+ .debug_str     0x00000969       0x3b ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+                                0x130 (size before relaxing)
+ .debug_str     0x000009a4       0x24 ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+                                0x197 (size before relaxing)
+ .debug_str     0x000009c8       0x26 ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+                                0x1a5 (size before relaxing)
+ .debug_str     0x000009ee       0x30 ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+                                0x1c7 (size before relaxing)
+ .debug_str     0x00000a1e      0x183 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+                                0x236 (size before relaxing)
+ .debug_str     0x00000ba1       0x4d /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+                                0x19c (size before relaxing)
+ .debug_str     0x00000bee       0xe0 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-int_errno.o)
+                                0x184 (size before relaxing)
+ .debug_str     0x00000cce       0xed /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+                                0x18b (size before relaxing)
+ .debug_str     0x00000dbb       0x45 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+                                0x191 (size before relaxing)
+ .debug_str     0x00000e00      0x29a /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+                                0x4b7 (size before relaxing)
+ .debug_str     0x0000109a       0x64 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+                                0x495 (size before relaxing)
+ .debug_str     0x000010fe       0x49 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-impure.o)
+                                0x46a (size before relaxing)
+ .debug_str     0x00001147       0x7f /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+                                0x16a (size before relaxing)
+ .debug_str     0x000011c6       0x2a ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+                                0x125 (size before relaxing)
+
+.debug_loc      0x00000000      0xe05
+ *(.debug_loc)
+ .debug_loc     0x00000000       0x2c obj/default/Servo.o
+ .debug_loc     0x0000002c       0x93 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-mul.o)
+ .debug_loc     0x000000bf       0x58 ../ServoDrive_bsp//libhal_bsp.a(alt_load.o)
+ .debug_loc     0x00000117       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_main.o)
+ .debug_loc     0x00000143       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_usleep.o)
+ .debug_loc     0x0000016f       0x84 ../ServoDrive_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_loc     0x000001f3       0x58 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_loc     0x0000024b       0x2c ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_loc     0x00000277       0x2c ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_loc     0x000002a3       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+ .debug_loc     0x000002cf       0x58 ../ServoDrive_bsp//libhal_bsp.a(alt_close.o)
+ .debug_loc     0x00000327       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_loc     0x00000353       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_dev.o)
+ .debug_loc     0x0000037f       0x58 ../ServoDrive_bsp//libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_loc     0x000003d7       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_do_ctors.o)
+ .debug_loc     0x00000403       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_do_dtors.o)
+ .debug_loc     0x0000042f       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_loc     0x0000045b       0x58 ../ServoDrive_bsp//libhal_bsp.a(alt_io_redirect.o)
+ .debug_loc     0x000004b3       0x84 ../ServoDrive_bsp//libhal_bsp.a(alt_open.o)
+ .debug_loc     0x00000537       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_release_fd.o)
+ .debug_loc     0x00000563       0x2c ../ServoDrive_bsp//libhal_bsp.a(altera_nios2_qsys_irq.o)
+ .debug_loc     0x0000058f       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_find_dev.o)
+ .debug_loc     0x000005bb       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_find_file.o)
+ .debug_loc     0x000005e7       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_get_fd.o)
+ .debug_loc     0x00000613       0x2c /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-atexit.o)
+ .debug_loc     0x0000063f       0x3e /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-exit.o)
+ .debug_loc     0x0000067d       0x6f /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-memcmp.o)
+ .debug_loc     0x000006ec       0x29 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .debug_loc     0x00000715      0x1f4 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__atexit.o)
+ .debug_loc     0x00000909      0x198 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)
+ .debug_loc     0x00000aa1      0x338 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/mno-hw-mul/libgcc.a(lib2-divmod.o)
+ .debug_loc     0x00000dd9       0x2c ../ServoDrive_bsp//libhal_bsp.a(alt_exit.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_alt_sim_info
+                0x00000000       0x40
+ *(.debug_alt_sim_info)
+ .debug_alt_sim_info
+                0x00000000       0x10 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .debug_alt_sim_info
+                0x00000010       0x30 ../ServoDrive_bsp//libhal_bsp.a(alt_busy_sleep.o)
+                0x0000d000                __alt_data_end = 0xd000
+                0x0000d000                PROVIDE (__alt_stack_pointer, __alt_data_end)
+                0x00009d40                PROVIDE (__alt_stack_limit, __alt_stack_base)
+                0x00009d40                PROVIDE (__alt_heap_start, end)
+                0x0000d000                PROVIDE (__alt_heap_limit, 0xd000)
+OUTPUT(ServoDrive.elf elf32-littlenios2)
+
+.debug_ranges   0x00000000       0x50
+ .debug_ranges  0x00000000       0x20 ../ServoDrive_bsp//obj/HAL/src/crt0.o
+ .debug_ranges  0x00000020       0x18 ../ServoDrive_bsp//libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_ranges  0x00000038       0x18 /home/icrs/altera/13.1/nios2eds/bin/gnu/H-i686-pc-linux-gnu/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-__call_atexit.o)

@@ -1,0 +1,33 @@
+
+WORK > DEFAULT
+DEFAULT:                                                                           ./libraries/work/                                                                             
+work:                                                                              ./libraries/work/                                                                             
+rsp_xbar_mux_001:                                                                  ./libraries/rsp_xbar_mux_001/                                                                 
+rsp_xbar_mux:                                                                      ./libraries/rsp_xbar_mux/                                                                     
+rsp_xbar_demux_002:                                                                ./libraries/rsp_xbar_demux_002/                                                               
+cmd_xbar_mux_002:                                                                  ./libraries/cmd_xbar_mux_002/                                                                 
+cmd_xbar_mux:                                                                      ./libraries/cmd_xbar_mux/                                                                     
+cmd_xbar_demux_001:                                                                ./libraries/cmd_xbar_demux_001/                                                               
+cmd_xbar_demux:                                                                    ./libraries/cmd_xbar_demux/                                                                   
+id_router_002:                                                                     ./libraries/id_router_002/                                                                    
+id_router:                                                                         ./libraries/id_router/                                                                        
+addr_router_001:                                                                   ./libraries/addr_router_001/                                                                  
+addr_router:                                                                       ./libraries/addr_router/                                                                      
+nios2_qsys_0_jtag_debug_module_translator_avalon_universal_slave_0_agent_rsp_fifo: ./libraries/nios2_qsys_0_jtag_debug_module_translator_avalon_universal_slave_0_agent_rsp_fifo/
+nios2_qsys_0_jtag_debug_module_translator_avalon_universal_slave_0_agent:          ./libraries/nios2_qsys_0_jtag_debug_module_translator_avalon_universal_slave_0_agent/         
+nios2_qsys_0_instruction_master_translator_avalon_universal_master_0_agent:        ./libraries/nios2_qsys_0_instruction_master_translator_avalon_universal_master_0_agent/       
+nios2_qsys_0_jtag_debug_module_translator:                                         ./libraries/nios2_qsys_0_jtag_debug_module_translator/                                        
+nios2_qsys_0_instruction_master_translator:                                        ./libraries/nios2_qsys_0_instruction_master_translator/                                       
+rst_controller:                                                                    ./libraries/rst_controller/                                                                   
+irq_mapper:                                                                        ./libraries/irq_mapper/                                                                       
+mm_interconnect_0:                                                                 ./libraries/mm_interconnect_0/                                                                
+sysid_qsys_0:                                                                      ./libraries/sysid_qsys_0/                                                                     
+jtag_uart_0:                                                                       ./libraries/jtag_uart_0/                                                                      
+onchip_memory2_0:                                                                  ./libraries/onchip_memory2_0/                                                                 
+nios2_qsys_0:                                                                      ./libraries/nios2_qsys_0/                                                                     
+altera_ver:                                                                        ./libraries/altera_ver/                                                                       
+lpm_ver:                                                                           ./libraries/lpm_ver/                                                                          
+sgate_ver:                                                                         ./libraries/sgate_ver/                                                                        
+altera_mf_ver:                                                                     ./libraries/altera_mf_ver/                                                                    
+altera_lnsim_ver:                                                                  ./libraries/altera_lnsim_ver/                                                                 
+cycloneiii_ver:                                                                    ./libraries/cycloneiii_ver/                                                                   

@@ -2,7 +2,7 @@ module FPGAServo(
 		input  wire	CLOCK_50,
 		output wire	[31:0] GPIO_0,
 		output wire	[31:0] GPIO_1,
-		input  wire	[9:0] switches,
+		input  wire	[7:0] switches,
 		output wire [7:0] LEDs
 	);
 	
