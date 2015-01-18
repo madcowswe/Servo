@@ -124,6 +124,14 @@
          type = "int";
       }
    }
+   element nios_custom_instr_floating_point_2_0
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
    element onchip_memory2_0
    {
       datum _sortIndex
@@ -383,6 +391,14 @@
   <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone III" />
  </module>
+ <module
+   kind="altera_nios_custom_instr_floating_point_2"
+   version="100.99.98.97"
+   enabled="0"
+   name="nios_custom_instr_floating_point_2_0">
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone III" />
+  <parameter name="AUTO_DEVICE" value="EP3C16F484C6" />
+ </module>
  <connection kind="clock" version="13.1" start="clk_0.clk" end="PWM_0.clock_sink" />
  <connection
    kind="reset"
@@ -524,6 +540,24 @@
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00011080" />
   <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="nios_custom_instruction"
+   version="13.1"
+   start="nios2_qsys_0.custom_instruction_master"
+   end="nios_custom_instr_floating_point_2_0.s1">
+  <parameter name="CIName">nios_custom_instr_floating_point_2_0</parameter>
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="224" />
+ </connection>
+ <connection
+   kind="nios_custom_instruction"
+   version="13.1"
+   start="nios2_qsys_0.custom_instruction_master"
+   end="nios_custom_instr_floating_point_2_0.s2">
+  <parameter name="CIName">nios_custom_instr_floating_point_2_0_1</parameter>
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="248" />
  </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
