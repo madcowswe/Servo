@@ -1,2 +1,17 @@
 #ignore output folder
 gcc
+
+*~
+
+*.cmp
+*.html
+*.sopcinfo
+*.rpt
+
+db/
+incremental_db/
+output_files/
+simulation/
+
+qsystem/
+.qsys_edit/
