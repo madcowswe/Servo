@@ -6,9 +6,10 @@
 #include "unistd.h"
 #include <stdint.h>
 
+
 #define PWM_REG_MAXCTR 0x8
-#define PWM_REG_UPDATEON_Z 0x9
-#define PWM_REG_UPDATEON_MAX 0xA
+#define PWM_REG_UPDATEON_Z 0xA
+#define PWM_REG_UPDATEON_MAX 0xB
 #define PWM_REG_UPDATE 0xF
 
 

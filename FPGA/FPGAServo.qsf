@@ -49,9 +49,6 @@ set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 2
 set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (Verilog)"
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
 
-# Pin & Location Assignments
-# ==========================
-
 # Fitter Assignments
 # ==================
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
@@ -69,4 +66,87 @@ set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+
+# Pin & Location Assignments
+# ==========================
+set_location_assignment PIN_112 -to GPIO[33]
+set_location_assignment PIN_123 -to GPIO[34]
+set_location_assignment PIN_17 -to GPIO[27]
+set_location_assignment PIN_26 -to GPIO[18]
+set_location_assignment PIN_27 -to CLK_50
+set_location_assignment PIN_28 -to GPIO[19]
+set_location_assignment PIN_29 -to GPIO[20]
+set_location_assignment PIN_30 -to GPIO[28]
+set_location_assignment PIN_48 -to GPIO[29]
+set_location_assignment PIN_61 -to GPIO[30]
+set_location_assignment PIN_80 -to GPIO[31]
+set_location_assignment PIN_88 -to GPIO[21]
+set_location_assignment PIN_89 -to GPIO[22]
+set_location_assignment PIN_90 -to GPIO[23]
+set_location_assignment PIN_91 -to GPIO[24]
+set_location_assignment PIN_96 -to GPIO[25]
+set_location_assignment PIN_97 -to GPIO[32]
+set_location_assignment PIN_98 -to GPIO[26]
+set_location_assignment PIN_120 -to M2_ENC_Z
+set_location_assignment PIN_124 -to M0_ENC_A
+set_location_assignment PIN_127 -to M0_ENC_B
+set_location_assignment PIN_130 -to M0_ENC_Z
+set_location_assignment PIN_131 -to M1_ENC_A
+set_location_assignment PIN_132 -to M1_ENC_B
+set_location_assignment PIN_135 -to M1_ENC_Z
+set_location_assignment PIN_140 -to M2_ENC_A
+set_location_assignment PIN_141 -to M2_ENC_B
+set_location_assignment PIN_110 -to GPIO[12]
+set_location_assignment PIN_111 -to GPIO[13]
+set_location_assignment PIN_113 -to GPIO[14]
+set_location_assignment PIN_114 -to GPIO[15]
+set_location_assignment PIN_118 -to GPIO[16]
+set_location_assignment PIN_119 -to GPIO[17]
+set_location_assignment PIN_100 -to M2_PWM_BL
+set_location_assignment PIN_101 -to M2_PWM_CH
+set_location_assignment PIN_102 -to M2_PWM_CL
+set_location_assignment PIN_105 -to GPIO[37]
+set_location_assignment PIN_106 -to GPIO[38]
+set_location_assignment PIN_92 -to M2_PWM_AH
+set_location_assignment PIN_93 -to M2_PWM_AL
+set_location_assignment PIN_99 -to M2_PWM_BH
+set_location_assignment PIN_74 -to GPIO[2]
+set_location_assignment PIN_75 -to GPIO[1]
+set_location_assignment PIN_76 -to GPIO[4]
+set_location_assignment PIN_77 -to GPIO[3]
+set_location_assignment PIN_78 -to GPIO[6]
+set_location_assignment PIN_79 -to GPIO[5]
+set_location_assignment PIN_81 -to GPIO[7]
+set_location_assignment PIN_84 -to GPIO[9]
+set_location_assignment PIN_85 -to GPIO[8]
+set_location_assignment PIN_86 -to GPIO[11]
+set_location_assignment PIN_87 -to GPIO[10]
+set_location_assignment PIN_62 -to M1_LEDR
+set_location_assignment PIN_64 -to M1_LEDG
+set_location_assignment PIN_65 -to M1_LEDB
+set_location_assignment PIN_66 -to M2_LEDR
+set_location_assignment PIN_69 -to M2_LEDG
+set_location_assignment PIN_70 -to M2_LEDB
+set_location_assignment PIN_38 -to M0_PWM_AH
+set_location_assignment PIN_39 -to M0_PWM_AL
+set_location_assignment PIN_41 -to M0_PWM_BH
+set_location_assignment PIN_43 -to M0_PWM_BL
+set_location_assignment PIN_44 -to M0_PWM_CH
+set_location_assignment PIN_45 -to M0_PWM_CL
+set_location_assignment PIN_46 -to M0_LEDR
+set_location_assignment PIN_47 -to M0_LEDG
+set_location_assignment PIN_50 -to M0_LEDB
+set_location_assignment PIN_52 -to M1_PWM_AH
+set_location_assignment PIN_54 -to M1_PWM_AL
+set_location_assignment PIN_55 -to M1_PWM_BH
+set_location_assignment PIN_56 -to M1_PWM_BL
+set_location_assignment PIN_57 -to M1_PWM_CH
+set_location_assignment PIN_58 -to M1_PWM_CL
+set_location_assignment PIN_59 -to STATUSLED_R
+set_location_assignment PIN_60 -to STATUSLED_B
+set_location_assignment PIN_32 -to GPIO[35]
+set_location_assignment PIN_33 -to GPIO[36]
+set_location_assignment PIN_126 -to BOOT_SEL
+set_location_assignment PIN_122 -to DEV_OE
+
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

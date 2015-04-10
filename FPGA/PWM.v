@@ -8,7 +8,8 @@ module Servo  (
 		input  wire        MMS_write,     //             .write
 		input  wire [31:0] MMS_writedata, //             .writedata
 		output wire [2:0]  Udrive,      //     M0PWMout.udrive
-		output wire [2:0]  Ldrive      //             .ldrive
+		output wire [2:0]  Ldrive,      //             .ldrive
+		output reg         irqout       //      Trigirq.irq
 	);
 	
 
@@ -17,6 +18,8 @@ module Servo  (
 	reg [15:0] maxctrvaltoset;
 	reg updateon0;
 	reg updateonmax;
+	reg trigon0;
+	reg trigonmax;
 	reg update;
 	reg updateAck;
 
@@ -29,6 +32,8 @@ module Servo  (
 			maxctrvaltoset <= 16'hFFFF;
 			updateon0 <= 1'b0;
 			updateonmax <= 1'b0;
+			trigon0 <= 1'b0;
+			trigonmax <= 1'b0;
 			update <= 1'b0;
 		end else begin
 			if(updateAck) begin
@@ -52,10 +57,15 @@ module Servo  (
 
 					4'h8:
 						maxctrvaltoset <= MMS_writedata[15:0];
-					4'h9:
-						updateon0 <= MMS_writedata[0];
+					4'h9:;
 					4'hA:
+						updateon0 <= MMS_writedata[0];
+					4'hB:
 						updateonmax <= MMS_writedata[0];
+					4'hC:
+						trigon0 <= MMS_writedata[0];
+					4'hD:
+						trigonmax <= MMS_writedata[0];
 
 					4'hF:
 						update <= MMS_writedata[0];
@@ -64,8 +74,6 @@ module Servo  (
 			end
 		end
 	end
-
-
 
 	reg [15:0] compvalhigh[2:0];
 	reg [15:0] compvallow[2:0];
@@ -86,11 +94,15 @@ module Servo  (
 
 			maxctrval <= 16'hFFFF;
 			updateAck <= 1'b0;
+
+			irqout <= 1'b0;
 		end else begin
+
+			irqout <= 1'b0;
 
 			if(!update) begin
 				updateAck <= 1'b0;
-			end
+			endcase
 
 			if(countup) begin
 				if(ctr == maxctrval) begin
@@ -102,6 +114,10 @@ module Servo  (
 							compvallow[i] <= compvallowtoset[i];
 						end
 						maxctrval <= maxctrvaltoset;
+					end
+
+					if(trigonmax) begin
+						irqout <= 1'b1;
 					end
 				end else begin
 					ctr <= ctr + 1;
@@ -116,6 +132,10 @@ module Servo  (
 							compvallow[i] <= compvallowtoset[i];
 						end
 						maxctrval <= maxctrvaltoset;
+					end
+
+					if(trigon0) begin
+						irqout <= 1'b1;
 					end
 				end else begin
 					ctr <= ctr - 1;
