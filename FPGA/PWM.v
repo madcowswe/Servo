@@ -102,7 +102,7 @@ module Servo  (
 
 			if(!update) begin
 				updateAck <= 1'b0;
-			endcase
+			end
 
 			if(countup) begin
 				if(ctr == maxctrval) begin

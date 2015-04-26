@@ -17,68 +17,12 @@
          type = "String";
       }
    }
-   element PWM_0
-   {
-      datum _sortIndex
-      {
-         value = "3";
-         type = "int";
-      }
-   }
-   element PWM_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "70144";
-         type = "String";
-      }
-   }
-   element PWM_1
-   {
-      datum _sortIndex
-      {
-         value = "5";
-         type = "int";
-      }
-   }
-   element PWM_1.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "70208";
-         type = "String";
-      }
-   }
-   element QEI_0
-   {
-      datum _sortIndex
-      {
-         value = "4";
-         type = "int";
-      }
-   }
-   element QEI_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "70288";
-         type = "String";
-      }
-   }
-   element QEI_1
+   element MotorControlHardware
    {
       datum _sortIndex
       {
          value = "6";
          type = "int";
-      }
-   }
-   element QEI_1.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "70296";
-         type = "String";
       }
    }
    element altpll_0
@@ -101,7 +45,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "4";
          type = "int";
       }
    }
@@ -113,19 +57,11 @@
          type = "String";
       }
    }
-   element modular_adc_0
-   {
-      datum _sortIndex
-      {
-         value = "2";
-         type = "int";
-      }
-   }
    element nios2_qsys_0
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "2";
          type = "int";
       }
    }
@@ -141,7 +77,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "3";
          type = "int";
       }
    }
@@ -161,11 +97,59 @@
          type = "String";
       }
    }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
    element sysid_qsys_0
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "5";
          type = "int";
       }
    }
@@ -198,23 +182,67 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
- <interface name="pwm_0_pwmout" internal="PWM_0.PWMout" type="conduit" dir="end" />
- <interface name="pwm_1_pwmout" internal="PWM_1.PWMout" type="conduit" dir="end" />
  <interface
-   name="qei_0_encoderin"
-   internal="QEI_0.EncoderIn"
+   name="motorcontrolhardware_pwm_0_pwmout"
+   internal="MotorControlHardware.PWM_0_PWMout"
    type="conduit"
    dir="end" />
  <interface
-   name="qei_1_encoderin"
-   internal="QEI_1.EncoderIn"
+   name="motorcontrolhardware_qei_0_encoderin"
+   internal="MotorControlHardware.QEI_0_EncoderIn"
    type="conduit"
    dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
- <module name="PWM_0" kind="PWM" version="1.0" enabled="1" />
- <module name="PWM_1" kind="PWM" version="1.0" enabled="1" />
- <module name="QEI_0" kind="QEI" version="1.0" enabled="1" />
- <module name="QEI_1" kind="QEI" version="1.0" enabled="1" />
+ <module
+   name="MotorControlHardware"
+   kind="subsystemA"
+   version="1.0"
+   enabled="1">
+  <parameter name="AUTO_ADC_CLK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_ADC_CLK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_ADC_CLK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLK_0_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLK_0_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_CLK_0_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_DEVICE" value="10M08SAE144C8GES" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
+  <parameter name="AUTO_GENERATION_ID" value="0" />
+  <parameter name="AUTO_MODULAR_ADC_0_ADC_PLL_CLOCK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_MODULAR_ADC_0_ADC_PLL_CLOCK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_MODULAR_ADC_0_ADC_PLL_CLOCK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_MODULAR_ADC_0_CLOCK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_MODULAR_ADC_0_CLOCK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_MODULAR_ADC_0_CLOCK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_MULTIPLEXER_0_CLK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_MULTIPLEXER_0_CLK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_MULTIPLEXER_0_CLK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_PWM_0_CLOCK_SINK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_PWM_0_CLOCK_SINK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_PWM_0_CLOCK_SINK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_PWM_1_CLOCK_SINK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_PWM_1_CLOCK_SINK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_PWM_1_CLOCK_SINK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_QEI_0_CLOCK_SINK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_QEI_0_CLOCK_SINK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_QEI_0_CLOCK_SINK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_QEI_1_CLOCK_SINK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_QEI_1_CLOCK_SINK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_QEI_1_CLOCK_SINK_RESET_DOMAIN" value="-1" />
+  <parameter
+     name="AUTO_ST_CH_DATA_DEMUX_AND_SWAP_0_CLOCK_SINK_CLOCK_DOMAIN"
+     value="-1" />
+  <parameter
+     name="AUTO_ST_CH_DATA_DEMUX_AND_SWAP_0_CLOCK_SINK_CLOCK_RATE"
+     value="-1" />
+  <parameter
+     name="AUTO_ST_CH_DATA_DEMUX_AND_SWAP_0_CLOCK_SINK_RESET_DOMAIN"
+     value="-1" />
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_MotorControlHardware</parameter>
+ </module>
  <module name="altpll_0" kind="altpll" version="14.1" enabled="1">
   <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
   <parameter name="AUTO_INCLK_INTERFACE_CLOCK_RATE" value="50000000" />
@@ -408,183 +436,6 @@
   <parameter name="writeIRQThreshold" value="8" />
  </module>
  <module
-   name="modular_adc_0"
-   kind="altera_modular_adc"
-   version="14.1"
-   enabled="1">
-  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
-  <parameter name="CLOCK_FREQ" value="116000000" />
-  <parameter name="CORE_VAR" value="3" />
-  <parameter name="DEVICE_PART" value="10M08SAE144C8GES" />
-  <parameter name="ENABLE_DEBUG" value="0" />
-  <parameter name="FAMILY" value="MAX 10" />
-  <parameter name="MONITOR_COUNT_WIDTH" value="12" />
-  <parameter name="clkdiv" value="2" />
-  <parameter name="en_thmax_ch0" value="false" />
-  <parameter name="en_thmax_ch1" value="false" />
-  <parameter name="en_thmax_ch10" value="false" />
-  <parameter name="en_thmax_ch11" value="false" />
-  <parameter name="en_thmax_ch12" value="false" />
-  <parameter name="en_thmax_ch13" value="false" />
-  <parameter name="en_thmax_ch14" value="false" />
-  <parameter name="en_thmax_ch15" value="false" />
-  <parameter name="en_thmax_ch16" value="false" />
-  <parameter name="en_thmax_ch2" value="false" />
-  <parameter name="en_thmax_ch3" value="false" />
-  <parameter name="en_thmax_ch4" value="false" />
-  <parameter name="en_thmax_ch5" value="false" />
-  <parameter name="en_thmax_ch6" value="false" />
-  <parameter name="en_thmax_ch7" value="false" />
-  <parameter name="en_thmax_ch8" value="false" />
-  <parameter name="en_thmax_ch9" value="false" />
-  <parameter name="en_thmin_ch0" value="false" />
-  <parameter name="en_thmin_ch1" value="false" />
-  <parameter name="en_thmin_ch10" value="false" />
-  <parameter name="en_thmin_ch11" value="false" />
-  <parameter name="en_thmin_ch12" value="false" />
-  <parameter name="en_thmin_ch13" value="false" />
-  <parameter name="en_thmin_ch14" value="false" />
-  <parameter name="en_thmin_ch15" value="false" />
-  <parameter name="en_thmin_ch16" value="false" />
-  <parameter name="en_thmin_ch2" value="false" />
-  <parameter name="en_thmin_ch3" value="false" />
-  <parameter name="en_thmin_ch4" value="false" />
-  <parameter name="en_thmin_ch5" value="false" />
-  <parameter name="en_thmin_ch6" value="false" />
-  <parameter name="en_thmin_ch7" value="false" />
-  <parameter name="en_thmin_ch8" value="false" />
-  <parameter name="en_thmin_ch9" value="false" />
-  <parameter name="en_tsd_max" value="false" />
-  <parameter name="en_tsd_min" value="false" />
-  <parameter name="external_vref" value="3.3" />
-  <parameter name="int_vref_vr" value="3.3" />
-  <parameter name="ip_is_for_which_adc" value="1" />
-  <parameter name="prescaler_ch16" value="false" />
-  <parameter name="prescaler_ch8" value="false" />
-  <parameter name="refsel" value="0" />
-  <parameter name="seq_order_length" value="1" />
-  <parameter name="seq_order_slot_1" value="0" />
-  <parameter name="seq_order_slot_10" value="30" />
-  <parameter name="seq_order_slot_11" value="30" />
-  <parameter name="seq_order_slot_12" value="30" />
-  <parameter name="seq_order_slot_13" value="30" />
-  <parameter name="seq_order_slot_14" value="30" />
-  <parameter name="seq_order_slot_15" value="30" />
-  <parameter name="seq_order_slot_16" value="30" />
-  <parameter name="seq_order_slot_17" value="30" />
-  <parameter name="seq_order_slot_18" value="30" />
-  <parameter name="seq_order_slot_19" value="30" />
-  <parameter name="seq_order_slot_2" value="30" />
-  <parameter name="seq_order_slot_20" value="30" />
-  <parameter name="seq_order_slot_21" value="30" />
-  <parameter name="seq_order_slot_22" value="30" />
-  <parameter name="seq_order_slot_23" value="30" />
-  <parameter name="seq_order_slot_24" value="30" />
-  <parameter name="seq_order_slot_25" value="30" />
-  <parameter name="seq_order_slot_26" value="30" />
-  <parameter name="seq_order_slot_27" value="30" />
-  <parameter name="seq_order_slot_28" value="30" />
-  <parameter name="seq_order_slot_29" value="30" />
-  <parameter name="seq_order_slot_3" value="30" />
-  <parameter name="seq_order_slot_30" value="30" />
-  <parameter name="seq_order_slot_31" value="30" />
-  <parameter name="seq_order_slot_32" value="30" />
-  <parameter name="seq_order_slot_33" value="30" />
-  <parameter name="seq_order_slot_34" value="30" />
-  <parameter name="seq_order_slot_35" value="30" />
-  <parameter name="seq_order_slot_36" value="30" />
-  <parameter name="seq_order_slot_37" value="30" />
-  <parameter name="seq_order_slot_38" value="30" />
-  <parameter name="seq_order_slot_39" value="30" />
-  <parameter name="seq_order_slot_4" value="30" />
-  <parameter name="seq_order_slot_40" value="30" />
-  <parameter name="seq_order_slot_41" value="30" />
-  <parameter name="seq_order_slot_42" value="30" />
-  <parameter name="seq_order_slot_43" value="30" />
-  <parameter name="seq_order_slot_44" value="30" />
-  <parameter name="seq_order_slot_45" value="30" />
-  <parameter name="seq_order_slot_46" value="30" />
-  <parameter name="seq_order_slot_47" value="30" />
-  <parameter name="seq_order_slot_48" value="30" />
-  <parameter name="seq_order_slot_49" value="30" />
-  <parameter name="seq_order_slot_5" value="30" />
-  <parameter name="seq_order_slot_50" value="30" />
-  <parameter name="seq_order_slot_51" value="30" />
-  <parameter name="seq_order_slot_52" value="30" />
-  <parameter name="seq_order_slot_53" value="30" />
-  <parameter name="seq_order_slot_54" value="30" />
-  <parameter name="seq_order_slot_55" value="30" />
-  <parameter name="seq_order_slot_56" value="30" />
-  <parameter name="seq_order_slot_57" value="30" />
-  <parameter name="seq_order_slot_58" value="30" />
-  <parameter name="seq_order_slot_59" value="30" />
-  <parameter name="seq_order_slot_6" value="30" />
-  <parameter name="seq_order_slot_60" value="30" />
-  <parameter name="seq_order_slot_61" value="30" />
-  <parameter name="seq_order_slot_62" value="30" />
-  <parameter name="seq_order_slot_63" value="30" />
-  <parameter name="seq_order_slot_64" value="30" />
-  <parameter name="seq_order_slot_7" value="30" />
-  <parameter name="seq_order_slot_8" value="30" />
-  <parameter name="seq_order_slot_9" value="30" />
-  <parameter name="thmax_ch0" value="0.0" />
-  <parameter name="thmax_ch1" value="0.0" />
-  <parameter name="thmax_ch10" value="0.0" />
-  <parameter name="thmax_ch11" value="0.0" />
-  <parameter name="thmax_ch12" value="0.0" />
-  <parameter name="thmax_ch13" value="0.0" />
-  <parameter name="thmax_ch14" value="0.0" />
-  <parameter name="thmax_ch15" value="0.0" />
-  <parameter name="thmax_ch16" value="0.0" />
-  <parameter name="thmax_ch2" value="0.0" />
-  <parameter name="thmax_ch3" value="0.0" />
-  <parameter name="thmax_ch4" value="0.0" />
-  <parameter name="thmax_ch5" value="0.0" />
-  <parameter name="thmax_ch6" value="0.0" />
-  <parameter name="thmax_ch7" value="0.0" />
-  <parameter name="thmax_ch8" value="0.0" />
-  <parameter name="thmax_ch9" value="0.0" />
-  <parameter name="thmin_ch0" value="0.0" />
-  <parameter name="thmin_ch1" value="0.0" />
-  <parameter name="thmin_ch10" value="0.0" />
-  <parameter name="thmin_ch11" value="0.0" />
-  <parameter name="thmin_ch12" value="0.0" />
-  <parameter name="thmin_ch13" value="0.0" />
-  <parameter name="thmin_ch14" value="0.0" />
-  <parameter name="thmin_ch15" value="0.0" />
-  <parameter name="thmin_ch16" value="0.0" />
-  <parameter name="thmin_ch2" value="0.0" />
-  <parameter name="thmin_ch3" value="0.0" />
-  <parameter name="thmin_ch4" value="0.0" />
-  <parameter name="thmin_ch5" value="0.0" />
-  <parameter name="thmin_ch6" value="0.0" />
-  <parameter name="thmin_ch7" value="0.0" />
-  <parameter name="thmin_ch8" value="0.0" />
-  <parameter name="thmin_ch9" value="0.0" />
-  <parameter name="tsclkdiv" value="1" />
-  <parameter name="tsclksel" value="1" />
-  <parameter name="tsd_max" value="125" />
-  <parameter name="tsd_min" value="0" />
-  <parameter name="use_ch0" value="true" />
-  <parameter name="use_ch1" value="true" />
-  <parameter name="use_ch10" value="false" />
-  <parameter name="use_ch11" value="false" />
-  <parameter name="use_ch12" value="false" />
-  <parameter name="use_ch13" value="false" />
-  <parameter name="use_ch14" value="false" />
-  <parameter name="use_ch15" value="false" />
-  <parameter name="use_ch16" value="false" />
-  <parameter name="use_ch2" value="true" />
-  <parameter name="use_ch3" value="true" />
-  <parameter name="use_ch4" value="true" />
-  <parameter name="use_ch5" value="true" />
-  <parameter name="use_ch6" value="true" />
-  <parameter name="use_ch7" value="true" />
-  <parameter name="use_ch8" value="true" />
-  <parameter name="use_ch9" value="false" />
-  <parameter name="use_tsd" value="true" />
- </module>
- <module
    name="nios2_qsys_0"
    kind="altera_nios2_gen2"
    version="14.1"
@@ -608,7 +459,7 @@
   <parameter name="dataAddrWidth" value="17" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x8000' end='0xD000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x10800' end='0x11000' /><slave name='PWM_0.avalon_slave' start='0x11200' end='0x11240' /><slave name='PWM_1.avalon_slave' start='0x11240' end='0x11280' /><slave name='sysid_qsys_0.control_slave' start='0x11288' end='0x11290' /><slave name='QEI_0.avalon_slave' start='0x11290' end='0x11298' /><slave name='QEI_1.avalon_slave' start='0x11298' end='0x112A0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x112A0' end='0x112A8' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='MotorControlHardware_PWM_0.avalon_slave' start='0x0' end='0x40' /><slave name='MotorControlHardware_QEI_0.avalon_slave' start='0x40' end='0x48' /><slave name='onchip_memory2_0.s1' start='0x8000' end='0xA000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x10800' end='0x11000' /><slave name='sysid_qsys_0.control_slave' start='0x11288' end='0x11290' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x112A0' end='0x112A8' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -647,14 +498,14 @@
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Tiny" />
   <parameter name="instAddrWidth" value="17" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x8000' end='0xD000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x10800' end='0x11000' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x8000' end='0xA000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x10800' end='0x11000' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="2" />
+  <parameter name="internalIrqMaskSystemInfo" value="3" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -781,7 +632,7 @@
   <parameter name="initMemContent" value="false" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="20480" />
+  <parameter name="memorySize" value="8192" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="resetrequest_enabled" value="true" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
@@ -815,42 +666,6 @@
    kind="avalon"
    version="14.1"
    start="nios2_qsys_0.data_master"
-   end="QEI_1.avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011298" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.1"
-   start="nios2_qsys_0.data_master"
-   end="PWM_1.avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011240" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.1"
-   start="nios2_qsys_0.data_master"
-   end="QEI_0.avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011290" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.1"
-   start="nios2_qsys_0.data_master"
-   end="PWM_0.avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011200" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.1"
-   start="nios2_qsys_0.data_master"
    end="sysid_qsys_0.control_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00011288" />
@@ -863,6 +678,15 @@
    end="nios2_qsys_0.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00010800" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.1"
+   start="nios2_qsys_0.data_master"
+   end="MotorControlHardware.mm_bridge_0_s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -896,7 +720,7 @@
    kind="clock"
    version="14.1"
    start="altpll_0.c0"
-   end="modular_adc_0.adc_pll_clock" />
+   end="MotorControlHardware.adc_clk" />
  <connection
    kind="clock"
    version="14.1"
@@ -912,32 +736,12 @@
    kind="clock"
    version="14.1"
    start="altpll_0.c1"
+   end="MotorControlHardware.clk" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="altpll_0.c1"
    end="onchip_memory2_0.clk1" />
- <connection
-   kind="clock"
-   version="14.1"
-   start="altpll_0.c1"
-   end="modular_adc_0.clock" />
- <connection
-   kind="clock"
-   version="14.1"
-   start="altpll_0.c1"
-   end="PWM_0.clock_sink" />
- <connection
-   kind="clock"
-   version="14.1"
-   start="altpll_0.c1"
-   end="QEI_0.clock_sink" />
- <connection
-   kind="clock"
-   version="14.1"
-   start="altpll_0.c1"
-   end="PWM_1.clock_sink" />
- <connection
-   kind="clock"
-   version="14.1"
-   start="altpll_0.c1"
-   end="QEI_1.clock_sink" />
  <connection
    kind="clock"
    version="14.1"
@@ -947,9 +751,21 @@
    kind="interrupt"
    version="14.1"
    start="nios2_qsys_0.irq"
+   end="MotorControlHardware.PWM_0_interrupt_sender">
+  <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="14.1"
+   start="nios2_qsys_0.irq"
    end="jtag_uart_0.irq">
   <parameter name="irqNumber" value="1" />
  </connection>
+ <connection
+   kind="reset"
+   version="14.1"
+   start="clk_0.clk_reset"
+   end="MotorControlHardware.adc_reset" />
  <connection
    kind="reset"
    version="14.1"
@@ -974,32 +790,12 @@
    kind="reset"
    version="14.1"
    start="clk_0.clk_reset"
+   end="MotorControlHardware.reset" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="clk_0.clk_reset"
    end="onchip_memory2_0.reset1" />
- <connection
-   kind="reset"
-   version="14.1"
-   start="clk_0.clk_reset"
-   end="QEI_0.reset_sink" />
- <connection
-   kind="reset"
-   version="14.1"
-   start="clk_0.clk_reset"
-   end="PWM_1.reset_sink" />
- <connection
-   kind="reset"
-   version="14.1"
-   start="clk_0.clk_reset"
-   end="QEI_1.reset_sink" />
- <connection
-   kind="reset"
-   version="14.1"
-   start="clk_0.clk_reset"
-   end="PWM_0.reset_sink" />
- <connection
-   kind="reset"
-   version="14.1"
-   start="clk_0.clk_reset"
-   end="modular_adc_0.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />

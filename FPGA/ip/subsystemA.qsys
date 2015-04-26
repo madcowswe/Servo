@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags=""
+   categories="" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element $${FILENAME}
+   {
+   }
+   element ADC_src_clock
+   {
+      datum _sortIndex
+      {
+         value = "1";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element PWM_0
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+   }
+   element PWM_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element PWM_1
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element QEI_0
+   {
+      datum _sortIndex
+      {
+         value = "4";
+         type = "int";
+      }
+   }
+   element QEI_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "64";
+         type = "String";
+      }
+   }
+   element QEI_1
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element ST_ch_data_demux_and_swap_0
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element ST_channel_prefixer_0
+   {
+      datum _sortIndex
+      {
+         value = "11";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element Sys_clk
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element demultiplexer_0
+   {
+      datum _sortIndex
+      {
+         value = "12";
+         type = "int";
+      }
+   }
+   element mm_bridge_0
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+   }
+   element modular_adc_0
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element multiplexer_0
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element sc_fifo_0
+   {
+      datum _sortIndex
+      {
+         value = "10";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="10M08SAE144C8GES" />
+ <parameter name="deviceFamily" value="MAX 10" />
+ <parameter name="deviceSpeedGrade" value="8" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="false" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface name="PWM_0_PWMout" internal="PWM_0.PWMout" type="conduit" dir="end" />
+ <interface
+   name="PWM_0_interrupt_sender"
+   internal="PWM_0.interrupt_sender"
+   type="interrupt"
+   dir="end" />
+ <interface name="PWM_1_PWMout" internal="PWM_1.PWMout" />
+ <interface name="PWM_1_interrupt_sender" internal="PWM_1.interrupt_sender" />
+ <interface
+   name="QEI_0_EncoderIn"
+   internal="QEI_0.EncoderIn"
+   type="conduit"
+   dir="end" />
+ <interface name="QEI_1_EncoderIn" internal="QEI_1.EncoderIn" />
+ <interface name="adc_clk" internal="ADC_src_clock.clk_in" type="clock" dir="end" />
+ <interface
+   name="adc_reset"
+   internal="ADC_src_clock.clk_in_reset"
+   type="reset"
+   dir="end" />
+ <interface name="clk" internal="Sys_clk.clk_in" type="clock" dir="end" />
+ <interface
+   name="mm_bridge_0_s0"
+   internal="mm_bridge_0.s0"
+   type="avalon"
+   dir="end" />
+ <interface name="reset" internal="Sys_clk.clk_in_reset" type="reset" dir="end" />
+ <module name="ADC_src_clock" kind="clock_source" version="14.1" enabled="1">
+  <parameter name="clockFrequency" value="50000000" />
+  <parameter name="clockFrequencyKnown" value="false" />
+  <parameter name="inputClockFrequency" value="0" />
+  <parameter name="resetSynchronousEdges" value="NONE" />
+ </module>
+ <module name="PWM_0" kind="PWM" version="1.0" enabled="1" />
+ <module name="PWM_1" kind="PWM" version="1.0" enabled="0" />
+ <module name="QEI_0" kind="QEI" version="1.0" enabled="1" />
+ <module name="QEI_1" kind="QEI" version="1.0" enabled="0" />
+ <module
+   name="ST_ch_data_demux_and_swap_0"
+   kind="ST_ch_data_demux_and_swap"
+   version="1.0"
+   enabled="1" />
+ <module
+   name="ST_channel_prefixer_0"
+   kind="ST_channel_prefixer"
+   version="1.0"
+   enabled="1" />
+ <module name="Sys_clk" kind="clock_source" version="14.1" enabled="1">
+  <parameter name="clockFrequency" value="50000000" />
+  <parameter name="clockFrequencyKnown" value="false" />
+  <parameter name="inputClockFrequency" value="0" />
+  <parameter name="resetSynchronousEdges" value="NONE" />
+ </module>
+ <module
+   name="demultiplexer_0"
+   kind="demultiplexer"
+   version="14.1"
+   enabled="1">
+  <parameter name="bitsPerSymbol" value="12" />
+  <parameter name="errorWidth" value="0" />
+  <parameter name="inChannelWidth" value="7" />
+  <parameter name="numOutputInterfaces" value="3" />
+  <parameter name="symbolsPerBeat" value="1" />
+  <parameter name="useHighBitsOfChannel" value="true" />
+  <parameter name="usePackets" value="true" />
+ </module>
+ <module
+   name="mm_bridge_0"
+   kind="altera_avalon_mm_bridge"
+   version="14.1"
+   enabled="1">
+  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
+  <parameter name="ADDRESS_WIDTH" value="10" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="DATA_WIDTH" value="32" />
+  <parameter name="LINEWRAPBURSTS" value="0" />
+  <parameter name="MAX_BURST_SIZE" value="1" />
+  <parameter name="MAX_PENDING_RESPONSES" value="4" />
+  <parameter name="PIPELINE_COMMAND" value="0" />
+  <parameter name="PIPELINE_RESPONSE" value="0" />
+  <parameter name="SYMBOL_WIDTH" value="8" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="7" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="1" />
+ </module>
+ <module
+   name="modular_adc_0"
+   kind="altera_modular_adc"
+   version="14.1"
+   enabled="1">
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
+  <parameter name="CLOCK_FREQ" value="0" />
+  <parameter name="CORE_VAR" value="3" />
+  <parameter name="DEVICE_PART" value="10M08SAE144C8GES" />
+  <parameter name="ENABLE_DEBUG" value="0" />
+  <parameter name="FAMILY" value="MAX 10" />
+  <parameter name="MONITOR_COUNT_WIDTH" value="12" />
+  <parameter name="clkdiv" value="2" />
+  <parameter name="en_thmax_ch0" value="false" />
+  <parameter name="en_thmax_ch1" value="false" />
+  <parameter name="en_thmax_ch10" value="false" />
+  <parameter name="en_thmax_ch11" value="false" />
+  <parameter name="en_thmax_ch12" value="false" />
+  <parameter name="en_thmax_ch13" value="false" />
+  <parameter name="en_thmax_ch14" value="false" />
+  <parameter name="en_thmax_ch15" value="false" />
+  <parameter name="en_thmax_ch16" value="false" />
+  <parameter name="en_thmax_ch2" value="false" />
+  <parameter name="en_thmax_ch3" value="false" />
+  <parameter name="en_thmax_ch4" value="false" />
+  <parameter name="en_thmax_ch5" value="false" />
+  <parameter name="en_thmax_ch6" value="false" />
+  <parameter name="en_thmax_ch7" value="false" />
+  <parameter name="en_thmax_ch8" value="false" />
+  <parameter name="en_thmax_ch9" value="false" />
+  <parameter name="en_thmin_ch0" value="false" />
+  <parameter name="en_thmin_ch1" value="false" />
+  <parameter name="en_thmin_ch10" value="false" />
+  <parameter name="en_thmin_ch11" value="false" />
+  <parameter name="en_thmin_ch12" value="false" />
+  <parameter name="en_thmin_ch13" value="false" />
+  <parameter name="en_thmin_ch14" value="false" />
+  <parameter name="en_thmin_ch15" value="false" />
+  <parameter name="en_thmin_ch16" value="false" />
+  <parameter name="en_thmin_ch2" value="false" />
+  <parameter name="en_thmin_ch3" value="false" />
+  <parameter name="en_thmin_ch4" value="false" />
+  <parameter name="en_thmin_ch5" value="false" />
+  <parameter name="en_thmin_ch6" value="false" />
+  <parameter name="en_thmin_ch7" value="false" />
+  <parameter name="en_thmin_ch8" value="false" />
+  <parameter name="en_thmin_ch9" value="false" />
+  <parameter name="en_tsd_max" value="false" />
+  <parameter name="en_tsd_min" value="false" />
+  <parameter name="external_vref" value="3.3" />
+  <parameter name="int_vref_vr" value="3.3" />
+  <parameter name="ip_is_for_which_adc" value="1" />
+  <parameter name="prescaler_ch16" value="false" />
+  <parameter name="prescaler_ch8" value="false" />
+  <parameter name="refsel" value="0" />
+  <parameter name="seq_order_length" value="1" />
+  <parameter name="seq_order_slot_1" value="0" />
+  <parameter name="seq_order_slot_10" value="30" />
+  <parameter name="seq_order_slot_11" value="30" />
+  <parameter name="seq_order_slot_12" value="30" />
+  <parameter name="seq_order_slot_13" value="30" />
+  <parameter name="seq_order_slot_14" value="30" />
+  <parameter name="seq_order_slot_15" value="30" />
+  <parameter name="seq_order_slot_16" value="30" />
+  <parameter name="seq_order_slot_17" value="30" />
+  <parameter name="seq_order_slot_18" value="30" />
+  <parameter name="seq_order_slot_19" value="30" />
+  <parameter name="seq_order_slot_2" value="30" />
+  <parameter name="seq_order_slot_20" value="30" />
+  <parameter name="seq_order_slot_21" value="30" />
+  <parameter name="seq_order_slot_22" value="30" />
+  <parameter name="seq_order_slot_23" value="30" />
+  <parameter name="seq_order_slot_24" value="30" />
+  <parameter name="seq_order_slot_25" value="30" />
+  <parameter name="seq_order_slot_26" value="30" />
+  <parameter name="seq_order_slot_27" value="30" />
+  <parameter name="seq_order_slot_28" value="30" />
+  <parameter name="seq_order_slot_29" value="30" />
+  <parameter name="seq_order_slot_3" value="30" />
+  <parameter name="seq_order_slot_30" value="30" />
+  <parameter name="seq_order_slot_31" value="30" />
+  <parameter name="seq_order_slot_32" value="30" />
+  <parameter name="seq_order_slot_33" value="30" />
+  <parameter name="seq_order_slot_34" value="30" />
+  <parameter name="seq_order_slot_35" value="30" />
+  <parameter name="seq_order_slot_36" value="30" />
+  <parameter name="seq_order_slot_37" value="30" />
+  <parameter name="seq_order_slot_38" value="30" />
+  <parameter name="seq_order_slot_39" value="30" />
+  <parameter name="seq_order_slot_4" value="30" />
+  <parameter name="seq_order_slot_40" value="30" />
+  <parameter name="seq_order_slot_41" value="30" />
+  <parameter name="seq_order_slot_42" value="30" />
+  <parameter name="seq_order_slot_43" value="30" />
+  <parameter name="seq_order_slot_44" value="30" />
+  <parameter name="seq_order_slot_45" value="30" />
+  <parameter name="seq_order_slot_46" value="30" />
+  <parameter name="seq_order_slot_47" value="30" />
+  <parameter name="seq_order_slot_48" value="30" />
+  <parameter name="seq_order_slot_49" value="30" />
+  <parameter name="seq_order_slot_5" value="30" />
+  <parameter name="seq_order_slot_50" value="30" />
+  <parameter name="seq_order_slot_51" value="30" />
+  <parameter name="seq_order_slot_52" value="30" />
+  <parameter name="seq_order_slot_53" value="30" />
+  <parameter name="seq_order_slot_54" value="30" />
+  <parameter name="seq_order_slot_55" value="30" />
+  <parameter name="seq_order_slot_56" value="30" />
+  <parameter name="seq_order_slot_57" value="30" />
+  <parameter name="seq_order_slot_58" value="30" />
+  <parameter name="seq_order_slot_59" value="30" />
+  <parameter name="seq_order_slot_6" value="30" />
+  <parameter name="seq_order_slot_60" value="30" />
+  <parameter name="seq_order_slot_61" value="30" />
+  <parameter name="seq_order_slot_62" value="30" />
+  <parameter name="seq_order_slot_63" value="30" />
+  <parameter name="seq_order_slot_64" value="30" />
+  <parameter name="seq_order_slot_7" value="30" />
+  <parameter name="seq_order_slot_8" value="30" />
+  <parameter name="seq_order_slot_9" value="30" />
+  <parameter name="thmax_ch0" value="0.0" />
+  <parameter name="thmax_ch1" value="0.0" />
+  <parameter name="thmax_ch10" value="0.0" />
+  <parameter name="thmax_ch11" value="0.0" />
+  <parameter name="thmax_ch12" value="0.0" />
+  <parameter name="thmax_ch13" value="0.0" />
+  <parameter name="thmax_ch14" value="0.0" />
+  <parameter name="thmax_ch15" value="0.0" />
+  <parameter name="thmax_ch16" value="0.0" />
+  <parameter name="thmax_ch2" value="0.0" />
+  <parameter name="thmax_ch3" value="0.0" />
+  <parameter name="thmax_ch4" value="0.0" />
+  <parameter name="thmax_ch5" value="0.0" />
+  <parameter name="thmax_ch6" value="0.0" />
+  <parameter name="thmax_ch7" value="0.0" />
+  <parameter name="thmax_ch8" value="0.0" />
+  <parameter name="thmax_ch9" value="0.0" />
+  <parameter name="thmin_ch0" value="0.0" />
+  <parameter name="thmin_ch1" value="0.0" />
+  <parameter name="thmin_ch10" value="0.0" />
+  <parameter name="thmin_ch11" value="0.0" />
+  <parameter name="thmin_ch12" value="0.0" />
+  <parameter name="thmin_ch13" value="0.0" />
+  <parameter name="thmin_ch14" value="0.0" />
+  <parameter name="thmin_ch15" value="0.0" />
+  <parameter name="thmin_ch16" value="0.0" />
+  <parameter name="thmin_ch2" value="0.0" />
+  <parameter name="thmin_ch3" value="0.0" />
+  <parameter name="thmin_ch4" value="0.0" />
+  <parameter name="thmin_ch5" value="0.0" />
+  <parameter name="thmin_ch6" value="0.0" />
+  <parameter name="thmin_ch7" value="0.0" />
+  <parameter name="thmin_ch8" value="0.0" />
+  <parameter name="thmin_ch9" value="0.0" />
+  <parameter name="tsclkdiv" value="1" />
+  <parameter name="tsclksel" value="1" />
+  <parameter name="tsd_max" value="125" />
+  <parameter name="tsd_min" value="0" />
+  <parameter name="use_ch0" value="true" />
+  <parameter name="use_ch1" value="true" />
+  <parameter name="use_ch10" value="false" />
+  <parameter name="use_ch11" value="false" />
+  <parameter name="use_ch12" value="false" />
+  <parameter name="use_ch13" value="false" />
+  <parameter name="use_ch14" value="false" />
+  <parameter name="use_ch15" value="false" />
+  <parameter name="use_ch16" value="false" />
+  <parameter name="use_ch2" value="true" />
+  <parameter name="use_ch3" value="true" />
+  <parameter name="use_ch4" value="true" />
+  <parameter name="use_ch5" value="true" />
+  <parameter name="use_ch6" value="true" />
+  <parameter name="use_ch7" value="true" />
+  <parameter name="use_ch8" value="true" />
+  <parameter name="use_ch9" value="false" />
+  <parameter name="use_tsd" value="true" />
+ </module>
+ <module name="multiplexer_0" kind="multiplexer" version="14.1" enabled="1">
+  <parameter name="bitsPerSymbol" value="5" />
+  <parameter name="errorWidth" value="0" />
+  <parameter name="numInputInterfaces" value="3" />
+  <parameter name="outChannelWidth" value="2" />
+  <parameter name="packetScheduling" value="true" />
+  <parameter name="schedulingSize" value="2" />
+  <parameter name="symbolsPerBeat" value="1" />
+  <parameter name="useHighBitsOfChannel" value="true" />
+  <parameter name="usePackets" value="true" />
+ </module>
+ <module
+   name="sc_fifo_0"
+   kind="altera_avalon_sc_fifo"
+   version="14.1"
+   enabled="1">
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="BITS_PER_SYMBOL" value="2" />
+  <parameter name="CHANNEL_WIDTH" value="0" />
+  <parameter name="EMPTY_LATENCY" value="3" />
+  <parameter name="ENABLE_EXPLICIT_MAXCHANNEL" value="false" />
+  <parameter name="ERROR_WIDTH" value="0" />
+  <parameter name="EXPLICIT_MAXCHANNEL" value="0" />
+  <parameter name="FIFO_DEPTH" value="2" />
+  <parameter name="SYMBOLS_PER_BEAT" value="1" />
+  <parameter name="USE_ALMOST_EMPTY_IF" value="0" />
+  <parameter name="USE_ALMOST_FULL_IF" value="0" />
+  <parameter name="USE_FILL_LEVEL" value="0" />
+  <parameter name="USE_MEMORY_BLOCKS" value="1" />
+  <parameter name="USE_PACKETS" value="0" />
+  <parameter name="USE_STORE_FORWARD" value="0" />
+ </module>
+ <connection
+   kind="avalon"
+   version="14.1"
+   start="mm_bridge_0.m0"
+   end="PWM_1.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.1"
+   start="mm_bridge_0.m0"
+   end="QEI_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0040" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.1"
+   start="mm_bridge_0.m0"
+   end="QEI_1.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.1"
+   start="mm_bridge_0.m0"
+   end="PWM_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
+   start="ST_channel_prefixer_0.avalon_streaming_source"
+   end="demultiplexer_0.in" />
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
+   start="ST_ch_data_demux_and_swap_0.ch_in_data_out"
+   end="sc_fifo_0.in" />
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
+   start="ST_ch_data_demux_and_swap_0.data_in_ch_out"
+   end="modular_adc_0.command" />
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
+   start="multiplexer_0.out"
+   end="ST_ch_data_demux_and_swap_0.input" />
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
+   start="sc_fifo_0.out"
+   end="ST_channel_prefixer_0.prefix" />
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
+   start="modular_adc_0.response"
+   end="ST_channel_prefixer_0.avalon_streaming_sink" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="ADC_src_clock.clk"
+   end="modular_adc_0.adc_pll_clock" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="multiplexer_0.clk" />
+ <connection kind="clock" version="14.1" start="Sys_clk.clk" end="mm_bridge_0.clk" />
+ <connection kind="clock" version="14.1" start="Sys_clk.clk" end="sc_fifo_0.clk" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="demultiplexer_0.clk" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="modular_adc_0.clock" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="ST_ch_data_demux_and_swap_0.clock_sink" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="QEI_0.clock_sink" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="PWM_0.clock_sink" />
+ <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="ST_channel_prefixer_0.clock_sink" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="sc_fifo_0.clk_reset" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="multiplexer_0.reset" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="mm_bridge_0.reset" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="demultiplexer_0.reset" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="modular_adc_0.reset_sink" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="ST_ch_data_demux_and_swap_0.reset_sink" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="QEI_0.reset_sink" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="PWM_0.reset_sink" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="ST_channel_prefixer_0.reset_sink" />
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+</system>
