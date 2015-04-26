@@ -33,6 +33,8 @@ module Triggered_ADC_Sequencer
 	localparam REG_IRQFLAG = 5'h0;
 	localparam REG_MAXSEQ = 5'h0;
 
+	reg [11:0] samp_store [0:7];
+
 	reg En;
 	reg [2:0] max_seq;
 	reg [4:0] ch_map [0:7];
@@ -43,19 +45,21 @@ module Triggered_ADC_Sequencer
 			irq_out <= 1'b0;
 			En <= 1'b0;
 		end else begin
-			if(MMS_address < 5'h10) begin
-				case (MMS_address)
-					REG_EN:
-						En <= MMS_writedata[0];
-					REG_IRQFLAG:
-						irq_out <= MMS_writedata[0];
-					REG_MAXSEQ:
-						max_seq <= MMS_writedata[2:0];
-				endcase
-			end else if(MMS_address >= 5'h10 && MMS_address < 5'h18) begin
-				ch_map[MMS_address & 5'h0F] <= MMS_writedata[4:0];
+			if(MMS_write) begin
+				if(MMS_address < 5'h10) begin
+					case (MMS_address)
+						REG_EN:
+							En <= MMS_writedata[0];
+						REG_IRQFLAG:
+							irq_out <= MMS_writedata[0];
+						REG_MAXSEQ:
+							max_seq <= MMS_writedata[2:0];
+					endcase
+				end else if(MMS_address >= 5'h10 && MMS_address < 5'h18) begin
+					ch_map[MMS_address & 5'h0F] <= MMS_writedata[4:0];
+				end
 			end
-
+			
 			if(resp_endofpacket & resp_valid) begin
 				irq_out <= 1'b1;
 			end
@@ -112,8 +116,6 @@ module Triggered_ADC_Sequencer
 	assign chout_startofpacket = sequence_ctr == 3'b000;
 	assign chout_endofpacket = sequence_ctr == max_seq;
 
-
-	reg [11:0] samp_store [0:7];
 	reg [2:0] resp_ctr;
 	always @(posedge clk or negedge reset_n) begin : proc_resp
 		if(~reset_n) begin

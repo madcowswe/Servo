@@ -1,12 +1,12 @@
-# system info qsystem_tb on 2015.04.26.19:44:46
+# system info qsystem_tb on 2015.04.26.21:08:12
 system_info:
 name,value
 DEVICE,10M08SAE144C8GES
 DEVICE_FAMILY,MAX 10
-GENERATION_ID,1430073856
+GENERATION_ID,1430078862
 #
 #
-# Files generated for qsystem_tb on 2015.04.26.19:44:46
+# Files generated for qsystem_tb on 2015.04.26.21:08:12
 files:
 filepath,kind,attributes,module,is_top
 qsystem/testbench/qsystem_tb/simulation/qsystem_tb.v,VERILOG,,qsystem_tb,true
@@ -15,6 +15,10 @@ qsystem/testbench/qsystem_tb/simulation/submodules/verbosity_pkg.sv,SYSTEM_VERIL
 qsystem/testbench/qsystem_tb/simulation/submodules/altera_conduit_bfm.sv,SYSTEM_VERILOG,,altera_conduit_bfm,false
 qsystem/testbench/qsystem_tb/simulation/submodules/verbosity_pkg.sv,SYSTEM_VERILOG, COMMON_SYSTEMVERILOG_PACKAGE=avalon_vip_verbosity_pkg,altera_conduit_bfm_0002,false
 qsystem/testbench/qsystem_tb/simulation/submodules/altera_conduit_bfm_0002.sv,SYSTEM_VERILOG,,altera_conduit_bfm_0002,false
+qsystem/testbench/qsystem_tb/simulation/submodules/verbosity_pkg.sv,SYSTEM_VERILOG, COMMON_SYSTEMVERILOG_PACKAGE=avalon_vip_verbosity_pkg,altera_conduit_bfm_0003,false
+qsystem/testbench/qsystem_tb/simulation/submodules/altera_conduit_bfm_0003.sv,SYSTEM_VERILOG,,altera_conduit_bfm_0003,false
+qsystem/testbench/qsystem_tb/simulation/submodules/verbosity_pkg.sv,SYSTEM_VERILOG, COMMON_SYSTEMVERILOG_PACKAGE=avalon_vip_verbosity_pkg,altera_conduit_bfm_0004,false
+qsystem/testbench/qsystem_tb/simulation/submodules/altera_conduit_bfm_0004.sv,SYSTEM_VERILOG,,altera_conduit_bfm_0004,false
 qsystem/testbench/qsystem_tb/simulation/submodules/verbosity_pkg.sv,SYSTEM_VERILOG, COMMON_SYSTEMVERILOG_PACKAGE=avalon_vip_verbosity_pkg,altera_avalon_clock_source,false
 qsystem/testbench/qsystem_tb/simulation/submodules/altera_avalon_clock_source.sv,SYSTEM_VERILOG,,altera_avalon_clock_source,false
 qsystem/testbench/qsystem_tb/simulation/submodules/verbosity_pkg.sv,SYSTEM_VERILOG, COMMON_SYSTEMVERILOG_PACKAGE=avalon_vip_verbosity_pkg,altera_avalon_reset_source,false
@@ -30,7 +34,6 @@ qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_jtag_uart_0.v,VERILOG
 qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_modular_adc_0.v,VERILOG,,qsystem_modular_adc_0,false
 qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_multiplexer_0.sv,SYSTEM_VERILOG,,qsystem_multiplexer_0,false
 qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_nios2_qsys_0.v,VERILOG,,qsystem_nios2_qsys_0,false
-qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_onchip_memory2_0.hex,HEX,,qsystem_onchip_memory2_0,false
 qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_onchip_memory2_0.v,VERILOG,,qsystem_onchip_memory2_0,false
 qsystem/testbench/qsystem_tb/simulation/submodules/altera_avalon_sc_fifo.v,VERILOG,,altera_avalon_sc_fifo,false
 qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_sysid_qsys_0.vo,VERILOG,,qsystem_sysid_qsys_0,false
@@ -170,5 +173,8 @@ qsystem_tb.qsystem_inst.rst_controller,altera_reset_controller
 qsystem_tb.qsystem_inst.rst_controller_001,altera_reset_controller
 qsystem_tb.qsystem_inst_PWM_0_PWMout_bfm,altera_conduit_bfm
 qsystem_tb.qsystem_inst_QEI_0_EncoderIn_bfm,altera_conduit_bfm_0002
+qsystem_tb.qsystem_inst_altpll_0_areset_conduit_bfm,altera_conduit_bfm_0003
+qsystem_tb.qsystem_inst_altpll_0_locked_conduit_bfm,altera_conduit_bfm_0004
+qsystem_tb.qsystem_inst_altpll_0_phasedone_conduit_bfm,altera_conduit_bfm_0004
 qsystem_tb.qsystem_inst_clk_bfm,altera_avalon_clock_source
 qsystem_tb.qsystem_inst_reset_bfm,altera_avalon_reset_source

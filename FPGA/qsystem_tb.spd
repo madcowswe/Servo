@@ -222,10 +222,6 @@
    type="VERILOG"
    library="sc_fifo_0" />
  <file
-   path="qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_onchip_memory2_0.hex"
-   type="HEX"
-   library="onchip_memory2_0" />
- <file
    path="qsystem/testbench/qsystem_tb/simulation/submodules/qsystem_onchip_memory2_0.v"
    type="VERILOG"
    library="onchip_memory2_0" />
@@ -281,6 +277,14 @@
    path="qsystem/testbench/qsystem_tb/simulation/submodules/altera_avalon_clock_source.sv"
    type="SYSTEM_VERILOG"
    library="qsystem_inst_clk_bfm" />
+ <file
+   path="qsystem/testbench/qsystem_tb/simulation/submodules/altera_conduit_bfm_0004.sv"
+   type="SYSTEM_VERILOG"
+   library="qsystem_inst_altpll_0_locked_conduit_bfm" />
+ <file
+   path="qsystem/testbench/qsystem_tb/simulation/submodules/altera_conduit_bfm_0003.sv"
+   type="SYSTEM_VERILOG"
+   library="qsystem_inst_altpll_0_areset_conduit_bfm" />
  <file
    path="qsystem/testbench/qsystem_tb/simulation/submodules/altera_conduit_bfm_0002.sv"
    type="SYSTEM_VERILOG"

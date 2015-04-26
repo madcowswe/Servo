@@ -206,3 +206,8 @@ int main()
 		usleep(500000);
 	}
 }
+
+//Use only for simulation!
+int alt_main(){
+	return main();
+}

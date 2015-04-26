@@ -23,6 +23,8 @@ module Servo  (
 	reg update;
 	reg updateAck;
 
+	integer i;
+
 	always @(posedge clk or negedge reset_n) begin : proc_MMSinterface
 		if(~reset_n) begin
 			for (i = 0; i < 3; i = i + 1) begin
@@ -82,7 +84,6 @@ module Servo  (
 	reg [15:0] maxctrval;
 	reg countup;
 
-	integer i;
 	always @(posedge clk or negedge reset_n) begin : proc_modulator
 		if(~reset_n) begin
 			ctr <= 16'h0000;
@@ -113,7 +114,6 @@ module Servo  (
 							compvalhigh[i] <= compvalhightoset[i];
 							compvallow[i] <= compvallowtoset[i];
 						end
-						maxctrval <= maxctrvaltoset;
 					end
 
 					if(trigonmax) begin
@@ -131,7 +131,6 @@ module Servo  (
 							compvalhigh[i] <= compvalhightoset[i];
 							compvallow[i] <= compvallowtoset[i];
 						end
-						maxctrval <= maxctrvaltoset;
 					end
 
 					if(trigon0) begin
@@ -141,6 +140,13 @@ module Servo  (
 					ctr <= ctr - 1;
 				end
 			end
+
+			if(maxctrvaltoset != maxctrval) begin
+				maxctrval <= maxctrvaltoset;
+				ctr <= 16'h0000;
+				countup <= 1'b1;
+			end
+			
 		end
 	end
 
