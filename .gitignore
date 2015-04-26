@@ -17,6 +17,8 @@ qsystem/
 subsystemA/
 .qsys_edit/
 
+*.d
+
 *.objdump
 *.map
 

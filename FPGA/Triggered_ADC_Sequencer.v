@@ -1,8 +1,8 @@
 // Triggered_ADC_Sequencer.v
 
 `timescale 1 ps / 1 ps
-module Triggered_ADC_Sequencer #(
-	) (
+module Triggered_ADC_Sequencer 
+	(
 		input  wire        clk,                 //       clock_sink.clk
 		input  wire        reset_n,             //       reset_sink.reset_n
 		input  wire        chout_ready,         //   cmd_ch_as_data.ready
@@ -14,7 +14,7 @@ module Triggered_ADC_Sequencer #(
 		input  wire        MMS_read,            //     avalon_slave.read
 		input  wire        MMS_write,           //                 .write
 		input  wire [4:0]  MMS_address,         //                 .address
-		output wire [31:0] MMS_readdata,        //                 .readdata
+		output reg [31:0] MMS_readdata,        //                 .readdata
 		input  wire [31:0] MMS_writedata,       //                 .writedata
 		input  wire        resp_valid,          //     ADC_response.valid
 		input  wire [11:0] resp_data,           //                 .data
@@ -53,7 +53,7 @@ module Triggered_ADC_Sequencer #(
 						max_seq <= MMS_writedata[2:0];
 				endcase
 			end else if(MMS_address >= 5'h10 && MMS_address < 5'h18) begin
-				ch_map[MMS_address & 5'h0F] <= MMS_writedata[4:0]
+				ch_map[MMS_address & 5'h0F] <= MMS_writedata[4:0];
 			end
 
 			if(resp_endofpacket & resp_valid) begin
