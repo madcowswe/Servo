@@ -32,26 +32,18 @@
          value = "3";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
    }
    element PWM_0.avalon_slave
    {
       datum baseAddress
       {
-         value = "0";
+         value = "128";
          type = "String";
-      }
-   }
-   element PWM_1
-   {
-      datum _sortIndex
-      {
-         value = "6";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "0";
-         type = "boolean";
       }
    }
    element QEI_0
@@ -61,33 +53,25 @@
          value = "4";
          type = "int";
       }
-   }
-   element QEI_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "64";
-         type = "String";
-      }
-   }
-   element QEI_1
-   {
-      datum _sortIndex
-      {
-         value = "5";
-         type = "int";
-      }
       datum sopceditor_expanded
       {
          value = "0";
          type = "boolean";
       }
    }
+   element QEI_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "192";
+         type = "String";
+      }
+   }
    element ST_ch_data_demux_and_swap_0
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
       datum sopceditor_expanded
@@ -100,7 +84,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "10";
          type = "int";
       }
       datum sopceditor_expanded
@@ -122,11 +106,32 @@
          type = "boolean";
       }
    }
+   element Triggered_ADC_Sequencer_0
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element Triggered_ADC_Sequencer_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element demultiplexer_0
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "11";
          type = "int";
       }
    }
@@ -142,7 +147,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "8";
          type = "int";
       }
       datum sopceditor_expanded
@@ -155,7 +160,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "6";
          type = "int";
       }
       datum sopceditor_expanded
@@ -168,7 +173,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "9";
          type = "int";
       }
       datum sopceditor_expanded
@@ -199,18 +204,10 @@
  <instanceScript></instanceScript>
  <interface name="PWM_0_PWMout" internal="PWM_0.PWMout" type="conduit" dir="end" />
  <interface
-   name="PWM_0_interrupt_sender"
-   internal="PWM_0.interrupt_sender"
-   type="interrupt"
-   dir="end" />
- <interface name="PWM_1_PWMout" internal="PWM_1.PWMout" />
- <interface name="PWM_1_interrupt_sender" internal="PWM_1.interrupt_sender" />
- <interface
    name="QEI_0_EncoderIn"
    internal="QEI_0.EncoderIn"
    type="conduit"
    dir="end" />
- <interface name="QEI_1_EncoderIn" internal="QEI_1.EncoderIn" />
  <interface name="adc_clk" internal="ADC_src_clock.clk_in" type="clock" dir="end" />
  <interface
    name="adc_reset"
@@ -224,6 +221,11 @@
    type="avalon"
    dir="end" />
  <interface name="reset" internal="Sys_clk.clk_in_reset" type="reset" dir="end" />
+ <interface
+   name="triggered_adc_sequencer_0_interrupt_sender"
+   internal="Triggered_ADC_Sequencer_0.interrupt_sender"
+   type="interrupt"
+   dir="end" />
  <module name="ADC_src_clock" kind="clock_source" version="14.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="false" />
@@ -231,9 +233,7 @@
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
  <module name="PWM_0" kind="PWM" version="1.0" enabled="1" />
- <module name="PWM_1" kind="PWM" version="1.0" enabled="0" />
  <module name="QEI_0" kind="QEI" version="1.0" enabled="1" />
- <module name="QEI_1" kind="QEI" version="1.0" enabled="0" />
  <module
    name="ST_ch_data_demux_and_swap_0"
    kind="ST_ch_data_demux_and_swap"
@@ -249,6 +249,13 @@
   <parameter name="clockFrequencyKnown" value="false" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
+ </module>
+ <module
+   name="Triggered_ADC_Sequencer_0"
+   kind="Triggered_ADC_Sequencer"
+   version="1.0"
+   enabled="1">
+  <parameter name="AUTO_TRIG_INTERRUPTS_USED" value="1" />
  </module>
  <module
    name="demultiplexer_0"
@@ -279,7 +286,7 @@
   <parameter name="PIPELINE_COMMAND" value="0" />
   <parameter name="PIPELINE_RESPONSE" value="0" />
   <parameter name="SYMBOL_WIDTH" value="8" />
-  <parameter name="SYSINFO_ADDR_WIDTH" value="7" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="8" />
   <parameter name="USE_AUTO_ADDRESS_WIDTH" value="1" />
  </module>
  <module
@@ -495,27 +502,9 @@
    kind="avalon"
    version="14.1"
    start="mm_bridge_0.m0"
-   end="PWM_1.avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.1"
-   start="mm_bridge_0.m0"
    end="QEI_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0040" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.1"
-   start="mm_bridge_0.m0"
-   end="QEI_1.avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x00c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -523,6 +512,15 @@
    version="14.1"
    start="mm_bridge_0.m0"
    end="PWM_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0080" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.1"
+   start="mm_bridge_0.m0"
+   end="Triggered_ADC_Sequencer_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
@@ -540,6 +538,11 @@
  <connection
    kind="avalon_streaming"
    version="14.1"
+   start="Triggered_ADC_Sequencer_0.cmd_ch_as_data"
+   end="multiplexer_0.in0" />
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
    start="ST_ch_data_demux_and_swap_0.data_in_ch_out"
    end="modular_adc_0.command" />
  <connection
@@ -552,6 +555,11 @@
    version="14.1"
    start="sc_fifo_0.out"
    end="ST_channel_prefixer_0.prefix" />
+ <connection
+   kind="avalon_streaming"
+   version="14.1"
+   start="demultiplexer_0.out0"
+   end="Triggered_ADC_Sequencer_0.ADC_response" />
  <connection
    kind="avalon_streaming"
    version="14.1"
@@ -600,6 +608,18 @@
    start="Sys_clk.clk"
    end="ST_channel_prefixer_0.clock_sink" />
  <connection
+   kind="clock"
+   version="14.1"
+   start="Sys_clk.clk"
+   end="Triggered_ADC_Sequencer_0.clock_sink" />
+ <connection
+   kind="interrupt"
+   version="14.1"
+   start="Triggered_ADC_Sequencer_0.Trig"
+   end="PWM_0.interrupt_sender">
+  <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
    kind="reset"
    version="14.1"
    start="Sys_clk.clk_reset"
@@ -644,6 +664,11 @@
    version="14.1"
    start="Sys_clk.clk_reset"
    end="ST_channel_prefixer_0.reset_sink" />
+ <connection
+   kind="reset"
+   version="14.1"
+   start="Sys_clk.clk_reset"
+   end="Triggered_ADC_Sequencer_0.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />

@@ -459,7 +459,7 @@
   <parameter name="dataAddrWidth" value="17" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='MotorControlHardware_PWM_0.avalon_slave' start='0x0' end='0x40' /><slave name='MotorControlHardware_QEI_0.avalon_slave' start='0x40' end='0x48' /><slave name='onchip_memory2_0.s1' start='0x8000' end='0xA000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x10800' end='0x11000' /><slave name='sysid_qsys_0.control_slave' start='0x11288' end='0x11290' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x112A0' end='0x112A8' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='MotorControlHardware_Triggered_ADC_Sequencer_0.avalon_slave' start='0x0' end='0x80' /><slave name='MotorControlHardware_PWM_0.avalon_slave' start='0x80' end='0xC0' /><slave name='MotorControlHardware_QEI_0.avalon_slave' start='0xC0' end='0xC8' /><slave name='onchip_memory2_0.s1' start='0x8000' end='0xA000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x10800' end='0x11000' /><slave name='sysid_qsys_0.control_slave' start='0x11288' end='0x11290' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x112A0' end='0x112A8' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -650,7 +650,7 @@
    version="14.1"
    enabled="1">
   <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
-  <parameter name="id" value="0" />
+  <parameter name="id" value="4919" />
   <parameter name="timestamp" value="0" />
  </module>
  <connection
@@ -751,15 +751,15 @@
    kind="interrupt"
    version="14.1"
    start="nios2_qsys_0.irq"
-   end="MotorControlHardware.PWM_0_interrupt_sender">
-  <parameter name="irqNumber" value="0" />
+   end="jtag_uart_0.irq">
+  <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"
    version="14.1"
    start="nios2_qsys_0.irq"
-   end="jtag_uart_0.irq">
-  <parameter name="irqNumber" value="1" />
+   end="MotorControlHardware.triggered_adc_sequencer_0_interrupt_sender">
+  <parameter name="irqNumber" value="0" />
  </connection>
  <connection
    kind="reset"
