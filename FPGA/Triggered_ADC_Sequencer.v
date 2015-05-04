@@ -30,8 +30,8 @@ module Triggered_ADC_Sequencer
 	//24-31 store
 
 	localparam REG_EN = 5'h0;
-	localparam REG_IRQFLAG = 5'h0;
-	localparam REG_MAXSEQ = 5'h0;
+	localparam REG_IRQFLAG = 5'h1;
+	localparam REG_MAXSEQ = 5'h2;
 
 	reg [11:0] samp_store [0:7];
 

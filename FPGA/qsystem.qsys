@@ -324,21 +324,6 @@
    internal="QEI_0.EncoderIn"
    type="conduit"
    dir="end" />
- <interface
-   name="altpll_0_areset_conduit"
-   internal="altpll_0.areset_conduit"
-   type="conduit"
-   dir="end" />
- <interface
-   name="altpll_0_locked_conduit"
-   internal="altpll_0.locked_conduit"
-   type="conduit"
-   dir="end" />
- <interface
-   name="altpll_0_phasedone_conduit"
-   internal="altpll_0.phasedone_conduit"
-   type="conduit"
-   dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <module name="PWM_0" kind="PWM" version="1.0" enabled="1" />
@@ -779,7 +764,7 @@
   <parameter name="dataAddrWidth" value="18" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x10000' end='0x20000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x20800' end='0x21000' /><slave name='Triggered_ADC_Sequencer_0.avalon_slave' start='0x21000' end='0x21080' /><slave name='PWM_0.avalon_slave' start='0x21080' end='0x210C0' /><slave name='QEI_0.avalon_slave' start='0x210C0' end='0x210C8' /><slave name='sysid_qsys_0.control_slave' start='0x210C8' end='0x210D0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x210D0' end='0x210D8' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x10000' end='0x16000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x20800' end='0x21000' /><slave name='Triggered_ADC_Sequencer_0.avalon_slave' start='0x21000' end='0x21080' /><slave name='PWM_0.avalon_slave' start='0x21080' end='0x210C0' /><slave name='QEI_0.avalon_slave' start='0x210C0' end='0x210C8' /><slave name='sysid_qsys_0.control_slave' start='0x210C8' end='0x210D0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x210D0' end='0x210D8' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -818,7 +803,7 @@
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Tiny" />
   <parameter name="instAddrWidth" value="18" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x10000' end='0x20000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x20800' end='0x21000' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x10000' end='0x16000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x20800' end='0x21000' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
@@ -952,7 +937,7 @@
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName">C:\Users\Oskar\Dropbox\Servo\FPGA\software\ServoDrive\mem_init\qsystem_onchip_memory2_0.hex</parameter>
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="65536" />
+  <parameter name="memorySize" value="24576" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="resetrequest_enabled" value="false" />
   <parameter name="simAllowMRAMContentsFile" value="false" />

@@ -14,6 +14,12 @@
 #define PWM_REG_TRIGON_MAX 0xD
 #define PWM_REG_UPDATE 0xF
 
+#define TADCS_REG_EN 0
+#define TADCS_REG_IRQFLAG 1
+#define TADCS_REG_MAXSEQ 2
+#define TADCS_OFFSET_CH_MAP 0x10
+#define TADCS_OFFSET_SAMPSTORE 0x18
+
 
 // deadband timing. All units ns.
 // tOn* = turn on delay
@@ -33,10 +39,11 @@ static const float tFallDriver = 50;
 static const float tDelayMatchDriver = 50;
 static const float tSafety = 50;
 
-static const float deadtime_ns = 200;//tFallFET + tFallDriver + tDelayMatchDriver + tSafety;
-static const int deadtimeint = 10;//50000000.0f * deadtime_ns * 1e-9f;
+//static const float deadtime_ns = 200;//tFallFET + tFallDriver + tDelayMatchDriver + tSafety;
+#define deadtime_ns 200
+static const int deadtimeint = (float)ALT_CPU_CPU_FREQ * deadtime_ns * 1e-9f;
 
-static const int PWMHalfPeriod = 50000000/16000;
+static const int PWMHalfPeriod = ALT_CPU_CPU_FREQ/16000;
 
 // Magnitude must not be larger than sqrt(3)/2, or 0.866
 void SVM(float alpha, float beta, uint32_t* tAout, uint32_t* tBout, uint32_t* tCout){
@@ -188,16 +195,31 @@ int main()
 	//printf("Hello from Nios II!\n");
 
 	IOWR(PWM_0_BASE, PWM_REG_UPDATEON_Z, 1);
+	IOWR(PWM_0_BASE, PWM_REG_TRIGON_Z, 1);
 	IOWR(PWM_0_BASE, PWM_REG_MAXCTR, PWMHalfPeriod);
+
+	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_MAXSEQ, 1);
+	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_CH_MAP + 0, 7);
+	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_CH_MAP + 1, 6),
+	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
+	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_EN, 1);
 
 	for (int ud = 0; 1; ud ^= 1)
 	{
+		float Ia, Ib;
+		if (IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG))
+		{
+			IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
+			Ia = IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 0);
+			Ib = IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 1);
+		}
+		
 		uint32_t tABC[3];
-		SVM(ud*0.05,0,&tABC[0],&tABC[1],&tABC[2]);
+		SVM(ud*0.01,0,&tABC[0],&tABC[1],&tABC[2]);
 
 		for (int i = 0; i < 3; ++i)
 		{
-			IOWR(PWM_0_BASE, 2*i, tABC[i] - deadtimeint/2);
+			IOWR(PWM_0_BASE, 2*i, tABC[i] - deadtimeint/2);//MAX((int)tABC[i] - deadtimeint/2, 0));
 			IOWR(PWM_0_BASE, 2*i + 1, tABC[i] + deadtimeint/2);
 		}
 
@@ -207,7 +229,7 @@ int main()
 	}
 }
 
-//Use only for simulation!
-int alt_main(){
-	return main();
-}
+////Use only for simulation!
+//int alt_main(){
+//	return main();
+//}

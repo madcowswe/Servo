@@ -7,8 +7,8 @@ module Servo  (
 		input  wire [3:0]  MMS_addr,      // avalon_slave.address
 		input  wire        MMS_write,     //             .write
 		input  wire [31:0] MMS_writedata, //             .writedata
-		output wire [2:0]  Udrive,      //     M0PWMout.udrive
-		output wire [2:0]  Ldrive,      //             .ldrive
+		output wire [0:2]  Udrive,      //     M0PWMout.udrive
+		output wire [0:2]  Ldrive,      //             .ldrive
 		output reg         irqout       //      Trigirq.irq
 	);
 	

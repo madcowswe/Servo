@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(10M08SAE144ES) Path("C:/Users/Oskar/Dropbox/Servo/FPGA/output_files/") File("FPGAServo.sof") MfrSpec(OpMask(1));
+		Device PartName(10M08SAE144ES) Path("C:/Users/Oskar/Documents/Servo/FPGA/output_files/") File("FPGAServo.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 
