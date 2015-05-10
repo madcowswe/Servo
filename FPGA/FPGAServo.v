@@ -54,7 +54,7 @@ module FPGAServo(
     qsystem u0 (
         .PWM_0_PWMout_ldrive   ({PWM_AL1, PWM_BL1, PWM_CL1}),   //    PWM_0_PWMout.ldrive
         .PWM_0_PWMout_udrive   ({PWM_AH1, PWM_BH1, PWM_CH1}),   //                .udrive
-        .QEI_0_EncoderIn_encab ({ENC_A2, ENC_B2}), // QEI_0_EncoderIn.encab
+        .QEI_0_EncoderIn_encabz ({ENC_A2, ENC_B2, ENC_Z2}), // QEI_0_EncoderIn.encab
         .clk_clk               (CLK_50),               //             clk.clk
         .reset_reset_n         (1)          //           reset.reset_n
     );

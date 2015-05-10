@@ -25,6 +25,9 @@ module Servo  (
 
 	integer i;
 
+	reg CPUDone;
+	reg En;
+
 	always @(posedge clk or negedge reset_n) begin : proc_MMSinterface
 		if(~reset_n) begin
 			for (i = 0; i < 3; i = i + 1) begin
@@ -37,9 +40,19 @@ module Servo  (
 			trigon0 <= 1'b0;
 			trigonmax <= 1'b0;
 			update <= 1'b0;
+			En <= 1'b0;
+			CPUDone <= 1'b0;
 		end else begin
 			if(updateAck) begin
 				update <= 1'b0;
+				CPUDone <= 1'b1;
+			end else begin
+				if(irqout) begin
+					if(!CPUDone) begin
+						En <= 1'b0;
+					end
+					CPUDone <= 1'b0;
+				end
 			end
 
 			if(MMS_write) begin
@@ -59,7 +72,8 @@ module Servo  (
 
 					4'h8:
 						maxctrvaltoset <= MMS_writedata[15:0];
-					4'h9:;
+					4'h9:
+						En <= MMS_writedata[0];
 					4'hA:
 						updateon0 <= MMS_writedata[0];
 					4'hB:
@@ -150,12 +164,12 @@ module Servo  (
 		end
 	end
 
-	assign Udrive[0] = (ctr > compvalhigh[0]);
-	assign Ldrive[0] = (ctr < compvallow[0]);
-	assign Udrive[1] = (ctr > compvalhigh[1]);
-	assign Ldrive[1] = (ctr < compvallow[1]);
-	assign Udrive[2] = (ctr > compvalhigh[2]);
-	assign Ldrive[2] = (ctr < compvallow[2]);
+	assign Udrive[0] = (ctr > compvalhigh[0]) & En;
+	assign Ldrive[0] = (ctr < compvallow[0]) & En;
+	assign Udrive[1] = (ctr > compvalhigh[1]) & En;
+	assign Ldrive[1] = (ctr < compvallow[1]) & En;
+	assign Udrive[2] = (ctr > compvalhigh[2]) & En;
+	assign Ldrive[2] = (ctr < compvallow[2]) & En;
 
 
 endmodule

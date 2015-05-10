@@ -142,7 +142,9 @@ ACDS_VERSION := 13.1
 ELF := ServoDrive.elf
 
 # Paths to C, C++, and assembly source files.
-C_SRCS := Servo.c
+C_SRCS += Servo.c
+C_SRCS += extramath/extramath.c
+C_SRCS += extramath/sincostables.c
 CXX_SRCS :=
 ASM_SRCS :=
 
