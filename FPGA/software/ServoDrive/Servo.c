@@ -53,28 +53,28 @@ static const float PWMPeriod = 1.0f/(float)PWMFrequency;
 
 static const int PWMHalfPeriod = ALT_CPU_CPU_FREQ/PWMFrequency;
 
-//#define QudcountsPerRev 2000
-#define QudcountsPerRev 2400
+
+//donkey
+//#define QudcountsPerRev 2400
+//static const float currentKp = 0.002f;
+//static const float currentKi = 10.0f;
+//static const float speedKp = 0.02f;
+//static const float speedKi = 0.0f;
+
+//350kv motor
+#define QudcountsPerRev 2000
+static const float currentKp = 0.004f;
+static const float currentKi = 15.0f;
+static const float speedKp = 0.02f;//0.1f;
+static const float speedKi = 0.0f;//1.0f;
+
+static const float currentlimit = 50.0f;
+static const float lockinCurrent = 10.0f;
+
 
 static const float ADCtoAscalefactor = 3.3f/((float)(1<<12) * 50.0f * 0.0005f);
 static const float encToPhasefactor = 2.0f*PI_F*7.0f/(float)QudcountsPerRev;
-static const float omegaFilterConst = 0.98;
-
-static const float lockinCurrent = 10.0f;
-
-//donkey
-static const float currentKp = 0.002f;
-static const float currentKi = 10.0f;
-
-
-//350kv motor
-//static const float currentKp = 0.004f;
-//static const float currentKi = 15.0f;
-//static const float speedKp = 0.1f;
-//static const float speedKi = 1.0f;
-static const float speedKp = 0.02f;
-static const float speedKi = 0.0f;
-static const float currentlimit = 50.0f;
+static const float omegaFilterConst = 0.98; //Note, leads to a 747 rad/s lag when accelerating at 171m/s^2
 
 // Magnitude must not be larger than sqrt(3)/2, or 0.866
 void SVM(float alpha, float beta, uint32_t* tAout, uint32_t* tBout, uint32_t* tCout){
@@ -218,29 +218,47 @@ void SVM(float alpha, float beta, uint32_t* tAout, uint32_t* tBout, uint32_t* tC
 
 }
 
-void control_current(float ItargetAlpha, float ItargetBeta, float Ia, float Ib){
+static int IsenseOffset[2] = {0};
+void wait_for_current(float* Ia, float* Ib){
+	while(!IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG));
+	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
+
+	*Ia = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 0) - IsenseOffset[0]);
+	*Ib = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 1) - IsenseOffset[1]);
+}
+
+void control_current(float targetId, float targetIq, float Ia, float Ib, float phase){
+
+	static float IerrVstate_d = 0.0f;
+	static float IerrVstate_q = 0.0f;
+
 
 	float Ialpha = Ia;
-	float Ibeta = one_by_sqrt3 * Ia + two_by_sqrt3 * Ib; 
+	float Ibeta = one_by_sqrt3 * Ia + two_by_sqrt3 * Ib;
 
-	float IerrAlpha = ItargetAlpha - Ialpha;
-	float IerrBeta = ItargetBeta - Ibeta;
+	float c,s;
+	fast_cossin(phase, &c, &s);
+	float Id = c*Ialpha + s*Ibeta;
+	float Iq = c*Ibeta - s*Ialpha;
 
-	static float IerrVstateAlpha = 0.0f;
-	static float IerrVstateBeta = 0.0f;
+	float Ierr_d = targetId - Id;
+	float Ierr_q = targetIq - Iq;
 
-	float Valpha = IerrVstateAlpha + IerrAlpha * currentKp;
-	float Vbeta = IerrVstateBeta + IerrBeta * currentKp;
+	float Vd = IerrVstate_d + Ierr_d * currentKp;
+	float Vq = IerrVstate_q + Ierr_q * currentKp;
 
-	float Vscalefactor = sqrt3_by_2 * Q_rsqrt(Valpha*Valpha + Vbeta*Vbeta);
+	float Vscalefactor = sqrt3_by_2 * Q_rsqrt(Vd*Vd + Vq*Vq);
 	if (Vscalefactor < 1)
 	{
-		Valpha *= Vscalefactor;
-		Vbeta *= Vscalefactor;
+		Vd *= Vscalefactor;
+		Vq *= Vscalefactor;
 	} else {
-		IerrVstateAlpha += IerrAlpha * (currentKi * PWMPeriod);
-		IerrVstateBeta += IerrBeta * (currentKi * PWMPeriod);
+		IerrVstate_d += Ierr_d * (currentKi * PWMPeriod);
+		IerrVstate_q += Ierr_q * (currentKi * PWMPeriod);
 	}
+
+	float Valpha = c*Vd - s*Vq;
+	float Vbeta = c*Vq + s*Vd;
 
 	uint32_t tABC[3];
 	SVM(Valpha,Vbeta,&tABC[0],&tABC[1],&tABC[2]);
@@ -254,19 +272,10 @@ void control_current(float ItargetAlpha, float ItargetBeta, float Ia, float Ib){
 	IOWR(PWM_0_BASE, PWM_REG_UPDATE, 1);
 }
 
-static int IsenseOffset[2] = {0};
-
 void blocking_polar_control_current(float phase, float mag){
-	while(!IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG));
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
-
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
-	float Ia = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 0) - IsenseOffset[0]);
-	float Ib = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 1) - IsenseOffset[1]);
-	float c,s;
-	fast_cossin(phase, &c, &s);
-
-	control_current(mag*c, mag*s, Ia, Ib);
+	float Ia, Ib;
+	wait_for_current(&Ia, &Ib);
+	control_current(mag, 0.0f, Ia, Ib, phase);
 }
 
 int main()
@@ -274,10 +283,10 @@ int main()
 	//printf("Hello from Nios II!\n");
 
 	//350kv motor vice rig
-	//IOWR(QEI_0_BASE, QEI_REG_revDir, 1); //encoder reversed dir compared to motor
+	IOWR(QEI_0_BASE, QEI_REG_revDir, 1); //encoder reversed dir compared to motor
 
 	//Teleport rig
-	IOWR(QEI_0_BASE, QEI_REG_revDir, 0);
+	//IOWR(QEI_0_BASE, QEI_REG_revDir, 0);
 
 	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_MAXSEQ, 1);
 	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_CH_MAP + 0, 7);
@@ -397,20 +406,14 @@ int main()
 	//while(1);
 
 	int oldenc = IORD(QEI_0_BASE, QEI_REG_COUNT);
-	while(1)
-	for(int i = -2000; i < 2000; ++i){
+	//while(1)
+	for(int i = -20000; i < 20000; ++i){
 
-		while(!IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG));
-		IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
-
-		IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
-		float Ia = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 0) - IsenseOffset[0]);
-		float Ib = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 1) - IsenseOffset[1]);
+		float Ia, Ib;
+		wait_for_current(&Ia, &Ib);
 
 		int enccount = IORD(QEI_0_BASE, QEI_REG_COUNT);
 		float phase = ((enccount - encoffset) % QudcountsPerRev) * encToPhasefactor;
-		float c,s;
-		fast_cossin(phase, &c, &s);
 
 		float dencbydt = encToPhasefactor*(enccount - oldenc)*PWMFrequency;
 		oldenc = enccount;
@@ -424,31 +427,29 @@ int main()
 			IOWR(LOG_REG_0_BASE, 0, (int)(omega*10.0f));
 		}
 
-		float omegasetpoint = (i<0) ? 2000.0f : -2000.0f;
-		omegasetpoint -= enccount * 0.1f;
+		float omegasetpoint = (i<0) ? 200.0f : -200.0f;
+		//omegasetpoint -= enccount * 0.1f;
 		float omegaerror = omegasetpoint - omega;
 
 		static float Iqintstate = 0.0f;
 
-		float Id = 0.0f;
-		float Iq = speedKp * omegaerror + Iqintstate;
+		float targetId = 0.0f;
+		float targetIq = speedKp * omegaerror + Iqintstate;
 
-		if(Iq > currentlimit){
-			Iq = currentlimit;
+		if(targetIq > currentlimit){
+			targetIq = currentlimit;
 		}else{
-			if(Iq < -currentlimit){
-				Iq = -currentlimit;
+			if(targetIq < -currentlimit){
+				targetIq = -currentlimit;
 			} else {
 				Iqintstate += omegaerror * (speedKi * PWMPeriod);
 			}
 		}
 
-		float Ialpha = c*Id - s*Iq;
-		float Ibeta  = c*Iq + s*Id;
-
-		control_current(Ialpha, Ibeta, Ia, Ib);
+		control_current(targetId, targetIq, Ia, Ib, phase);
 
 	}
+	
 }
 
 ////Use only for simulation!
