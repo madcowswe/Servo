@@ -2,9 +2,9 @@
 Version=1.0
 
 [PublishSettings]
-OutputFilePath2=C:\Users\Public\Documents\Altium\Projects\Inverter\.PDF
+OutputFilePath2=C:\Users\Oskar\Documents\Altium\Projects\Inverter\.PDF
 ReleaseManaged2=0
-OutputBasePath2=C:\Users\Public\Documents\Altium\Projects\Inverter\
+OutputBasePath2=C:\Users\Oskar\Documents\Altium\Projects\Inverter\
 OutputPathMedia2=
 OutputPathMediaValue2=
 OutputPathOutputer2=[Output Type]
@@ -79,7 +79,7 @@ WmvVideoCodecName4=Windows Media Video V7
 WmvQuality4=80
 
 [GeneratedFilesSettings]
-RelativeOutputPath2=C:\Users\Public\Documents\Altium\Projects\Inverter\.PDF
+RelativeOutputPath2=C:\Users\Oskar\Documents\Altium\Projects\Inverter\.PDF
 OpenOutputs2=1
 RelativeOutputPath3=
 OpenOutputs3=1
@@ -138,7 +138,7 @@ OutputEnabled2_OutputMedium2=2
 OutputEnabled2_OutputMedium3=0
 OutputEnabled2_OutputMedium4=0
 OutputDefault2=0
-PageOptions2=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.88|XCorrection=1.00|YCorrection=1.00|PrintKind=0|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
+PageOptions2=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.89|XCorrection=1.00|YCorrection=1.00|PrintKind=0|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
 Configuration2_Name1=OutputConfigurationParameter1
 Configuration2_Item1=DesignatorDisplayMode=Physical|PrintArea=DesignExtent|PrintAreaLowerLeftCornerX=0|PrintAreaLowerLeftCornerY=0|PrintAreaUpperRightCornerX=0|PrintAreaUpperRightCornerY=0|Record=PcbPrintView
 Configuration2_Name2=OutputConfigurationParameter2
@@ -176,13 +176,13 @@ PageOptions3=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintS
 Configuration3_Name1=Filter
 Configuration3_Item1=545046300E5446696C74657257726170706572000D46696C7465722E416374697665090F46696C7465722E43726974657269610A04000000000000000000
 Configuration3_Name2=General
-Configuration3_Item2=TemplateFilename=Board Stack Report.XLT
+Configuration3_Item2=TemplateFilename=BOM Simple.XLT
 Configuration3_Name3=GroupOrder
 Configuration3_Item3=Comment=True|Footprint=True
 Configuration3_Name4=OutputConfigurationParameter1
 Configuration3_Item4==SimpleBOMView|SimpleBOMMode=0
 Configuration3_Name5=SortOrder
-Configuration3_Item5=Supplier Stock 1=Up
+Configuration3_Item5=Supplier Subtotal 1=Up
 Configuration3_Name6=VisibleOrder
-Configuration3_Item6=Comment=85|Description=85|Designator=85|Footprint=85|LibRef=85|Quantity=85|Value=85|Manufacturer 1=85|Manufacturer 2=179|Manufacturer Part Number 1=85|Manufacturer Part Number 2=179|Supplier 1=85|Supplier 2=179|Supplier Currency 1=85|Supplier Currency 2=179|Supplier Order Qty 1=85|Supplier Order Qty 2=179|Supplier Part Number 1=85|Supplier Part Number 2=179|Supplier Stock 1=85|Supplier Stock 2=179|Supplier Subtotal 1=85|Supplier Subtotal 2=179|Supplier Unit Price 1=75|Supplier Unit Price 2=179
+Configuration3_Item6=Comment=79|Description=79|Designator=79|Footprint=79|LibRef=79|Quantity=79|Value=79|Manufacturer 1=79|Manufacturer Part Number 1=79|Supplier 1=79|Supplier Currency 1=79|Supplier Order Qty 1=79|Supplier Part Number 1=79|Supplier Stock 1=79|Supplier Subtotal 1=79|Supplier Unit Price 1=59
 
