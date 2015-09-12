@@ -280,7 +280,9 @@ void blocking_polar_control_current(float phase, float mag){
 
 int main()
 {
-	//printf("Hello from Nios II!\n");
+	printf("Hello from Nios II!\n");
+
+	while(1);
 
 	//350kv motor vice rig
 	IOWR(QEI_0_BASE, QEI_REG_revDir, 1); //encoder reversed dir compared to motor

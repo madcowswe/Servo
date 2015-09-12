@@ -1,9 +1,10 @@
-<session jtag_chain="USB-Blaster [USB-0]" jtag_device="@1: 10M08SA(.|ES)/10M08S(C|F) (0x031820DD)" sof_file="output_files/FPGAServo.sof">
+<session jtag_chain="USB-Blaster [USB-1]" jtag_device="@1: 10M08SA(.|ES)/10M08S(C|F) (0x031820DD)" sof_file="output_files/FPGAServo.sof">
   <display_tree gui_logging_enabled="0">
     <display_branch instance="ADCDebug" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
     <display_branch instance="CPUDeadlineCheck" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
     <display_branch instance="EncoderDebug" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
     <display_branch instance="logReg" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
+    <display_branch instance="auto_signaltap_4" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
   </display_tree>
   <instance enabled="false" entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="ADCDebug" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
@@ -373,18 +374,7 @@
   <static_plugin_mnemonics/>
   <instance enabled="false" entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="CPUDeadlineCheck" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="1" mfg_id="110" node_id="0" version="6"/>
-    <position_info>
-      <single attribute="active tab" value="1"/>
-      <single attribute="data horizontal scroll position" value="0"/>
-      <single attribute="data vertical scroll position" value="0"/>
-      <single attribute="setup horizontal scroll position" value="0"/>
-      <single attribute="setup vertical scroll position" value="0"/>
-      <single attribute="zoom level denominator" value="1"/>
-      <single attribute="zoom level numerator" value="1"/>
-      <single attribute="zoom offset denominator" value="1"/>
-      <single attribute="zoom offset numerator" value="122880"/>
-    </position_info>
-    <signal_set global_temp="1" name="signal_set: 2015/05/10 22:36:03  #0">
+    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2015/05/10 22:36:03  #0">
       <clock name="qsystem:u0|qsystem_altpll_0:altpll_0|c1" polarity="posedge" tap_mode="classic"/>
       <config ram_type="AUTO" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="8192" trigger_in_enable="no" trigger_out_enable="no"/>
       <top_entity/>
@@ -412,31 +402,30 @@
         <unified_setup_data_view>
           <node data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|irqout" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="3" tap_mode="classic" trigger_index="3" type="unknown"/>
           <node data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|MMS_write" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="classic" trigger_index="2" type="unknown"/>
-          <node data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="qsystem:u0|Servo:pwm_0|CPUDone" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
-          <node data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="qsystem:u0|Servo:pwm_0|En" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
+          <node data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|CPUDone" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <node data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="qsystem:u0|Servo:pwm_0|En" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
         </unified_setup_data_view>
         <data_view>
           <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|irqout" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="3" tap_mode="classic" trigger_index="3" type="unknown"/>
           <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|MMS_write" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="classic" trigger_index="2" type="unknown"/>
-          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="qsystem:u0|Servo:pwm_0|CPUDone" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
-          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="qsystem:u0|Servo:pwm_0|En" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
+          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|CPUDone" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="qsystem:u0|Servo:pwm_0|En" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
         </data_view>
         <setup_view>
           <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|irqout" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="3" tap_mode="classic" trigger_index="3" type="unknown"/>
           <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|MMS_write" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="classic" trigger_index="2" type="unknown"/>
-          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="qsystem:u0|Servo:pwm_0|CPUDone" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
-          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="qsystem:u0|Servo:pwm_0|En" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
+          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Servo:pwm_0|CPUDone" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="qsystem:u0|Servo:pwm_0|En" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
         </setup_view>
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="43D46184" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2015/05/10 22:36:03  #1" position="post" power_up_trigger_mode="false" record_data_gap="true" segment_size="2048" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="43D46184" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2015/05/10 22:36:03  #1" position="post" power_up_trigger_mode="false" record_data_gap="true" segment_size="2048" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'qsystem:u0|Servo:pwm_0|En' == falling edge
             <power_up enabled="yes">
-            </power_up>
-            <op_node/>
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
@@ -465,6 +454,17 @@
         </log>
       </trigger>
     </signal_set>
+    <position_info>
+      <single attribute="active tab" value="1"/>
+      <single attribute="data horizontal scroll position" value="0"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="setup horizontal scroll position" value="0"/>
+      <single attribute="setup vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="1"/>
+      <single attribute="zoom offset denominator" value="1"/>
+      <single attribute="zoom offset numerator" value="122880"/>
+    </position_info>
   </instance>
   <instance enabled="false" entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="EncoderDebug" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="2" mfg_id="110" node_id="0" version="6"/>
@@ -800,7 +800,7 @@
       <single attribute="zoom offset numerator" value="130560"/>
     </position_info>
   </instance>
-  <instance enabled="true" entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="logReg" source_file="sld_signaltap.vhd">
+  <instance enabled="false" entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="logReg" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="3" mfg_id="110" node_id="0" version="6"/>
     <signal_set global_temp="1" is_expanded="true" name="signal_set: 2015/05/10 19:56:53  #0">
       <clock name="qsystem:u0|qsystem_altpll_0:altpll_0|c1" polarity="posedge" tap_mode="classic"/>
@@ -850,8 +850,8 @@
       </signal_vec>
       <presentation>
         <unified_setup_data_view>
-          <node duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="true" is_storage_input="true" is_trigger_input="true" level-0="high" name="qsystem:u0|Log_reg:log_reg_0|MMS_write" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="high" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
-          <node is_selected="false" level-0="alt_or" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31..0]" order="msb_to_lsb" radix="line_signed" state="collapse" storage-0="alt_or" storage-1="alt_or" storage-2="alt_or" type="combinatorial">
+          <node duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="high" name="qsystem:u0|Log_reg:log_reg_0|MMS_write" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="high" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <node is_selected="false" level-0="alt_or" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31..0]" order="msb_to_lsb" radix="line_signed" state="expand" storage-0="alt_or" storage-1="alt_or" storage-2="alt_or" type="combinatorial">
             <node duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="false" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31]" tap_mode="classic" type="unknown"/>
             <node duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="false" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[30]" tap_mode="classic" type="unknown"/>
             <node duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="false" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[29]" tap_mode="classic" type="unknown"/>
@@ -887,7 +887,7 @@
           </node>
         </unified_setup_data_view>
         <data_view>
-          <bus is_selected="false" level-0="alt_or" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31..0]" order="msb_to_lsb" radix="line_signed" state="collapse" storage-0="alt_or" storage-1="alt_or" storage-2="alt_or" type="combinatorial">
+          <bus is_selected="false" level-0="alt_or" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31..0]" order="msb_to_lsb" radix="line_signed" state="expand" storage-0="alt_or" storage-1="alt_or" storage-2="alt_or" type="combinatorial">
             <net data_index="6" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[15]" pwr_level-0="dont_care" tap_mode="classic" trigger_index="7" type="unknown"/>
             <net data_index="5" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[14]" pwr_level-0="dont_care" tap_mode="classic" trigger_index="6" type="unknown"/>
             <net data_index="4" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="true" level-0="dont_care" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[13]" pwr_level-0="dont_care" tap_mode="classic" trigger_index="5" type="unknown"/>
@@ -907,8 +907,8 @@
           </bus>
         </data_view>
         <setup_view>
-          <net duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="true" is_storage_input="true" is_trigger_input="true" level-0="high" name="qsystem:u0|Log_reg:log_reg_0|MMS_write" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="high" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
-          <bus is_selected="false" level-0="alt_or" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31..0]" order="msb_to_lsb" radix="line_signed" state="collapse" storage-0="alt_or" storage-1="alt_or" storage-2="alt_or" type="combinatorial">
+          <net duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="high" name="qsystem:u0|Log_reg:log_reg_0|MMS_write" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="high" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <bus is_selected="false" level-0="alt_or" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31..0]" order="msb_to_lsb" radix="line_signed" state="expand" storage-0="alt_or" storage-1="alt_or" storage-2="alt_or" type="combinatorial">
             <net duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="false" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[31]" tap_mode="classic" type="unknown"/>
             <net duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="false" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[30]" tap_mode="classic" type="unknown"/>
             <net duplicate_name_allowed="false" is_data_input="false" is_node_valid="true" is_selected="false" is_storage_input="false" is_trigger_input="false" name="qsystem:u0|Log_reg:log_reg_0|MMS_writedata[29]" tap_mode="classic" type="unknown"/>
@@ -946,13 +946,12 @@
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="5C88648A" attribute_mem_mode="false" gap_record="false" global_temp="1" name="trigger: 2015/05/10 20:12:45  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="2048" storage_mode="conditional" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="5C88648A" attribute_mem_mode="false" gap_record="false" global_temp="1" is_expanded="true" name="trigger: 2015/05/10 20:12:45  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="2048" storage_mode="conditional" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'qsystem:u0|Log_reg:log_reg_0|MMS_write' == high
             <power_up enabled="yes">
-            </power_up>
-            <op_node/>
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
@@ -976,7 +975,7 @@
           </storage_qualifier_level>
         </storage_qualifier_events>
         <log>
-          <data global_temp="1" name="log: 2015/05/10 23:43:11  #0"/>
+          <data global_temp="1" name="log: 2015/07/21 21:33:31  #0"/>
           <extradata/>
         </log>
       </trigger>
@@ -993,8 +992,103 @@
       <single attribute="zoom offset numerator" value="129024"/>
     </position_info>
   </instance>
+  <instance enabled="true" entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_4" source_file="sld_signaltap.vhd">
+    <node_ip_info instance_id="4" mfg_id="110" node_id="0" version="6"/>
+    <position_info>
+      <single attribute="active tab" value="0"/>
+      <single attribute="data horizontal scroll position" value="0"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="setup horizontal scroll position" value="0"/>
+      <single attribute="setup vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="1"/>
+      <single attribute="zoom offset denominator" value="1"/>
+      <single attribute="zoom offset numerator" value="130944"/>
+    </position_info>
+    <signal_set global_temp="1" name="signal_set: 2015/08/13 00:38:40  #0">
+      <clock name="CLK_50" polarity="posedge" tap_mode="classic"/>
+      <config ram_type="AUTO" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="128" trigger_in_enable="no" trigger_out_enable="no"/>
+      <top_entity/>
+      <signal_vec>
+        <trigger_input_vec>
+          <wire name="CTS_n" tap_mode="classic"/>
+          <wire name="RTS_n" tap_mode="classic"/>
+          <wire name="RX" tap_mode="classic"/>
+          <wire name="TX" tap_mode="classic"/>
+        </trigger_input_vec>
+        <data_input_vec>
+          <wire name="CTS_n" tap_mode="classic"/>
+          <wire name="RTS_n" tap_mode="classic"/>
+          <wire name="RX" tap_mode="classic"/>
+          <wire name="TX" tap_mode="classic"/>
+        </data_input_vec>
+        <storage_qualifier_input_vec>
+          <wire name="CTS_n" tap_mode="classic"/>
+          <wire name="RTS_n" tap_mode="classic"/>
+          <wire name="RX" tap_mode="classic"/>
+          <wire name="TX" tap_mode="classic"/>
+        </storage_qualifier_input_vec>
+      </signal_vec>
+      <presentation>
+        <unified_setup_data_view>
+          <node data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="RTS_n" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
+          <node data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="RX" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="classic" trigger_index="2" type="unknown"/>
+          <node data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="CTS_n" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <node data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="either edge" name="TX" storage_index="3" tap_mode="classic" trigger_index="3" type="unknown"/>
+        </unified_setup_data_view>
+        <data_view>
+          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="RTS_n" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
+          <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="RX" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="classic" trigger_index="2" type="unknown"/>
+          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="CTS_n" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="either edge" name="TX" storage_index="3" tap_mode="classic" trigger_index="3" type="unknown"/>
+        </data_view>
+        <setup_view>
+          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="RTS_n" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="classic" trigger_index="1" type="unknown"/>
+          <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="RX" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="classic" trigger_index="2" type="unknown"/>
+          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="CTS_n" storage_index="0" tap_mode="classic" trigger_index="0" type="unknown"/>
+          <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="either edge" name="TX" storage_index="3" tap_mode="classic" trigger_index="3" type="unknown"/>
+        </setup_view>
+        <trigger_in_editor/>
+        <trigger_out_editor/>
+      </presentation>
+      <trigger CRC="AE74F136" attribute_mem_mode="false" gap_record="false" global_temp="1" name="trigger: 2015/08/13 00:49:56  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="transitional" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+        <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
+        <events use_custom_flow_control="no">
+          <level enabled="yes" name="condition1" type="basic">'TX' == either edge
+            <power_up enabled="yes">
+            </power_up>
+            <op_node/>
+          </level>
+        </events>
+        <storage_qualifier_events>
+          <transitional>1111
+            <pwr_up_transitional>1111</pwr_up_transitional>
+          </transitional>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+        </storage_qualifier_events>
+        <log>
+          <data global_temp="1" name="log: Trig @ 2015/08/13 00:51:25 (0:1:29.0 elapsed)" power_up_mode="false" sample_depth="15" trigger_position="1">001100100011001000110010001100100011001000110010001100100011</data>
+          <extradata>1T1111111111111</extradata>
+        </log>
+      </trigger>
+    </signal_set>
+  </instance>
   <global_info>
-    <single attribute="active instance" value="3"/>
+    <single attribute="active instance" value="4"/>
     <single attribute="config widget visible" value="1"/>
     <single attribute="data log widget visible" value="1"/>
     <single attribute="hierarchy widget visible" value="1"/>
@@ -1002,7 +1096,8 @@
     <single attribute="jtag widget visible" value="1"/>
     <single attribute="lock mode" value="0"/>
     <multi attribute="column width" size="23" value="34,34,459,74,68,78,95,96,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
-    <multi attribute="frame size" size="2" value="1920,1018"/>
+    <multi attribute="frame size" size="2" value="1598,1180"/>
     <multi attribute="jtag widget size" size="2" value="334,153"/>
+    <single attribute="hierarchy widget height" value="147"/>
   </global_info>
 </session>
