@@ -57,8 +57,8 @@ static const int PWMHalfPeriod = ALT_CPU_CPU_FREQ/(PWMFrequency*2);
 #define QudcountsPerRev 2400
 static const float currentKp = 0.002f;
 static const float currentKi = 5.0f;
-static const float speedKp = 0.03f;
-static const float speedKi = 0.4f;
+static const float speedKp = 0.06f;
+static const float speedKi = 0.0f;//0.4f;
 
 //350kv motor
 //#define QudcountsPerRev 2000
@@ -75,7 +75,7 @@ static const float speedLimit = 4000.0f;
 static const float ADCtoAscalefactor = 3.3f/((float)(1<<12) * 50.0f * 0.0005f);
 static const float ADCtoVbusSF = 3.3f * 11.0f / (float)(1<<12);
 static const float encToPhasefactor = 2.0f*PI_F*7.0f/(float)QudcountsPerRev;
-static const float omegaFilterConst = 0.97; //Note, leads to a 747 rad/s lag when accelerating at 171m/s^2
+static const float omegaFilterConst = 0.95;
 
 static const float BrakeResistorCurrent = 60.0f; //Amps
 static const float BrakeResistorFactor = 1.0f/60.0f;
@@ -288,9 +288,9 @@ void blocking_polar_control_current(float phase, float mag){
 
 int main()
 {
-	printf("Hello from Nios II!\n");
+	//printf("Hello from Nios II!\n");
 
-	while(1);
+	//while(1);
 
 	IOWR(QEI_0_BASE, QEI_REG_revDir, 1);
 
@@ -436,7 +436,7 @@ int main()
 
 	int oldenc = IORD(QEI_0_BASE, QEI_REG_COUNT);
 	while(1)
-	for(int i = -10000; i < 10000; ++i){
+	for(int i = -1800; i < 1800; ++i){
 
 		float Ia, Ib, Vbus;
 		wait_for_ADC(&Ia, &Ib, &Vbus);
@@ -453,7 +453,7 @@ int main()
 		float possetpoint = (i<0) ? 150.0f : 0.0f;
 		float pos = enccount * encToPhasefactor;
 
-		float omegasetpoint = 30.0f * (possetpoint - pos);
+		float omegasetpoint = 35.0f * (possetpoint - pos);
 		if(omegasetpoint > speedLimit){
 			omegasetpoint = speedLimit;
 		}else{
@@ -501,7 +501,7 @@ int main()
 		static int logctr = 0;
 		if(++logctr == 4){
 			logctr = 0;
-			//IOWR(LOG_REG_0_BASE, 0, (int)(targetIq*500.0f));
+			IOWR(LOG_REG_0_BASE, 1, (int)(targetIq*500.0f));
 			IOWR(LOG_REG_0_BASE, 0, (int)(omega*10.0f));
 		}
 

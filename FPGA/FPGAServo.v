@@ -62,8 +62,8 @@ module FPGAServo(
         .pwm_1_pwmout_udrive   ({PWM_AH3, PWM_BH3, PWM_CH3}),     //                .udrive
         .QEI_0_EncoderIn_encabz ({ENC_A2, ENC_B2, ENC_Z2}), // QEI_0_EncoderIn.encab
         .clk_clk               (CLK_50),               //             clk.clk
-        .reset_reset_n         (1)          //           reset.reset_n
-		.uart_0_external_connection_rxd   (RX),   // uart_0_external_connection.rxd
+        .reset_reset_n         (1),          //           reset.reset_n
+		  .uart_0_external_connection_rxd   (RX),   // uart_0_external_connection.rxd
         .uart_0_external_connection_txd   (TX),   //                           .txd
         .uart_0_external_connection_cts_n (RTS_n), //                           .cts_n
         .uart_0_external_connection_rts_n (CTS_n)  //                           .rts_n
