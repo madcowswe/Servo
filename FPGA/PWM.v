@@ -7,11 +7,11 @@ module Servo  (
 		input  wire [3:0]  MMS_addr,      // avalon_slave.address
 		input  wire        MMS_write,     //             .write
 		input  wire [31:0] MMS_writedata, //             .writedata
-		output wire [0:2]  Udrive,      //     M0PWMout.udrive
-		output wire [0:2]  Ldrive,      //             .ldrive
+		output reg  [0:2]  Udrive,      //     M0PWMout.udrive
+		output reg  [0:2]  Ldrive,      //             .ldrive
 		output reg         irqout       //      Trigirq.irq
 	);
-	
+
 
 	reg [15:0] compvalhightoset[2:0];
 	reg [15:0] compvallowtoset[2:0];
@@ -160,16 +160,26 @@ module Servo  (
 				ctr <= 16'h0000;
 				countup <= 1'b1;
 			end
-			
+
 		end
 	end
 
-	assign Udrive[0] = (ctr > compvalhigh[0]) & En;
-	assign Ldrive[0] = (ctr < compvallow[0]) & En;
-	assign Udrive[1] = (ctr > compvalhigh[1]) & En;
-	assign Ldrive[1] = (ctr < compvallow[1]) & En;
-	assign Udrive[2] = (ctr > compvalhigh[2]) & En;
-	assign Ldrive[2] = (ctr < compvallow[2]) & En;
-
+	always @(posedge clk or negedge reset_n) begin : proc_compare
+		if(~reset_n) begin
+			Udrive[0] <= 1'b0;
+			Ldrive[0] <= 1'b0;
+			Udrive[1] <= 1'b0;
+			Ldrive[1] <= 1'b0;
+			Udrive[2] <= 1'b0;
+			Ldrive[2] <= 1'b0;
+		end else begin
+			Udrive[0] <= (ctr > compvalhigh[0]) & En;
+			Ldrive[0] <= (ctr < compvallow[0] ) & En;
+			Udrive[1] <= (ctr > compvalhigh[1]) & En;
+			Ldrive[1] <= (ctr < compvallow[1] ) & En;
+			Udrive[2] <= (ctr > compvalhigh[2]) & En;
+			Ldrive[2] <= (ctr < compvallow[2] ) & En;
+		end
+	end
 
 endmodule
