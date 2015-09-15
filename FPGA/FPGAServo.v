@@ -37,20 +37,24 @@ module FPGAServo(
 		output wire PWM_BL3,
 		output wire PWM_CH3,
 		output wire PWM_CL3,
-		input wire RXD,
+		input wire RX,
 		inout wire [36:31] SGPIO,
-		//output wire STATUSLED_B,
-		//output wire STATUSLED_R,
-		//output wire TXD,
-		//output wire CTS_n,
+		output wire STATUSLED_B,
+		output wire STATUSLED_R,
+		output wire TX,
+		output wire CTS_n,
 		input wire RTS_n
 	);
-	
+
 	//force -freeze sim:/qsystem_tb/qsystem_inst/altpll_0/areset St0 0
 	//force -freeze sim:/qsystem_tb/qsystem_inst/altpll_0/read St0 0
 	//force -freeze sim:/qsystem_tb/qsystem_inst/altpll_0/write St0 0
-	
-	
+
+	assign STATUSLED_R = RX;
+	assign STATUSLED_B = TX;
+	//assign TX = RX;
+	//assign CTS_n = 0;
+
     qsystem u0 (
         .PWM_0_PWMout_ldrive   ({PWM_AL1, PWM_BL1, PWM_CL1}),   //    PWM_0_PWMout.ldrive
         .PWM_0_PWMout_udrive   ({PWM_AH1, PWM_BH1, PWM_CH1}),   //                .udrive
@@ -59,8 +63,11 @@ module FPGAServo(
         .QEI_0_EncoderIn_encabz ({ENC_A2, ENC_B2, ENC_Z2}), // QEI_0_EncoderIn.encab
         .clk_clk               (CLK_50),               //             clk.clk
         .reset_reset_n         (1)          //           reset.reset_n
+		.uart_0_external_connection_rxd   (RX),   // uart_0_external_connection.rxd
+        .uart_0_external_connection_txd   (TX),   //                           .txd
+        .uart_0_external_connection_cts_n (RTS_n), //                           .cts_n
+        .uart_0_external_connection_rts_n (CTS_n)  //                           .rts_n
     );
-
 
 //	reg [32:0] ctr = 0;
 //	reg blinkystate = 0;
@@ -75,4 +82,3 @@ module FPGAServo(
 //	assign LEDB1 = blinkystate;
 
 endmodule
-	

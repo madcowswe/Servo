@@ -288,7 +288,9 @@ void blocking_polar_control_current(float phase, float mag){
 
 int main()
 {
-	//printf("Hello from Nios II!\n");
+	printf("Hello from Nios II!\n");
+
+	while(1);
 
 	IOWR(QEI_0_BASE, QEI_REG_revDir, 1);
 
