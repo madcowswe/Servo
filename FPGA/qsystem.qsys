@@ -50,7 +50,7 @@
    {
       datum baseAddress
       {
-         value = "41152";
+         value = "41344";
          type = "String";
       }
    }
@@ -58,7 +58,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "20";
          type = "int";
       }
    }
@@ -66,7 +66,23 @@
    {
       datum baseAddress
       {
-         value = "41088";
+         value = "41280";
+         type = "String";
+      }
+   }
+   element PWM_2
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
+   element PWM_2.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "41216";
          type = "String";
       }
    }
@@ -74,7 +90,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "10";
          type = "int";
       }
       datum sopceditor_expanded
@@ -87,7 +103,23 @@
    {
       datum baseAddress
       {
-         value = "41248";
+         value = "41456";
+         type = "String";
+      }
+   }
+   element QEI_1
+   {
+      datum _sortIndex
+      {
+         value = "11";
+         type = "int";
+      }
+   }
+   element QEI_1.mms
+   {
+      datum baseAddress
+      {
+         value = "41440";
          type = "String";
       }
    }
@@ -95,7 +127,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "15";
          type = "int";
       }
    }
@@ -103,7 +135,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "18";
          type = "int";
       }
    }
@@ -111,11 +143,27 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "12";
          type = "int";
       }
    }
    element Triggered_ADC_Sequencer_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "41088";
+         type = "String";
+      }
+   }
+   element Triggered_ADC_Sequencer_1
+   {
+      datum _sortIndex
+      {
+         value = "13";
+         type = "int";
+      }
+   }
+   element Triggered_ADC_Sequencer_1.avalon_slave
    {
       datum baseAddress
       {
@@ -143,7 +191,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "19";
          type = "int";
       }
    }
@@ -172,7 +220,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "16";
          type = "int";
       }
    }
@@ -180,7 +228,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "14";
          type = "int";
       }
    }
@@ -357,11 +405,27 @@
          type = "String";
       }
    }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element qsystem
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
    element sc_fifo_0
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "17";
          type = "int";
       }
    }
@@ -382,7 +446,7 @@
    {
       datum baseAddress
       {
-         value = "41264";
+         value = "41472";
          type = "String";
       }
    }
@@ -390,7 +454,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "21";
          type = "int";
       }
    }
@@ -398,7 +462,7 @@
    {
       datum baseAddress
       {
-         value = "41216";
+         value = "41408";
          type = "String";
       }
    }
@@ -431,6 +495,12 @@
    dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="pwm_1_pwmout" internal="PWM_1.PWMout" type="conduit" dir="end" />
+ <interface name="pwm_2_pwmout" internal="PWM_2.PWMout" type="conduit" dir="end" />
+ <interface
+   name="qei_1_encoderin"
+   internal="QEI_1.EncoderIn"
+   type="conduit"
+   dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <interface
    name="uart_0_external_connection"
@@ -440,7 +510,11 @@
  <module name="Log_reg_0" kind="Log_reg" version="1.0" enabled="1" />
  <module name="PWM_0" kind="PWM" version="1.0" enabled="1" />
  <module name="PWM_1" kind="PWM" version="1.0" enabled="1" />
+ <module name="PWM_2" kind="PWM" version="1.0" enabled="1" />
  <module name="QEI_0" kind="QEI" version="1.0" enabled="1">
+  <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="-1" />
+ </module>
+ <module name="QEI_1" kind="QEI" version="1.0" enabled="1">
   <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="-1" />
  </module>
  <module
@@ -455,6 +529,13 @@
    enabled="1" />
  <module
    name="Triggered_ADC_Sequencer_0"
+   kind="Triggered_ADC_Sequencer"
+   version="1.0"
+   enabled="1">
+  <parameter name="AUTO_TRIG_INTERRUPTS_USED" value="1" />
+ </module>
+ <module
+   name="Triggered_ADC_Sequencer_1"
    kind="Triggered_ADC_Sequencer"
    version="1.0"
    enabled="1">
@@ -877,7 +958,7 @@
   <parameter name="dataAddrWidth" value="16" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='Log_reg_0.avalon_slave' start='0x8000' end='0x9000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x9800' end='0xA000' /><slave name='Triggered_ADC_Sequencer_0.avalon_slave' start='0xA000' end='0xA080' /><slave name='PWM_1.avalon_slave' start='0xA080' end='0xA0C0' /><slave name='PWM_0.avalon_slave' start='0xA0C0' end='0xA100' /><slave name='uart_0.s1' start='0xA100' end='0xA120' /><slave name='QEI_0.mms' start='0xA120' end='0xA130' /><slave name='sysid_qsys_0.control_slave' start='0xA130' end='0xA138' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='Log_reg_0.avalon_slave' start='0x8000' end='0x9000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x9800' end='0xA000' /><slave name='Triggered_ADC_Sequencer_1.avalon_slave' start='0xA000' end='0xA080' /><slave name='Triggered_ADC_Sequencer_0.avalon_slave' start='0xA080' end='0xA100' /><slave name='PWM_2.avalon_slave' start='0xA100' end='0xA140' /><slave name='PWM_1.avalon_slave' start='0xA140' end='0xA180' /><slave name='PWM_0.avalon_slave' start='0xA180' end='0xA1C0' /><slave name='uart_0.s1' start='0xA1C0' end='0xA1E0' /><slave name='QEI_1.mms' start='0xA1E0' end='0xA1F0' /><slave name='QEI_0.mms' start='0xA1F0' end='0xA200' /><slave name='sysid_qsys_0.control_slave' start='0xA200' end='0xA208' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -923,7 +1004,7 @@
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="5" />
+  <parameter name="internalIrqMaskSystemInfo" value="7" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -998,7 +1079,7 @@
   <parameter name="setting_usedesignware" value="false" />
   <parameter name="shift_rot_impl" value="1" />
   <parameter name="tightlyCoupledDataMaster0AddrWidth" value="15" />
-  <parameter name="tightlyCoupledDataMaster0MapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s2' start='0x0' end='0x6000' /></address-map>]]></parameter>
+  <parameter name="tightlyCoupledDataMaster0MapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s2' start='0x0' end='0x8000' /></address-map>]]></parameter>
   <parameter name="tightlyCoupledDataMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledDataMaster1MapParam" value="" />
   <parameter name="tightlyCoupledDataMaster2AddrWidth" value="1" />
@@ -1006,7 +1087,7 @@
   <parameter name="tightlyCoupledDataMaster3AddrWidth" value="1" />
   <parameter name="tightlyCoupledDataMaster3MapParam" value="" />
   <parameter name="tightlyCoupledInstructionMaster0AddrWidth" value="15" />
-  <parameter name="tightlyCoupledInstructionMaster0MapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x0' end='0x6000' /></address-map>]]></parameter>
+  <parameter name="tightlyCoupledInstructionMaster0MapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x0' end='0x8000' /></address-map>]]></parameter>
   <parameter name="tightlyCoupledInstructionMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster1MapParam" value="" />
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
@@ -1059,7 +1140,7 @@
   <parameter name="initMemContent" value="false" />
   <parameter name="initializationFileName">C:\Users\Oskar\Dropbox\Servo\FPGA\software\ServoDrive\mem_init\qsystem_onchip_memory2_0.hex</parameter>
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="24576" />
+  <parameter name="memorySize" value="32768" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="resetrequest_enabled" value="false" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
@@ -1131,7 +1212,7 @@
    start="nios2_qsys_0.data_master"
    end="Triggered_ADC_Sequencer_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa000" />
+  <parameter name="baseAddress" value="0xa080" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1140,7 +1221,7 @@
    start="nios2_qsys_0.data_master"
    end="PWM_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa0c0" />
+  <parameter name="baseAddress" value="0xa180" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1158,7 +1239,25 @@
    start="nios2_qsys_0.data_master"
    end="PWM_1.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa080" />
+  <parameter name="baseAddress" value="0xa140" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_qsys_0.data_master"
+   end="PWM_2.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xa100" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_qsys_0.data_master"
+   end="Triggered_ADC_Sequencer_1.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xa000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1167,7 +1266,7 @@
    start="nios2_qsys_0.data_master"
    end="sysid_qsys_0.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa130" />
+  <parameter name="baseAddress" value="0xa200" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1185,7 +1284,16 @@
    start="nios2_qsys_0.data_master"
    end="QEI_0.mms">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa120" />
+  <parameter name="baseAddress" value="0xa1f0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_qsys_0.data_master"
+   end="QEI_1.mms">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xa1e0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1194,7 +1302,7 @@
    start="nios2_qsys_0.data_master"
    end="uart_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa100" />
+  <parameter name="baseAddress" value="0xa1c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1242,6 +1350,11 @@
  <connection
    kind="avalon_streaming"
    version="15.0"
+   start="Triggered_ADC_Sequencer_1.cmd_ch_as_data"
+   end="multiplexer_0.in1" />
+ <connection
+   kind="avalon_streaming"
+   version="15.0"
    start="ST_ch_data_demux_and_swap_0.data_in_ch_out"
    end="modular_adc_0.command" />
  <connection
@@ -1259,6 +1372,11 @@
    version="15.0"
    start="demultiplexer_0.out0"
    end="Triggered_ADC_Sequencer_0.ADC_response" />
+ <connection
+   kind="avalon_streaming"
+   version="15.0"
+   start="demultiplexer_0.out1"
+   end="Triggered_ADC_Sequencer_1.ADC_response" />
  <connection
    kind="avalon_streaming"
    version="15.0"
@@ -1340,6 +1458,21 @@
  <connection
    kind="clock"
    version="15.0"
+   start="altpll_0.c1"
+   end="PWM_2.clock_sink" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="altpll_0.c1"
+   end="Triggered_ADC_Sequencer_1.clock_sink" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="altpll_0.c1"
+   end="QEI_1.clock_sink" />
+ <connection
+   kind="clock"
+   version="15.0"
    start="clk_0.clk"
    end="altpll_0.inclk_interface" />
  <connection
@@ -1363,9 +1496,23 @@
  <connection
    kind="interrupt"
    version="15.0"
+   start="Triggered_ADC_Sequencer_1.Trig"
+   end="PWM_2.interrupt_sender">
+  <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
    start="nios2_qsys_0.irq"
    end="Triggered_ADC_Sequencer_0.interrupt_sender">
   <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="nios2_qsys_0.irq"
+   end="Triggered_ADC_Sequencer_1.interrupt_sender">
+  <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"
@@ -1484,6 +1631,21 @@
    version="15.0"
    start="clk_0.clk_reset"
    end="PWM_1.reset_sink" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="clk_0.clk_reset"
+   end="PWM_2.reset_sink" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="clk_0.clk_reset"
+   end="Triggered_ADC_Sequencer_1.reset_sink" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="clk_0.clk_reset"
+   end="QEI_1.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />

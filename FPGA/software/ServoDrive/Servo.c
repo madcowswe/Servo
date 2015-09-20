@@ -5,6 +5,7 @@
 #include "io.h"
 #include "unistd.h"
 #include <stdint.h>
+#include <stdbool.h>
 #include "extramath/extramath.h"
 
 
@@ -68,7 +69,7 @@ static const float speedKi = 0.0f;//0.4f;
 //static const float speedKi = 0.0f;//1.0f;
 
 static const float currentlimit = 50.0f;
-static const float lockinCurrent = 10.0f;
+static const float lockinCurrent = 20.0f;
 static const float speedLimit = 4000.0f;
 
 
@@ -77,8 +78,8 @@ static const float ADCtoVbusSF = 3.3f * 11.0f / (float)(1<<12);
 static const float encToPhasefactor = 2.0f*PI_F*7.0f/(float)QudcountsPerRev;
 static const float omegaFilterConst = 0.95;
 
-static const float BrakeResistorCurrent = 60.0f; //Amps
-static const float BrakeResistorFactor = 1.0f/60.0f;
+static const float BrakeResistorCurrent = 30.0f; //Amps
+static const float BrakeResistorFactor = 1.0f/30.0f;
 
 // Magnitude must not be larger than sqrt(3)/2, or 0.866
 void SVM(float alpha, float beta, uint32_t* tAout, uint32_t* tBout, uint32_t* tCout){
@@ -222,22 +223,62 @@ void SVM(float alpha, float beta, uint32_t* tAout, uint32_t* tBout, uint32_t* tC
 
 }
 
-static int IsenseOffset[2] = {0};
-void wait_for_ADC(float* Ia, float* Ib, float* Vbus){
-	while(!IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG));
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
+struct axis_state_s {
+	void* pwm_base;
+	void* qei_base;
+	void* tas_base;
+	int IsenseADC_AB[2];
+	int IsenseOffset[2];
+	bool  encrev;
+	int encoffset;
+	float IerrVstate_d;
+	float IerrVstate_q;
+	float omega;
+	float Iqintstate;
+};
 
-	*Ia = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 0) - IsenseOffset[0]);
-	*Ib = ADCtoAscalefactor * ((int)IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 1) - IsenseOffset[1]);
+struct axis_state_s axes[] = {
+	{	//Axis 0
+		.pwm_base = (void*)PWM_0_BASE,
+		.qei_base = (void*)QEI_0_BASE,
+		.tas_base = (void*)TRIGGERED_ADC_SEQUENCER_0_BASE,
+		.IsenseADC_AB = {7, 6},
+		.IsenseOffset = {0, 0},
+		.encrev = 0,
+		.encoffset = 0,
+		.IerrVstate_d = 0.0f,
+		.IerrVstate_q = 0.0f,
+		.omega = 0.0f,
+		.Iqintstate = 0.0f
+	},
+	{	//Axis 1
+		.pwm_base = (void*)PWM_2_BASE,
+		.qei_base = (void*)QEI_1_BASE,
+		.tas_base = (void*)TRIGGERED_ADC_SEQUENCER_1_BASE,
+		.IsenseADC_AB = {2, 1},
+		.IsenseOffset = {0, 0},
+		.encrev = 0,
+		.encoffset = 0,
+		.IerrVstate_d = 0.0f,
+		.IerrVstate_q = 0.0f,
+		.omega = 0.0f,
+		.Iqintstate = 0.0f
+	}
+};
 
-	*Vbus = ADCtoVbusSF * IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 2);
+static const int numaxes = sizeof(axes)/sizeof(axes[0]);
+
+void wait_for_ADC(struct axis_state_s* axis, float* Ia, float* Ib, float* Vbus){
+	while(!IORD(axis->tas_base, TADCS_REG_IRQFLAG));
+	IOWR(axis->tas_base, TADCS_REG_IRQFLAG, 0);
+
+	*Ia = ADCtoAscalefactor * ((int)IORD(axis->tas_base, TADCS_OFFSET_SAMPSTORE + 0) - axis->IsenseOffset[0]);
+	*Ib = ADCtoAscalefactor * ((int)IORD(axis->tas_base, TADCS_OFFSET_SAMPSTORE + 1) - axis->IsenseOffset[1]);
+
+	*Vbus = ADCtoVbusSF * IORD(axis->tas_base, TADCS_OFFSET_SAMPSTORE + 2);
 }
 
-void control_current(float targetId, float targetIq, float Ia, float Ib, float phase, float* IbusEst){
-
-	static float IerrVstate_d = 0.0f;
-	static float IerrVstate_q = 0.0f;
-
+void control_current(struct axis_state_s* axis, float targetId, float targetIq, float Ia, float Ib, float phase, float* IbusEst){
 
 	float Ialpha = Ia;
 	float Ibeta = one_by_sqrt3 * Ia + two_by_sqrt3 * Ib;
@@ -250,8 +291,8 @@ void control_current(float targetId, float targetIq, float Ia, float Ib, float p
 	float Ierr_d = targetId - Id;
 	float Ierr_q = targetIq - Iq;
 
-	float Vd = IerrVstate_d + Ierr_d * currentKp;
-	float Vq = IerrVstate_q + Ierr_q * currentKp;
+	float Vd = axis->IerrVstate_d + Ierr_d * currentKp;
+	float Vq = axis->IerrVstate_q + Ierr_q * currentKp;
 
 	float Vscalefactor = 0.98f * sqrt3_by_2 * Q_rsqrt(Vd*Vd + Vq*Vq);
 	if (Vscalefactor < 1)
@@ -259,8 +300,8 @@ void control_current(float targetId, float targetIq, float Ia, float Ib, float p
 		Vd *= Vscalefactor;
 		Vq *= Vscalefactor;
 	} else {
-		IerrVstate_d += Ierr_d * (currentKi * PWMPeriod);
-		IerrVstate_q += Ierr_q * (currentKi * PWMPeriod);
+		axis->IerrVstate_d += Ierr_d * (currentKi * PWMPeriod);
+		axis->IerrVstate_q += Ierr_q * (currentKi * PWMPeriod);
 	}
 
 	*IbusEst = Vd * Id + Vq * Iq; //Note V is in modulation, not voltage.
@@ -271,19 +312,44 @@ void control_current(float targetId, float targetIq, float Ia, float Ib, float p
 	uint32_t tABC[3];
 	SVM(Valpha,Vbeta,&tABC[0],&tABC[1],&tABC[2]);
 
-	IOWR(PWM_0_BASE, PWM_REG_UPDATE, 0);
+	IOWR(axis->pwm_base, PWM_REG_UPDATE, 0);
 	for (int i = 0; i < 3; ++i)
 	{
-		IOWR(PWM_0_BASE, 2*i, MAX((int)tABC[i] - deadtimeint/2, 0));
-		IOWR(PWM_0_BASE, 2*i + 1, tABC[i] + deadtimeint/2);
+		IOWR(axis->pwm_base, 2*i, MAX((int)tABC[i] - deadtimeint/2, 0));
+		IOWR(axis->pwm_base, 2*i + 1, tABC[i] + deadtimeint/2);
 	}
-	IOWR(PWM_0_BASE, PWM_REG_UPDATE, 1);
+	IOWR(axis->pwm_base, PWM_REG_UPDATE, 1);
 }
 
-void blocking_polar_control_current(float phase, float mag){
+void blocking_polar_control_current(struct axis_state_s* axis, float phase, float mag){
 	float Ia, Ib, Vbus, Ibusest;
-	wait_for_ADC(&Ia, &Ib, &Vbus);
-	control_current(mag, 0.0f, Ia, Ib, phase, &Ibusest);
+	wait_for_ADC(axis, &Ia, &Ib, &Vbus);
+	control_current(axis, mag, 0.0f, Ia, Ib, phase, &Ibusest);
+}
+
+void setup_axis(struct axis_state_s* axis_state){
+
+	IOWR(axis_state->qei_base, QEI_REG_revDir, axis_state->encrev);
+
+	IOWR(axis_state->tas_base, TADCS_REG_MAXSEQ, 2);
+	IOWR(axis_state->tas_base, TADCS_OFFSET_CH_MAP + 0, axis_state->IsenseADC_AB[0]); //Ia
+	IOWR(axis_state->tas_base, TADCS_OFFSET_CH_MAP + 1, axis_state->IsenseADC_AB[1]); //Ib
+	IOWR(axis_state->tas_base, TADCS_OFFSET_CH_MAP + 2, 0); //Vbus
+	IOWR(axis_state->tas_base, TADCS_REG_IRQFLAG, 0);
+	IOWR(axis_state->tas_base, TADCS_REG_EN, 1);
+
+	IOWR(axis_state->pwm_base, PWM_REG_TRIGON_Z, 1);
+	IOWR(axis_state->pwm_base, PWM_REG_UPDATEON_Z, 1);
+	IOWR(axis_state->pwm_base, PWM_REG_MAXCTR, PWMHalfPeriod);
+	IOWR(axis_state->pwm_base, PWM_REG_UPDATE, 0);
+	for (int i = 0; i < 3; ++i)
+	{
+		IOWR(axis_state->pwm_base, 2*i, PWMHalfPeriod/2 - deadtimeint/2);//MAX((int)tABC[i] - deadtimeint/2, 0));
+		IOWR(axis_state->pwm_base, 2*i + 1, PWMHalfPeriod/2 + deadtimeint/2);
+	}
+	IOWR(axis_state->pwm_base, PWM_REG_UPDATE, 1);
+	IOWR(axis_state->pwm_base, PWM_REG_EN, 1);
+
 }
 
 int main()
@@ -292,125 +358,155 @@ int main()
 
 	//while(1);
 
-	IOWR(QEI_0_BASE, QEI_REG_revDir, 1);
 
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_MAXSEQ, 2);
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_CH_MAP + 0, 7); //Ia
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_CH_MAP + 1, 6); //Ib
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_CH_MAP + 2, 0); //Vbus
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
-	IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_EN, 1);
-
-	//motor ch 1
-	IOWR(PWM_0_BASE, PWM_REG_TRIGON_Z, 1);
-	IOWR(PWM_0_BASE, PWM_REG_UPDATEON_Z, 1);
-	IOWR(PWM_0_BASE, PWM_REG_MAXCTR, PWMHalfPeriod);
-	IOWR(PWM_0_BASE, PWM_REG_UPDATE, 0);
-	for (int i = 0; i < 3; ++i)
-	{
-		IOWR(PWM_0_BASE, 2*i, PWMHalfPeriod/2 - deadtimeint/2);//MAX((int)tABC[i] - deadtimeint/2, 0));
-		IOWR(PWM_0_BASE, 2*i + 1, PWMHalfPeriod/2 + deadtimeint/2);
-	}
-	IOWR(PWM_0_BASE, PWM_REG_UPDATE, 1);
-	IOWR(PWM_0_BASE, PWM_REG_EN, 1);
+	setup_axis(&axes[0]);
+	setup_axis(&axes[1]);
 
 	//sample current sense values during V0 PWM
 	for (int i = -128; i < 128; ++i)
 	{
-		while(!IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG));
-		IOWR(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_REG_IRQFLAG, 0);
-		int Ia = IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 0);
-		int Ib = IORD(TRIGGERED_ADC_SEQUENCER_0_BASE, TADCS_OFFSET_SAMPSTORE + 1);
-		if(i >= 0){
-			IsenseOffset[0] += Ia;
-			IsenseOffset[1] += Ib;
-		}
+		for(int ax = 0; ax < numaxes; ++ax){
+			while(!IORD(axes[ax].tas_base, TADCS_REG_IRQFLAG));
+			IOWR(axes[ax].tas_base, TADCS_REG_IRQFLAG, 0);
+			int Ia = IORD(axes[ax].tas_base, TADCS_OFFSET_SAMPSTORE + 0);
+			int Ib = IORD(axes[ax].tas_base, TADCS_OFFSET_SAMPSTORE + 1);
+			if(i >= 0){
+				axes[ax].IsenseOffset[0] += Ia;
+				axes[ax].IsenseOffset[1] += Ib;
+			}
 
-		IOWR(PWM_0_BASE, PWM_REG_UPDATE, 0);
-		for (int i = 0; i < 3; ++i)
+			IOWR(axes[ax].pwm_base, PWM_REG_UPDATE, 0);
+			for (int i = 0; i < 3; ++i)
+			{
+				IOWR(axes[ax].pwm_base, 2*i, PWMHalfPeriod/2 - deadtimeint/2);//MAX((int)tABC[i] - deadtimeint/2, 0));
+				IOWR(axes[ax].pwm_base, 2*i + 1, PWMHalfPeriod/2 + deadtimeint/2);
+			}
+			IOWR(axes[ax].pwm_base, PWM_REG_UPDATE, 1);
+		}
+	}
+
+	for(int ax = 0; ax < numaxes; ++ax){
+		for (int i = 0; i < 2; ++i)
 		{
-			IOWR(PWM_0_BASE, 2*i, PWMHalfPeriod/2 - deadtimeint/2);//MAX((int)tABC[i] - deadtimeint/2, 0));
-			IOWR(PWM_0_BASE, 2*i + 1, PWMHalfPeriod/2 + deadtimeint/2);
+			axes[ax].IsenseOffset[i] /= 128;
 		}
-		IOWR(PWM_0_BASE, PWM_REG_UPDATE, 1);
 	}
 
-	for (int i = 0; i < 2; ++i)
-	{
-		IsenseOffset[i] /= 128;
-	}
 
+
+
+	//struct axis_state_s* test_ax = &axes[1];
+
+#if 0
 	//Fixed voltage test
+	float finalIa, finalIb;
 	while(0){
-		uint32_t tABC[3];
-		SVM(0.02f,0.0f,&tABC[0],&tABC[1],&tABC[2]);
+		for (int i = 0; i < 8000; ++i){
+			float Vbus;
+			wait_for_ADC(test_ax, &finalIa, &finalIb, &Vbus);
 
-		IOWR(PWM_0_BASE, PWM_REG_UPDATE, 0);
-		for (int i = 0; i < 3; ++i)
-		{
-			IOWR(PWM_0_BASE, 2*i, MAX((int)tABC[i] - deadtimeint/2, 0));
-			IOWR(PWM_0_BASE, 2*i + 1, tABC[i] + deadtimeint/2);
+			uint32_t tABC[3];
+			SVM(0.025f,0.0f,&tABC[0],&tABC[1],&tABC[2]);
+
+			IOWR(test_ax->pwm_base, PWM_REG_UPDATE, 0);
+			for (int i = 0; i < 3; ++i)
+			{
+				IOWR(test_ax->pwm_base, 2*i, MAX((int)tABC[i] - deadtimeint/2, 0));
+				IOWR(test_ax->pwm_base, 2*i + 1, tABC[i] + deadtimeint/2);
+			}
+			IOWR(test_ax->pwm_base, PWM_REG_UPDATE, 1);
 		}
-		IOWR(PWM_0_BASE, PWM_REG_UPDATE, 1);
+		finalIa = finalIa;
 	}
 
 	//square wave current control test
 	while(0){
 		for (int i = 0; i < 100; ++i)
 		{
-			blocking_polar_control_current(0.0f, 10.0f);
+			blocking_polar_control_current(test_ax, 0.0f, 10.0f);
 		}
 		for (int i = 0; i < 100; ++i)
 		{
-			blocking_polar_control_current(0.0f, 0.0f);
+			blocking_polar_control_current(test_ax, 0.0f, 0.0f);
 		}
 	}
 
+#endif
+
+
 //go to rotor zero phase to get ready to scan
-	for (int i = 0; i < (0.5f*PWMFrequency); ++i)
+	for (int i = 0; i < (1.0f*PWMFrequency); ++i)
 	{
-		blocking_polar_control_current(-2*PI_F, lockinCurrent);
+		for(int ax = 0; ax < numaxes; ++ax){
+			blocking_polar_control_current(&axes[ax], -2*PI_F, lockinCurrent);
+		}
 	}
 
 #ifdef ENC_IDX_PRESENT
 
-	IOWR(QEI_0_BASE, QEI_REG_clearOnZ, 1); //clear phase reg on next index pulse
+	for(int ax = 0; ax < numaxes; ++ax){
+		IOWR(axes[ax].qei_base, QEI_REG_clearOnZ, 1); //clear phase reg on next index pulse
+	}
 
 	//scan lockin until idx pulse
-	for (float ph = 0; IORD(QEI_0_BASE, QEI_REG_clearOnZ); ph += 0.0022f)
+	for (float ph = 0; BROKEN METHOD FOR MULTI AXIS IORD(test_ax->pwm_base, QEI_REG_clearOnZ); ph += 0.0022f)
 	{
-		blocking_polar_control_current(ph, lockinCurrent);
+		for(int ax = 0; ax < numaxes; ++ax){
+			blocking_polar_control_current(ph, lockinCurrent);
+		}
 	}
 
 #else
-	IOWR(QEI_0_BASE, QEI_REG_COUNT, 0);
+	for(int ax = 0; ax < numaxes; ++ax){
+		IOWR(axes[ax].qei_base, QEI_REG_COUNT, 0);
+	}
 #endif
 
 	//scan forwards
-	int encvaluesum = 0;
+	int encvaluesum[numaxes];
+	for(int ax = 0; ax < numaxes; ++ax){
+		encvaluesum[ax] = 0.0f;
+	}
 	for (float ph = -2*PI_F; ph < 2*PI_F; ph += 4*PI_F/128.0f)
 	{
 		for (int i = 0; i < (0.02f*PWMFrequency); ++i)
 		{
-			blocking_polar_control_current(ph, lockinCurrent);
+			for(int ax = 0; ax < numaxes; ++ax){
+				blocking_polar_control_current(&axes[ax], ph, lockinCurrent);
+			}
 		}
-		encvaluesum += IORD(QEI_0_BASE, QEI_REG_COUNT);
+		for(int ax = 0; ax < numaxes; ++ax){
+			encvaluesum[ax] += IORD(axes[ax].qei_base, QEI_REG_COUNT);
+		}
 	}
-	int testencval = IORD(QEI_0_BASE, QEI_REG_COUNT);
-	if(testencval <= 0) //encoder vs motor phases likely configured backwards, or disconnected
-		while(1){
-			//TODO flash red phase LED here
+
+	//check encoder direction
+	for(int ax = 0; ax < numaxes; ++ax){
+		int testencval = IORD(axes[ax].qei_base, QEI_REG_COUNT);
+		if(testencval <= 0){ //encoder vs motor phases likely configured backwards, or disconnected
+			while(1){
+				//TODO flash red phase LED here
+			}
 		}
+	}
+
+	//scan backwards
 	for (float ph = 2*PI_F; ph > -2*PI_F; ph -= 4*PI_F/128.0f)
 	{
 		for (int i = 0; i < (0.02f*PWMFrequency); ++i)
 		{
-			blocking_polar_control_current(ph, lockinCurrent);
+			for(int ax = 0; ax < numaxes; ++ax){
+				blocking_polar_control_current(&axes[ax], ph, lockinCurrent);
+			}
 		}
-		encvaluesum += IORD(QEI_0_BASE, QEI_REG_COUNT);
+		for(int ax = 0; ax < numaxes; ++ax){
+			encvaluesum[ax] += IORD(axes[ax].qei_base, QEI_REG_COUNT);
+		}
 	}
 
-	int encoffset = encvaluesum / 256;
+	for(int ax = 0; ax < numaxes; ++ax){
+		axes[ax].encoffset = encvaluesum[ax] / 256;
+	}
 
 	//Open loop spin
 	//for (float ph = 0.0f; ; ph += 200.0f/(float)PWMFrequency)
@@ -434,79 +530,103 @@ int main()
 	IOWR(PWM_1_BASE, PWM_REG_UPDATE, 1);
 	IOWR(PWM_1_BASE, PWM_REG_EN, 1);
 
-	int oldenc = IORD(QEI_0_BASE, QEI_REG_COUNT);
-	while(1)
-	for(int i = -1800; i < 1800; ++i){
-
-		float Ia, Ib, Vbus;
-		wait_for_ADC(&Ia, &Ib, &Vbus);
-
-		int enccount = IORD(QEI_0_BASE, QEI_REG_COUNT);
-		float phase = ((enccount - encoffset) % QudcountsPerRev) * encToPhasefactor;
-
-		float dencbydt = encToPhasefactor*(enccount - oldenc)*PWMFrequency;
-		oldenc = enccount;
-
-		static float omega = 0.0f;
-		omega = omegaFilterConst*omega + (1-omegaFilterConst)*dencbydt;
-
-		float possetpoint = (i<0) ? 150.0f : 0.0f;
-		float pos = enccount * encToPhasefactor;
-
-		float omegasetpoint = 35.0f * (possetpoint - pos);
-		if(omegasetpoint > speedLimit){
-			omegasetpoint = speedLimit;
-		}else{
-			if(omegasetpoint < -speedLimit){
-				omegasetpoint = -speedLimit;
-			} else {
-				//; //TODO use speed integral?
-			}
-		}
-
-		//float omegasetpoint = (i<0) ? 500.0f : -500.0f;
-		//float omegasetpoint = 400.0f;
-		//omegasetpoint -= enccount * 0.1f;
-		float omegaerror = omegasetpoint - omega;
-
-		static float Iqintstate = 0.0f;
-
-		float targetId = 0.0f;
-		float targetIq = speedKp * omegaerror + Iqintstate;
-
-		if(targetIq > currentlimit){
-			targetIq = currentlimit;
-		}else{
-			if(targetIq < -currentlimit){
-				targetIq = -currentlimit;
-			} else {
-				Iqintstate += omegaerror * (speedKi * PWMPeriod);
-			}
-		}
-
-		float IbusEst;
-		control_current(targetId, targetIq, Ia, Ib, phase, &IbusEst);
-
-		float Icomp = -IbusEst;
-		if(Icomp < 0.0f)
-			Icomp = 0.0f;
-
-		int Icomp_compareval = PWMHalfPeriod - (int)((float)PWMHalfPeriod * BrakeResistorFactor * Icomp);
-
-		IOWR(PWM_1_BASE, PWM_REG_UPDATE, 0);
-		IOWR(PWM_1_BASE, 0, MAX(Icomp_compareval - deadtimeint, 0));
-		IOWR(PWM_1_BASE, 1, MAX(Icomp_compareval, deadtimeint));
-		IOWR(PWM_1_BASE, PWM_REG_UPDATE, 1);
-
-		static int logctr = 0;
-		if(++logctr == 4){
-			logctr = 0;
-			IOWR(LOG_REG_0_BASE, 1, (int)(targetIq*500.0f));
-			IOWR(LOG_REG_0_BASE, 0, (int)(omega*10.0f));
-		}
-
+	int oldenc[numaxes];
+	for(int ax = 0; ax < numaxes; ++ax){
+		oldenc[ax] = IORD(axes[ax].qei_base, QEI_REG_COUNT);
 	}
-	
+
+	while(1)
+	{
+		float regenMax = 0.0f;
+
+		for(int k = 15; k > -10; --k)
+		for(int i = -1100; i < 1100; ++i){
+
+			float IbusEst[numaxes];
+			for(int ax = 0; ax < numaxes; ++ax){
+
+				float Ia, Ib, Vbus;
+				wait_for_ADC(&axes[ax], &Ia, &Ib, &Vbus);
+
+				int enccount = IORD(axes[ax].qei_base, QEI_REG_COUNT);
+				float phase = ((enccount - axes[ax].encoffset) % QudcountsPerRev) * encToPhasefactor;
+
+				float dencbydt = encToPhasefactor*(enccount - oldenc[ax])*PWMFrequency;
+				oldenc[ax] = enccount;
+
+				axes[ax].omega = omegaFilterConst*axes[ax].omega + (1-omegaFilterConst)*dencbydt;
+
+				float possetpoint = (i<0) ? 150.0f : 0.0f;
+				float pos = enccount * encToPhasefactor;
+
+				float omegasetpoint = 35.0f * (possetpoint - pos);
+				if(omegasetpoint > speedLimit){
+					omegasetpoint = speedLimit;
+				}else{
+					if(omegasetpoint < -speedLimit){
+						omegasetpoint = -speedLimit;
+					} else {
+						//; //TODO use speed integral?
+					}
+				}
+
+				if(k<0)
+					omegasetpoint = 0.0f;
+
+				//float omegasetpoint = (i<0) ? 500.0f : -500.0f;
+				//float omegasetpoint = 400.0f;
+				//omegasetpoint -= enccount * 0.1f;
+				float omegaerror = omegasetpoint - axes[ax].omega;
+
+				float targetId = 0.0f;
+				float targetIq = speedKp * omegaerror + axes[ax].Iqintstate;
+
+				if(targetIq > currentlimit){
+					targetIq = currentlimit;
+				}else{
+					if(targetIq < -currentlimit){
+						targetIq = -currentlimit;
+					} else {
+						axes[ax].Iqintstate += omegaerror * (speedKi * PWMPeriod);
+					}
+				}
+
+				control_current(&axes[ax], targetId, targetIq, Ia, Ib, phase, &IbusEst[ax]);
+
+				//Logging only makes sense for 1 axis at a time
+				if(ax == 0){
+					static int logctr = 0;
+					if(++logctr == 4){
+						logctr = 0;
+						IOWR(LOG_REG_0_BASE, 1, (int)(targetIq*500.0f));
+						IOWR(LOG_REG_0_BASE, 0, (int)(axes[ax].omega*10.0f));
+						//IOWR(LOG_REG_0_BASE, 0, (int)(Icomp*1000.0f));
+					}
+				}
+
+			}
+
+			float Icomp = 0.0f;
+			for(int ax = 0; ax < numaxes; ++ax){
+				Icomp -= IbusEst[ax];
+			}
+			if(Icomp < 0.0f)
+				Icomp = 0.0f;
+
+			if (Icomp > regenMax)
+				regenMax = Icomp;
+
+			int Icomp_compareval = PWMHalfPeriod - (int)((float)PWMHalfPeriod * BrakeResistorFactor * Icomp);
+
+			IOWR(PWM_1_BASE, PWM_REG_UPDATE, 0);
+			IOWR(PWM_1_BASE, 0, MAX(Icomp_compareval - deadtimeint, 0));
+			IOWR(PWM_1_BASE, 1, MAX(Icomp_compareval, deadtimeint));
+			IOWR(PWM_1_BASE, PWM_REG_UPDATE, 1);
+
+		}
+
+		//while(1);
+	}
 }
 
 ////Use only for simulation!

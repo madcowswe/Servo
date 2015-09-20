@@ -25,12 +25,12 @@ module FPGAServo(
 		output wire PWM_BL1,
 		output wire PWM_CH1,
 		output wire PWM_CL1,
-		// output wire PWM_AH2,
-		// output wire PWM_AL2,
-		// output wire PWM_BH2,
-		// output wire PWM_BL2,
-		// output wire PWM_CH2,
-		// output wire PWM_CL2,
+		output wire PWM_AH2,
+		output wire PWM_AL2,
+		output wire PWM_BH2,
+		output wire PWM_BL2,
+		output wire PWM_CH2,
+		output wire PWM_CL2,
 		output wire PWM_AH3,
 		output wire PWM_AL3,
 		output wire PWM_BH3,
@@ -55,19 +55,22 @@ module FPGAServo(
 	//assign TX = RX;
 	//assign CTS_n = 0;
 
-    qsystem u0 (
-        .PWM_0_PWMout_ldrive   ({PWM_AL1, PWM_BL1, PWM_CL1}),   //    PWM_0_PWMout.ldrive
-        .PWM_0_PWMout_udrive   ({PWM_AH1, PWM_BH1, PWM_CH1}),   //                .udrive
-		  .pwm_1_pwmout_ldrive   ({PWM_AL3, PWM_BL3, PWM_CL3}),    //    pwm_1_pwmout.ldrive
-        .pwm_1_pwmout_udrive   ({PWM_AH3, PWM_BH3, PWM_CH3}),     //                .udrive
-        .QEI_0_EncoderIn_encabz ({ENC_A2, ENC_B2, ENC_Z2}), // QEI_0_EncoderIn.encab
-        .clk_clk               (CLK_50),               //             clk.clk
-        .reset_reset_n         (1),          //           reset.reset_n
-		  .uart_0_external_connection_rxd   (RX),   // uart_0_external_connection.rxd
-        .uart_0_external_connection_txd   (TX),   //                           .txd
-        .uart_0_external_connection_cts_n (RTS_n), //                           .cts_n
-        .uart_0_external_connection_rts_n (CTS_n)  //                           .rts_n
-    );
+	qsystem u0 (
+		.clk_clk                          (CLK_50),                          //                        clk.clk
+		.reset_reset_n                    (1),                    //                      reset.reset_n
+		.PWM_0_PWMout_ldrive              ({PWM_AL1, PWM_BL1, PWM_CL1}),              //               PWM_0_PWMout.ldrive
+		.PWM_0_PWMout_udrive              ({PWM_AH1, PWM_BH1, PWM_CH1}),              //                           .udrive
+		.pwm_1_pwmout_ldrive              ({PWM_AL2, PWM_BL2, PWM_CL2}),              //               pwm_1_pwmout.ldrive
+		.pwm_1_pwmout_udrive              ({PWM_AH2, PWM_BH2, PWM_CH2}),              //                           .udrive
+		.pwm_2_pwmout_ldrive              ({PWM_AL3, PWM_BL3, PWM_CL3}),              //               pwm_2_pwmout.ldrive
+		.pwm_2_pwmout_udrive              ({PWM_AH3, PWM_BH3, PWM_CH3}),              //                           .udrive
+		.QEI_0_EncoderIn_encabz           ({ENC_A1, ENC_B1, ENC_Z1}),           //            QEI_0_EncoderIn.encabz
+		.qei_1_encoderin_encabz           ({ENC_A2, ENC_B2, ENC_Z2}),           //            qei_1_encoderin.encabz
+		.uart_0_external_connection_rxd   (RX),   // uart_0_external_connection.rxd
+		.uart_0_external_connection_txd   (TX),   //                           .txd
+		.uart_0_external_connection_cts_n (RTS_n), //                           .cts_n
+		.uart_0_external_connection_rts_n (CTS_n) //                           .rts_n
+	);
 
 //	reg [32:0] ctr = 0;
 //	reg blinkystate = 0;
