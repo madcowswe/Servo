@@ -50,7 +50,7 @@ static const float tSafety = 50;
 static const int deadtimeint = (float)ALT_CPU_CPU_FREQ * deadtime_ns * 1e-9f;
 
 #define PWMFrequency 8000
-static const float PWMPeriod = 1.0f/(float)PWMFrequency;
+static const float dt = 1.0f/(float)PWMFrequency;
 static const int PWMHalfPeriod = ALT_CPU_CPU_FREQ/(PWMFrequency*2);
 
 
@@ -72,6 +72,12 @@ static const float currentlimit = 50.0f;
 static const float lockinCurrent = 20.0f;
 static const float speedLimit = 4000.0f;
 
+static const float frictionCurrent = 8.0f;
+static const float accelperA = 1150.0f; //rad/s2 / A
+static const float Aperaccel = (1.0f/1150.0f);
+//static const float profileAccel = 40000.0f; //rad/s2
+static const float profileAccel = 8000.0f; //rad/s2
+
 
 static const float ADCtoAscalefactor = 3.3f/((float)(1<<12) * 50.0f * 0.0005f);
 static const float ADCtoVbusSF = 3.3f * 11.0f / (float)(1<<12);
@@ -80,6 +86,12 @@ static const float omegaFilterConst = 0.95;
 
 static const float BrakeResistorCurrent = 30.0f; //Amps
 static const float BrakeResistorFactor = 1.0f/30.0f;
+
+float fsign(float x){
+	if(x > 0.0f) return 1.0f;
+	if(x < 0.0f) return -1.0f;
+	return 0.0f;
+}
 
 // Magnitude must not be larger than sqrt(3)/2, or 0.866
 void SVM(float alpha, float beta, uint32_t* tAout, uint32_t* tBout, uint32_t* tCout){
@@ -224,6 +236,7 @@ void SVM(float alpha, float beta, uint32_t* tAout, uint32_t* tBout, uint32_t* tC
 }
 
 struct axis_state_s {
+	int id;
 	void* pwm_base;
 	void* qei_base;
 	void* tas_base;
@@ -234,11 +247,13 @@ struct axis_state_s {
 	float IerrVstate_d;
 	float IerrVstate_q;
 	float omega;
+	float oldenc;
 	float Iqintstate;
 };
 
 struct axis_state_s axes[] = {
 	{	//Axis 0
+		.id = 0,
 		.pwm_base = (void*)PWM_0_BASE,
 		.qei_base = (void*)QEI_0_BASE,
 		.tas_base = (void*)TRIGGERED_ADC_SEQUENCER_0_BASE,
@@ -249,9 +264,11 @@ struct axis_state_s axes[] = {
 		.IerrVstate_d = 0.0f,
 		.IerrVstate_q = 0.0f,
 		.omega = 0.0f,
+		.oldenc = 0.0f,
 		.Iqintstate = 0.0f
 	},
 	{	//Axis 1
+		.id = 1,
 		.pwm_base = (void*)PWM_2_BASE,
 		.qei_base = (void*)QEI_1_BASE,
 		.tas_base = (void*)TRIGGERED_ADC_SEQUENCER_1_BASE,
@@ -262,11 +279,13 @@ struct axis_state_s axes[] = {
 		.IerrVstate_d = 0.0f,
 		.IerrVstate_q = 0.0f,
 		.omega = 0.0f,
+		.oldenc = 0.0f,
 		.Iqintstate = 0.0f
 	}
 };
 
 static const int numaxes = sizeof(axes)/sizeof(axes[0]);
+static const void* brake_res_base = (void*)PWM_1_BASE;
 
 void wait_for_ADC(struct axis_state_s* axis, float* Ia, float* Ib, float* Vbus){
 	while(!IORD(axis->tas_base, TADCS_REG_IRQFLAG));
@@ -300,8 +319,8 @@ void control_current(struct axis_state_s* axis, float targetId, float targetIq, 
 		Vd *= Vscalefactor;
 		Vq *= Vscalefactor;
 	} else {
-		axis->IerrVstate_d += Ierr_d * (currentKi * PWMPeriod);
-		axis->IerrVstate_q += Ierr_q * (currentKi * PWMPeriod);
+		axis->IerrVstate_d += Ierr_d * (currentKi * dt);
+		axis->IerrVstate_q += Ierr_q * (currentKi * dt);
 	}
 
 	*IbusEst = Vd * Id + Vq * Iq; //Note V is in modulation, not voltage.
@@ -352,16 +371,7 @@ void setup_axis(struct axis_state_s* axis_state){
 
 }
 
-int main()
-{
-	//printf("Hello from Nios II!\n");
-
-	//while(1);
-
-
-	setup_axis(&axes[0]);
-	setup_axis(&axes[1]);
-
+void init_routine(){
 	//sample current sense values during V0 PWM
 	for (int i = -128; i < 128; ++i)
 	{
@@ -507,6 +517,105 @@ int main()
 	for(int ax = 0; ax < numaxes; ++ax){
 		axes[ax].encoffset = encvaluesum[ax] / 256;
 	}
+}
+
+void setup_brake_resistor(){
+	IOWR(brake_res_base, PWM_REG_TRIGON_Z, 1); //NOTE do not remove, watchdog depends on this.
+	IOWR(brake_res_base, PWM_REG_UPDATEON_Z, 1);
+	IOWR(brake_res_base, PWM_REG_MAXCTR, PWMHalfPeriod);
+	IOWR(brake_res_base, PWM_REG_UPDATE, 0);
+
+	IOWR(brake_res_base, 0, PWMHalfPeriod - deadtimeint); //A ready to inject some active modulation
+	IOWR(brake_res_base, 1, PWMHalfPeriod);
+	IOWR(brake_res_base, 2, 0); //B off
+	IOWR(brake_res_base, 3, PWMHalfPeriod);
+	IOWR(brake_res_base, 4, PWMHalfPeriod - deadtimeint); //C always grounded
+	IOWR(brake_res_base, 5, PWMHalfPeriod);
+
+	IOWR(brake_res_base, PWM_REG_UPDATE, 1);
+	IOWR(brake_res_base, PWM_REG_EN, 1);
+}
+
+void blocking_control_motor(struct axis_state_s* axis, float possetpoint, float omega_ff, float Iq_ff, float* IbusEst){
+
+	float Ia, Ib, Vbus;
+	wait_for_ADC(axis, &Ia, &Ib, &Vbus);
+
+	int enccount = IORD(axis->qei_base, QEI_REG_COUNT);
+	float phase = ((enccount - axis->encoffset) % QudcountsPerRev) * encToPhasefactor;
+	float dencbydt = encToPhasefactor*(enccount - axis->oldenc)*PWMFrequency;
+	axis->oldenc = enccount;
+	axis->omega = omegaFilterConst*axis->omega + (1-omegaFilterConst)*dencbydt;
+	float pos = enccount * encToPhasefactor;
+
+	float omegasetpoint = 35.0f * (possetpoint - pos) + omega_ff;
+	if(omegasetpoint > speedLimit){
+		omegasetpoint = speedLimit;
+	}else{
+		if(omegasetpoint < -speedLimit){
+			omegasetpoint = -speedLimit;
+		} else {
+			//; //TODO use speed integral?
+		}
+	}
+	float omegaerror = omegasetpoint - axis->omega;
+
+	float targetId = 0.0f;
+	float targetIq = speedKp * omegaerror + axis->Iqintstate + Iq_ff;
+	if(targetIq > currentlimit){
+		targetIq = currentlimit;
+	}else{
+		if(targetIq < -currentlimit){
+			targetIq = -currentlimit;
+		} else {
+			axis->Iqintstate += omegaerror * (speedKi * dt);
+		}
+	}
+
+	control_current(axis, targetId, targetIq, Ia, Ib, phase, IbusEst);
+
+	//Logging only makes sense for 1 axis at a time
+	if(axis->id == 1){
+		static int logctr = 0;
+		if(++logctr == 4){
+			logctr = 0;
+			IOWR(LOG_REG_0_BASE, 1, (int)(targetIq*500.0f));
+			IOWR(LOG_REG_0_BASE, 0, (int)(axis->omega*10.0f));
+			//IOWR(LOG_REG_0_BASE, 0, (int)(Icomp*1000.0f));
+		}
+	}
+
+}
+
+float dump_excess_current(float* regenCurrents, int numregen){
+	float Icomp = 0.0f;
+	for(int ax = 0; ax < numregen; ++ax){
+		Icomp -= regenCurrents[ax];
+	}
+	if(Icomp < 0.0f)
+		Icomp = 0.0f;
+
+	int Icomp_compareval = PWMHalfPeriod - (int)((float)PWMHalfPeriod * BrakeResistorFactor * Icomp);
+
+	IOWR(brake_res_base, PWM_REG_UPDATE, 0);
+	IOWR(brake_res_base, 0, MAX(Icomp_compareval - deadtimeint, 0));
+	IOWR(brake_res_base, 1, MAX(Icomp_compareval, deadtimeint));
+	IOWR(brake_res_base, PWM_REG_UPDATE, 1);
+
+	return Icomp;
+}
+
+static const float waypoints[] = {0.0f, 150.0f, 75.0f, 150.0f, 0.0f, 75.0f, 0.0f};
+static const int num_wpts = sizeof(waypoints)/sizeof(waypoints[0]);
+
+int main()
+{
+	//printf("Hello from Nios II!\n");
+	//while(1);
+
+	setup_axis(&axes[0]);
+	setup_axis(&axes[1]);
+	init_routine();
 
 	//Open loop spin
 	//for (float ph = 0.0f; ; ph += 200.0f/(float)PWMFrequency)
@@ -514,119 +623,88 @@ int main()
 
 	//while(1);
 
-	//Brake resistor
-	IOWR(PWM_1_BASE, PWM_REG_TRIGON_Z, 1); //NOTE do not remove, watchdog depends on this.
-	IOWR(PWM_1_BASE, PWM_REG_UPDATEON_Z, 1);
-	IOWR(PWM_1_BASE, PWM_REG_MAXCTR, PWMHalfPeriod);
-	IOWR(PWM_1_BASE, PWM_REG_UPDATE, 0);
+	setup_brake_resistor();
 
-	IOWR(PWM_1_BASE, 0, PWMHalfPeriod - deadtimeint); //A ready to inject some active modulation
-	IOWR(PWM_1_BASE, 1, PWMHalfPeriod);
-	IOWR(PWM_1_BASE, 2, 0); //B off
-	IOWR(PWM_1_BASE, 3, PWMHalfPeriod);
-	IOWR(PWM_1_BASE, 4, PWMHalfPeriod - deadtimeint); //C always grounded
-	IOWR(PWM_1_BASE, 5, PWMHalfPeriod);
-
-	IOWR(PWM_1_BASE, PWM_REG_UPDATE, 1);
-	IOWR(PWM_1_BASE, PWM_REG_EN, 1);
-
-	int oldenc[numaxes];
 	for(int ax = 0; ax < numaxes; ++ax){
-		oldenc[ax] = IORD(axes[ax].qei_base, QEI_REG_COUNT);
+		axes[ax].oldenc = IORD(axes[ax].qei_base, QEI_REG_COUNT);
 	}
+	//TODO waypoints[0] = IORD(axis->qei_base, QEI_REG_COUNT) * encToPhasefactor
 
-	while(1)
-	{
-		float regenMax = 0.0f;
+	for(int wpt = 1; wpt < num_wpts; ++wpt){
 
-		for(int k = 15; k > -10; --k)
-		for(int i = -1100; i < 1100; ++i){
+		float startpos = waypoints[wpt-1];
+		float endpos = waypoints[wpt];
+		float changeover_dpos = 0.5f*(endpos-startpos);
+		bool dir_forwards = endpos >= startpos;
+		float dir_sign = dir_forwards ? 1.0f : -1.0f;
+		float a = dir_sign * profileAccel;
+
+		float t = 0.0f;
+		float delta_pos;
+
+		//accelerate
+		do {
+
+			delta_pos = 0.5f*a*t*t;
+			float setpoint_omega = a*t;
+			float I_ff = Aperaccel * a + frictionCurrent * dir_sign;
 
 			float IbusEst[numaxes];
 			for(int ax = 0; ax < numaxes; ++ax){
-
-				float Ia, Ib, Vbus;
-				wait_for_ADC(&axes[ax], &Ia, &Ib, &Vbus);
-
-				int enccount = IORD(axes[ax].qei_base, QEI_REG_COUNT);
-				float phase = ((enccount - axes[ax].encoffset) % QudcountsPerRev) * encToPhasefactor;
-
-				float dencbydt = encToPhasefactor*(enccount - oldenc[ax])*PWMFrequency;
-				oldenc[ax] = enccount;
-
-				axes[ax].omega = omegaFilterConst*axes[ax].omega + (1-omegaFilterConst)*dencbydt;
-
-				float possetpoint = (i<0) ? 150.0f : 0.0f;
-				float pos = enccount * encToPhasefactor;
-
-				float omegasetpoint = 35.0f * (possetpoint - pos);
-				if(omegasetpoint > speedLimit){
-					omegasetpoint = speedLimit;
-				}else{
-					if(omegasetpoint < -speedLimit){
-						omegasetpoint = -speedLimit;
-					} else {
-						//; //TODO use speed integral?
-					}
-				}
-
-				if(k<0)
-					omegasetpoint = 0.0f;
-
-				//float omegasetpoint = (i<0) ? 500.0f : -500.0f;
-				//float omegasetpoint = 400.0f;
-				//omegasetpoint -= enccount * 0.1f;
-				float omegaerror = omegasetpoint - axes[ax].omega;
-
-				float targetId = 0.0f;
-				float targetIq = speedKp * omegaerror + axes[ax].Iqintstate;
-
-				if(targetIq > currentlimit){
-					targetIq = currentlimit;
-				}else{
-					if(targetIq < -currentlimit){
-						targetIq = -currentlimit;
-					} else {
-						axes[ax].Iqintstate += omegaerror * (speedKi * PWMPeriod);
-					}
-				}
-
-				control_current(&axes[ax], targetId, targetIq, Ia, Ib, phase, &IbusEst[ax]);
-
-				//Logging only makes sense for 1 axis at a time
-				if(ax == 0){
-					static int logctr = 0;
-					if(++logctr == 4){
-						logctr = 0;
-						IOWR(LOG_REG_0_BASE, 1, (int)(targetIq*500.0f));
-						IOWR(LOG_REG_0_BASE, 0, (int)(axes[ax].omega*10.0f));
-						//IOWR(LOG_REG_0_BASE, 0, (int)(Icomp*1000.0f));
-					}
-				}
-
+				blocking_control_motor(&axes[ax], startpos + delta_pos, setpoint_omega, I_ff, &IbusEst[ax]);
 			}
+			dump_excess_current(IbusEst, numaxes);
 
-			float Icomp = 0.0f;
+			t += dt;
+		} while( dir_forwards ? (delta_pos < changeover_dpos) : (delta_pos > changeover_dpos) );
+
+		t -= dt;
+
+		//decelerate
+		while(t > 0.0f){
+			delta_pos = 0.5f*a*t*t;
+			float setpoint_omega = a*t;
+			float I_ff = -Aperaccel * a + frictionCurrent * dir_sign;
+
+			float IbusEst[numaxes];
 			for(int ax = 0; ax < numaxes; ++ax){
-				Icomp -= IbusEst[ax];
+				blocking_control_motor(&axes[ax], endpos - delta_pos, setpoint_omega, I_ff, &IbusEst[ax]);
 			}
-			if(Icomp < 0.0f)
-				Icomp = 0.0f;
+			dump_excess_current(IbusEst, numaxes);
 
-			if (Icomp > regenMax)
-				regenMax = Icomp;
-
-			int Icomp_compareval = PWMHalfPeriod - (int)((float)PWMHalfPeriod * BrakeResistorFactor * Icomp);
-
-			IOWR(PWM_1_BASE, PWM_REG_UPDATE, 0);
-			IOWR(PWM_1_BASE, 0, MAX(Icomp_compareval - deadtimeint, 0));
-			IOWR(PWM_1_BASE, 1, MAX(Icomp_compareval, deadtimeint));
-			IOWR(PWM_1_BASE, PWM_REG_UPDATE, 1);
-
+			t -= dt;
 		}
 
-		//while(1);
 	}
+
+
+
+#if 0
+
+	while(1)
+	{
+		for(int k = 15; k > -10; --k)
+		for(int i = -1100; i < 1100; ++i){
+
+			float possetpoint = (i<0) ? 150.0f : 0.0f;
+			if(k<0)
+				possetpoint = 0.0f;
+
+			float omega_ff = 0.0f;
+			float Iq_ff = 0.0f;
+
+			float IbusEst[numaxes];
+			for(int ax = 0; ax < numaxes; ++ax){
+				blocking_control_motor(&axes[ax], possetpoint, omega_ff, Iq_ff, &IbusEst[ax]);
+			}
+			dump_excess_current(IbusEst, numaxes);
+
+		}
+		//while(1);
+
+	}
+#endif
+
 }
 
 ////Use only for simulation!
