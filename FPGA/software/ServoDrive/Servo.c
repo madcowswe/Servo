@@ -605,9 +605,9 @@ float dump_excess_current(float* regenCurrents, int numregen){
 	return Icomp;
 }
 
-static const float waypoints[] = {0.0f, 150.0f, 75.0f, 150.0f, 0.0f, 75.0f, 0.0f};
-static const int num_wpts = sizeof(waypoints)/sizeof(waypoints[0]);
-
+static const float waypoints_x[] = {0.0f, 150.0f, 0.0f,   150.0f, 0.0f, 75.0f,  0.0f};
+static const float waypoints_y[] = {0.0f, 150.0f, 150.0f, 0.0f,   0.0f, 150.0f, 0.0f};
+static const int num_wpts = sizeof(waypoints_x)/sizeof(waypoints_x[0]); //no check that wptlist is same length!
 int main()
 {
 	//printf("Hello from Nios II!\n");
@@ -632,43 +632,56 @@ int main()
 
 	for(int wpt = 1; wpt < num_wpts; ++wpt){
 
-		float startpos = waypoints[wpt-1];
-		float endpos = waypoints[wpt];
-		float changeover_dpos = 0.5f*(endpos-startpos);
-		bool dir_forwards = endpos >= startpos;
-		float dir_sign = dir_forwards ? 1.0f : -1.0f;
-		float a = dir_sign * profileAccel;
+		float startpos[2] = {waypoints_x[wpt-1], waypoints_y[wpt-1]};
+		float endpos[2] = {waypoints_x[wpt], waypoints_y[wpt]};
+		float deltapos[2] = {endpos[0] - startpos[0], endpos[1] - startpos[1]};
+
+		float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1]);
+		float I_param = Aperaccel * param_accel;
+
+		float dir_sign[2];
+		for(int dim = 0; dim < 2; ++dim){
+			dir_sign[dim] = (endpos[dim] >= endpos[dim]) ? 1.0f : -1.0f;
+		}
 
 		float t = 0.0f;
-		float delta_pos;
+		float px = 0.0f;
 
 		//accelerate
 		do {
 
-			delta_pos = 0.5f*a*t*t;
-			float setpoint_omega = a*t;
-			float I_ff = Aperaccel * a + frictionCurrent * dir_sign;
+			px = 0.5f*param_accel*t*t;
+			float param_omega = param_accel*t;
 
 			float IbusEst[numaxes];
 			for(int ax = 0; ax < numaxes; ++ax){
-				blocking_control_motor(&axes[ax], startpos + delta_pos, setpoint_omega, I_ff, &IbusEst[ax]);
+
+				float abs_pos = startpos[ax] + px*deltapos[ax];
+				float setpoint_omega = param_omega*deltapos[ax];
+				float I_ff = I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
+
+				blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
 			}
 			dump_excess_current(IbusEst, numaxes);
 
 			t += dt;
-		} while( dir_forwards ? (delta_pos < changeover_dpos) : (delta_pos > changeover_dpos) );
+		} while( px < 0.5f );
 
 		t -= dt;
 
 		//decelerate
 		while(t > 0.0f){
-			delta_pos = 0.5f*a*t*t;
-			float setpoint_omega = a*t;
-			float I_ff = -Aperaccel * a + frictionCurrent * dir_sign;
+			px = 0.5f*param_accel*t*t;
+			float param_omega = param_accel*t;
 
 			float IbusEst[numaxes];
 			for(int ax = 0; ax < numaxes; ++ax){
-				blocking_control_motor(&axes[ax], endpos - delta_pos, setpoint_omega, I_ff, &IbusEst[ax]);
+
+				float abs_pos = endpos[ax] - px*deltapos[ax];
+				float setpoint_omega = param_omega*deltapos[ax];
+				float I_ff = -I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
+
+				blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
 			}
 			dump_excess_current(IbusEst, numaxes);
 
@@ -677,33 +690,6 @@ int main()
 
 	}
 
-
-
-#if 0
-
-	while(1)
-	{
-		for(int k = 15; k > -10; --k)
-		for(int i = -1100; i < 1100; ++i){
-
-			float possetpoint = (i<0) ? 150.0f : 0.0f;
-			if(k<0)
-				possetpoint = 0.0f;
-
-			float omega_ff = 0.0f;
-			float Iq_ff = 0.0f;
-
-			float IbusEst[numaxes];
-			for(int ax = 0; ax < numaxes; ++ax){
-				blocking_control_motor(&axes[ax], possetpoint, omega_ff, Iq_ff, &IbusEst[ax]);
-			}
-			dump_excess_current(IbusEst, numaxes);
-
-		}
-		//while(1);
-
-	}
-#endif
 
 }
 
