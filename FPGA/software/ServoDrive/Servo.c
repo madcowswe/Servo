@@ -75,8 +75,7 @@ static const float speedLimit = 4000.0f;
 static const float frictionCurrent = 8.0f;
 static const float accelperA = 1150.0f; //rad/s2 / A
 static const float Aperaccel = (1.0f/1150.0f);
-//static const float profileAccel = 40000.0f; //rad/s2
-static const float profileAccel = 8000.0f; //rad/s2
+static const float profileAccel = 40000.0f; //rad/s2
 
 
 static const float ADCtoAscalefactor = 3.3f/((float)(1<<12) * 50.0f * 0.0005f);
@@ -605,9 +604,47 @@ float dump_excess_current(float* regenCurrents, int numregen){
 	return Icomp;
 }
 
-static const float waypoints_x[] = {0.0f, 150.0f, 0.0f,   150.0f, 0.0f, 75.0f,  0.0f};
-static const float waypoints_y[] = {0.0f, 150.0f, 150.0f, 0.0f,   0.0f, 150.0f, 0.0f};
-static const int num_wpts = sizeof(waypoints_x)/sizeof(waypoints_x[0]); //no check that wptlist is same length!
+struct point_s {
+	float x;
+	float y;
+};
+
+static const struct point_s waypoints[] = {
+	 {0.0f, 0.0f}
+	,{75,	150}
+	,{65.6000074800000,	0.591397402499999}
+	,{93.6517415400000,	147.643737082500}
+	,{47.3906585475000,	5.26676355750000}
+	,{111.131525557500,	140.723001000000}
+	,{30.9161060775000,	14.3237254200000}
+	,{126.341032942500,	129.672647055000}
+	,{17.2115067900000,	27.1932007725000}
+	,{138.324594412500,	115.187009625000}
+	,{7.13797106250000,	43.0665531300000}
+	,{146.329238722500,	98.1762745800000}
+	,{1.32845619750000,	60.9464014050000}
+	,{149.852004630000,	79.7092889625000}
+	,{0.147995370000004,	79.7092889625000}
+	,{148.671543802500,	60.9464014050000}
+	,{3.67076127750000,	98.1762745800000}
+	,{142.862028937500,	43.0665531300000}
+	,{11.6754055875000,	115.187009625000}
+	,{132.788493210000,	27.1932007725000}
+	,{23.6589670575000,	129.672647055000}
+	,{119.083893922500,	14.3237254200000}
+	,{38.8684744425000,	140.723001000000}
+	,{102.609341452500,	5.26676355750000}
+	,{56.3482584600000,	147.643737082500}
+	,{84.3999925200000,	0.591397402499999}
+	,{75.0000000000003,	150}
+	,{0.0f, 0.0f}
+};
+
+static const int num_wpts = sizeof(waypoints)/sizeof(waypoints[0]); //no check that wptlist is same length!
+
+//static const float waypoints_x[] = {0.0f, 150.0f, 0.0f,   150.0f, 0.0f, 75.0f,  0.0f};
+//static const float waypoints_y[] = {0.0f, 150.0f, 150.0f, 0.0f,   0.0f, 150.0f, 0.0f};
+//static const int num_wpts = sizeof(waypoints_x)/sizeof(waypoints_x[0]); //no check that wptlist is same length!
 int main()
 {
 	//printf("Hello from Nios II!\n");
@@ -630,13 +667,14 @@ int main()
 	}
 	//TODO waypoints[0] = IORD(axis->qei_base, QEI_REG_COUNT) * encToPhasefactor
 
+	for(int i = 0; i < 4; ++i)
 	for(int wpt = 1; wpt < num_wpts; ++wpt){
 
-		float startpos[2] = {waypoints_x[wpt-1], waypoints_y[wpt-1]};
-		float endpos[2] = {waypoints_x[wpt], waypoints_y[wpt]};
+		float startpos[2] = {waypoints[wpt-1].x, waypoints[wpt-1].y};
+		float endpos[2] = {waypoints[wpt].x, waypoints[wpt].y};
 		float deltapos[2] = {endpos[0] - startpos[0], endpos[1] - startpos[1]};
 
-		float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1]);
+		float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1] + 0.1f);
 		float I_param = Aperaccel * param_accel;
 
 		float dir_sign[2];
