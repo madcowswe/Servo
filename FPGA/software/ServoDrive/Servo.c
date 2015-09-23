@@ -574,9 +574,9 @@ void blocking_control_motor(struct axis_state_s* axis, float possetpoint, float 
 	control_current(axis, targetId, targetIq, Ia, Ib, phase, IbusEst);
 
 	//Logging only makes sense for 1 axis at a time
-	if(axis->id == 1){
+	if(axis->id == 0){
 		static int logctr = 0;
-		if(++logctr == 4){
+		if(++logctr == 8){
 			logctr = 0;
 			IOWR(LOG_REG_0_BASE, 1, (int)(targetIq*500.0f));
 			IOWR(LOG_REG_0_BASE, 0, (int)(axis->omega*10.0f));
@@ -679,7 +679,7 @@ int main()
 
 		float dir_sign[2];
 		for(int dim = 0; dim < 2; ++dim){
-			dir_sign[dim] = (endpos[dim] >= endpos[dim]) ? 1.0f : -1.0f;
+			dir_sign[dim] = (endpos[dim] >= startpos[dim]) ? 1.0f : -1.0f;
 		}
 
 		float t = 0.0f;
