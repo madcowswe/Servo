@@ -75,7 +75,7 @@ static const float speedLimit = 4000.0f;
 static const float frictionCurrent = 8.0f;
 static const float accelperA = 1150.0f; //rad/s2 / A
 static const float Aperaccel = (1.0f/1150.0f);
-static const float profileAccel = 40000.0f; //rad/s2
+static const float profileAccel = 35000.0f; //rad/s2
 
 
 static const float ADCtoAscalefactor = 3.3f/((float)(1<<12) * 50.0f * 0.0005f);
@@ -640,11 +640,8 @@ static const struct point_s waypoints[] = {
 	,{0.0f, 0.0f}
 };
 
-static const int num_wpts = sizeof(waypoints)/sizeof(waypoints[0]); //no check that wptlist is same length!
+static const int num_wpts = sizeof(waypoints)/sizeof(waypoints[0]);
 
-//static const float waypoints_x[] = {0.0f, 150.0f, 0.0f,   150.0f, 0.0f, 75.0f,  0.0f};
-//static const float waypoints_y[] = {0.0f, 150.0f, 150.0f, 0.0f,   0.0f, 150.0f, 0.0f};
-//static const int num_wpts = sizeof(waypoints_x)/sizeof(waypoints_x[0]); //no check that wptlist is same length!
 int main()
 {
 	//printf("Hello from Nios II!\n");
@@ -667,7 +664,7 @@ int main()
 	}
 	//TODO waypoints[0] = IORD(axis->qei_base, QEI_REG_COUNT) * encToPhasefactor
 
-	for(int i = 0; i < 4; ++i)
+	for(int i = 0; i < 1; ++i)
 	for(int wpt = 1; wpt < num_wpts; ++wpt){
 
 		float startpos[2] = {waypoints[wpt-1].x, waypoints[wpt-1].y};
