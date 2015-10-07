@@ -60,6 +60,7 @@ static const float currentKp = 0.002f;
 static const float currentKi = 5.0f;
 static const float speedKp = 0.06f;
 static const float speedKi = 0.0f;//0.4f;
+static const float posKp = 35.0f;
 
 //350kv motor
 //#define QudcountsPerRev 2000
@@ -75,7 +76,7 @@ static const float speedLimit = 4000.0f;
 static const float frictionCurrent = 8.0f;
 static const float accelperA = 1150.0f; //rad/s2 / A
 static const float Aperaccel = (1.0f/1150.0f);
-static const float profileAccel = 35000.0f; //rad/s2
+static const float profileAccel = 40000.0f; //rad/s2
 
 
 static const float ADCtoAscalefactor = 3.3f/((float)(1<<12) * 50.0f * 0.0005f);
@@ -547,7 +548,7 @@ void blocking_control_motor(struct axis_state_s* axis, float possetpoint, float 
 	axis->omega = omegaFilterConst*axis->omega + (1-omegaFilterConst)*dencbydt;
 	float pos = enccount * encToPhasefactor;
 
-	float omegasetpoint = 35.0f * (possetpoint - pos) + omega_ff;
+	float omegasetpoint = posKp * (possetpoint - pos) + omega_ff;
 	if(omegasetpoint > speedLimit){
 		omegasetpoint = speedLimit;
 	}else{
