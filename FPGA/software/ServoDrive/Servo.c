@@ -664,64 +664,83 @@ int main()
 	}
 	//TODO waypoints[0] = IORD(axis->qei_base, QEI_REG_COUNT) * encToPhasefactor
 
-	for(int i = 0; i < 1; ++i)
-	for(int wpt = 1; wpt < num_wpts; ++wpt){
+	while(1){
+		for(int i = 0; i < 1; ++i)
+		for(int wpt = 1; wpt < num_wpts; ++wpt){
 
-		float startpos[2] = {waypoints[wpt-1].x, waypoints[wpt-1].y};
-		float endpos[2] = {waypoints[wpt].x, waypoints[wpt].y};
-		float deltapos[2] = {endpos[0] - startpos[0], endpos[1] - startpos[1]};
+			float startpos[2] = {waypoints[wpt-1].x, waypoints[wpt-1].y};
+			float endpos[2] = {waypoints[wpt].x, waypoints[wpt].y};
+			float deltapos[2] = {endpos[0] - startpos[0], endpos[1] - startpos[1]};
 
-		float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1] + 0.1f);
-		float I_param = Aperaccel * param_accel;
+			float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1] + 0.1f);
+			float I_param = Aperaccel * param_accel;
 
-		float dir_sign[2];
-		for(int dim = 0; dim < 2; ++dim){
-			dir_sign[dim] = (endpos[dim] >= startpos[dim]) ? 1.0f : -1.0f;
-		}
-
-		float t = 0.0f;
-		float px = 0.0f;
-
-		//accelerate
-		do {
-
-			px = 0.5f*param_accel*t*t;
-			float param_omega = param_accel*t;
-
-			float IbusEst[numaxes];
-			for(int ax = 0; ax < numaxes; ++ax){
-
-				float abs_pos = startpos[ax] + px*deltapos[ax];
-				float setpoint_omega = param_omega*deltapos[ax];
-				float I_ff = I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
-
-				blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
+			float dir_sign[2];
+			for(int dim = 0; dim < 2; ++dim){
+				dir_sign[dim] = (endpos[dim] >= startpos[dim]) ? 1.0f : -1.0f;
 			}
-			dump_excess_current(IbusEst, numaxes);
 
-			t += dt;
-		} while( px < 0.5f );
+			float t = 0.0f;
+			float px = 0.0f;
 
-		t -= dt;
+			//accelerate
+			do {
 
-		//decelerate
-		while(t > 0.0f){
-			px = 0.5f*param_accel*t*t;
-			float param_omega = param_accel*t;
+				px = 0.5f*param_accel*t*t;
+				float param_omega = param_accel*t;
 
-			float IbusEst[numaxes];
-			for(int ax = 0; ax < numaxes; ++ax){
+				float IbusEst[numaxes];
+				for(int ax = 0; ax < numaxes; ++ax){
 
-				float abs_pos = endpos[ax] - px*deltapos[ax];
-				float setpoint_omega = param_omega*deltapos[ax];
-				float I_ff = -I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
+					float abs_pos = startpos[ax] + px*deltapos[ax];
+					float setpoint_omega = param_omega*deltapos[ax];
+					float I_ff = I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
 
-				blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
-			}
-			dump_excess_current(IbusEst, numaxes);
+					blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
+				}
+				dump_excess_current(IbusEst, numaxes);
+
+				t += dt;
+			} while( px < 0.5f );
 
 			t -= dt;
+
+			//decelerate
+			while(t > 0.0f){
+				px = 0.5f*param_accel*t*t;
+				float param_omega = param_accel*t;
+
+				float IbusEst[numaxes];
+				for(int ax = 0; ax < numaxes; ++ax){
+
+					float abs_pos = endpos[ax] - px*deltapos[ax];
+					float setpoint_omega = param_omega*deltapos[ax];
+					float I_ff = -I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
+
+					blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
+				}
+				dump_excess_current(IbusEst, numaxes);
+
+				t -= dt;
+			}
+
 		}
+
+		//idle
+		for(int i = 0; i < (5.0f*PWMFrequency); ++i){
+
+			float IbusEst[numaxes];
+			for(int ax = 0; ax < numaxes; ++ax){
+				float abs_pos = 0.0f;
+				float setpoint_omega = 0.0f;
+				float I_ff = 0.0f;
+
+				blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
+			}
+			dump_excess_current(IbusEst, numaxes);
+
+		}
+
 
 	}
 
