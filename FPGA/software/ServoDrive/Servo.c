@@ -58,7 +58,7 @@ static const int PWMHalfPeriod = ALT_CPU_CPU_FREQ/(PWMFrequency*2);
 #define QudcountsPerRev 2400
 static const float currentKp = 0.002f;
 static const float currentKi = 5.0f;
-static const float speedKp = 0.06f;
+static const float speedKp = 0.1f;
 static const float speedKi = 0.0f;//0.4f;
 static const float posKp = 35.0f;
 
@@ -76,7 +76,7 @@ static const float speedLimit = 4000.0f;
 static const float frictionCurrent = 8.0f;
 static const float accelperA = 1150.0f; //rad/s2 / A
 static const float Aperaccel = (1.0f/1150.0f);
-static const float profileAccel = 40000.0f; //rad/s2
+static const float profileAccel = 10000.0f;//40000.0f; //rad/s2
 
 
 static const float ADCtoAscalefactor = 3.3f/((float)(1<<12) * 50.0f * 0.0005f);
@@ -536,6 +536,23 @@ void setup_brake_resistor(){
 	IOWR(brake_res_base, PWM_REG_EN, 1);
 }
 
+void setup_mag_pwm(){
+	IOWR(MAGNET_PWM_BASE, PWM_REG_TRIGON_Z, 1); //NOTE do not remove, watchdog depends on this.
+	IOWR(MAGNET_PWM_BASE, PWM_REG_UPDATEON_Z, 1);
+	IOWR(MAGNET_PWM_BASE, PWM_REG_MAXCTR, PWMHalfPeriod);
+	IOWR(MAGNET_PWM_BASE, PWM_REG_UPDATE, 0);
+
+	IOWR(MAGNET_PWM_BASE, 0, 0); //A off
+	IOWR(MAGNET_PWM_BASE, 1, PWMHalfPeriod);
+	IOWR(MAGNET_PWM_BASE, 2, 0); //B off
+	IOWR(MAGNET_PWM_BASE, 3, PWMHalfPeriod);
+	IOWR(MAGNET_PWM_BASE, 4, 0); //C off
+	IOWR(MAGNET_PWM_BASE, 5, PWMHalfPeriod);
+
+	IOWR(MAGNET_PWM_BASE, PWM_REG_UPDATE, 1);
+	IOWR(MAGNET_PWM_BASE, PWM_REG_EN, 1);
+}
+
 void blocking_control_motor(struct axis_state_s* axis, float possetpoint, float omega_ff, float Iq_ff, float* IbusEst){
 
 	float Ia, Ib, Vbus;
@@ -610,7 +627,7 @@ struct point_s {
 	float y;
 };
 
-static const struct point_s waypoints[] = {
+static const struct point_s star_waypoints[] = {
 	 {0.0f, 0.0f}
 	,{75,	150}
 	,{65.6000074800000,	0.591397402499999}
@@ -640,8 +657,94 @@ static const struct point_s waypoints[] = {
 	,{75.0000000000003,	150}
 	,{0.0f, 0.0f}
 };
+static const int num_star_wpts = sizeof(star_waypoints)/sizeof(star_waypoints[0]);
 
-static const int num_wpts = sizeof(waypoints)/sizeof(waypoints[0]);
+struct point_mag_s {
+	float x;
+	float y;
+	float magStr;
+	float duration_modifier;
+};
+static const struct point_mag_s magpickup_waypoints[] = {
+	//{0.0f, 		0.0f, 	0.0f}
+	//,{150.0f,	150.0f, 0.0f}
+	//,{75.0f,	75.0f, 	0.4f}
+	//,{0.0f,		0.0f, 	0.0f}
+	//,{75.0f,	75.0f, 	0.0f}
+	//,{0.0f,		150.0f, 0.4f}
+	//,{0.0f,		0.0f, 	0.0f}
+{ 000.0f, 000.0f, 0.0f, 0000.0f },
+{ 032.6f, 032.6f, 0.0f, 0000.0f },
+{ 032.6f, 032.6f, 0.4f, 0500.0f },
+{ 053.5f, 019.0f, 0.4f, 0000.0f },
+{ 053.5f, 019.0f, 0.0f, 1000.0f },
+{ 078.1f, 015.1f, 0.0f, 0000.0f },
+{ 078.1f, 015.1f, 0.4f, 0500.0f },
+{ 102.2f, 021.5f, 0.4f, 0000.0f },
+{ 102.2f, 021.5f, 0.0f, 1000.0f },
+{ 121.6f, 037.2f, 0.0f, 0000.0f },
+{ 121.6f, 037.2f, 0.4f, 0500.0f },
+{ 133.0f, 059.5f, 0.4f, 0000.0f },
+{ 133.0f, 059.5f, 0.0f, 1000.0f },
+{ 134.3f, 084.4f, 0.0f, 0000.0f },
+{ 134.3f, 084.4f, 0.4f, 0500.0f },
+{ 125.3f, 107.7f, 0.4f, 0000.0f },
+{ 125.3f, 107.7f, 0.0f, 1000.0f },
+{ 107.7f, 125.3f, 0.0f, 0000.0f },
+{ 107.7f, 125.3f, 0.4f, 0500.0f },
+{ 084.4f, 134.3f, 0.4f, 0000.0f },
+{ 084.4f, 134.3f, 0.0f, 1000.0f },
+{ 059.5f, 133.0f, 0.0f, 0000.0f },
+{ 059.5f, 133.0f, 0.4f, 0500.0f },
+{ 037.3f, 121.6f, 0.4f, 0000.0f },
+{ 037.3f, 121.6f, 0.0f, 1000.0f },
+{ 021.5f, 102.3f, 0.0f, 0000.0f },
+{ 021.5f, 102.3f, 0.4f, 0500.0f },
+{ 015.1f, 078.2f, 0.4f, 0000.0f },
+{ 015.1f, 078.2f, 0.0f, 1000.0f },
+{ 019.0f, 053.5f, 0.0f, 0000.0f },
+{ 019.0f, 053.5f, 0.4f, 0500.0f },
+{ 032.6f, 032.6f, 0.4f, 0000.0f },
+{ 032.6f, 032.6f, 0.0f, 1000.0f },
+{ 053.5f, 019.0f, 0.0f, 0000.0f },
+{ 053.5f, 019.0f, 0.4f, 0500.0f },
+{ 078.1f, 015.1f, 0.4f, 0000.0f },
+{ 078.1f, 015.1f, 0.0f, 1000.0f },
+{ 102.2f, 021.5f, 0.0f, 0000.0f },
+{ 102.2f, 021.5f, 0.4f, 0500.0f },
+{ 121.6f, 037.2f, 0.4f, 0000.0f },
+{ 121.6f, 037.2f, 0.0f, 1000.0f },
+{ 133.0f, 059.5f, 0.0f, 0000.0f },
+{ 133.0f, 059.5f, 0.4f, 0500.0f },
+{ 134.3f, 084.4f, 0.4f, 0000.0f },
+{ 134.3f, 084.4f, 0.0f, 1000.0f },
+{ 125.3f, 107.7f, 0.0f, 0000.0f },
+{ 125.3f, 107.7f, 0.4f, 0500.0f },
+{ 107.7f, 125.3f, 0.4f, 0000.0f },
+{ 107.7f, 125.3f, 0.0f, 1000.0f },
+{ 084.4f, 134.3f, 0.0f, 0000.0f },
+{ 084.4f, 134.3f, 0.4f, 0500.0f },
+{ 059.5f, 133.0f, 0.4f, 0000.0f },
+{ 059.5f, 133.0f, 0.0f, 1000.0f },
+{ 037.3f, 121.6f, 0.0f, 0000.0f },
+{ 037.3f, 121.6f, 0.4f, 0500.0f },
+{ 021.5f, 102.3f, 0.4f, 0000.0f },
+{ 021.5f, 102.3f, 0.0f, 1000.0f },
+{ 015.1f, 078.2f, 0.0f, 0000.0f },
+{ 015.1f, 078.2f, 0.4f, 0500.0f },
+{ 019.0f, 053.5f, 0.4f, 0000.0f },
+{ 019.0f, 053.5f, 0.0f, 1000.0f },
+{ 000.0f, 000.0f, 0.0f, 0000.0f }
+};
+static const int num_mag_wpts = sizeof(magpickup_waypoints)/sizeof(magpickup_waypoints[0]);
+
+void set_mag_power(float power){
+	int magpowcompareval = (int)((float)PWMHalfPeriod * power);
+
+	IOWR(MAGNET_PWM_BASE, PWM_REG_UPDATE, 0);
+	IOWR(MAGNET_PWM_BASE, 0, magpowcompareval);
+	IOWR(MAGNET_PWM_BASE, PWM_REG_UPDATE, 1);
+}
 
 int main()
 {
@@ -659,6 +762,7 @@ int main()
 	//while(1);
 
 	setup_brake_resistor();
+	setup_mag_pwm();
 
 	for(int ax = 0; ax < numaxes; ++ax){
 		axes[ax].oldenc = IORD(axes[ax].qei_base, QEI_REG_COUNT);
@@ -667,13 +771,13 @@ int main()
 
 	while(1){
 		for(int i = 0; i < 1; ++i)
-		for(int wpt = 1; wpt < num_wpts; ++wpt){
+		for(int wpt = 1; wpt < num_mag_wpts; ++wpt){
 
-			float startpos[2] = {waypoints[wpt-1].x, waypoints[wpt-1].y};
-			float endpos[2] = {waypoints[wpt].x, waypoints[wpt].y};
+			float startpos[2] = {magpickup_waypoints[wpt-1].x, magpickup_waypoints[wpt-1].y};
+			float endpos[2] = {magpickup_waypoints[wpt].x, magpickup_waypoints[wpt].y};
 			float deltapos[2] = {endpos[0] - startpos[0], endpos[1] - startpos[1]};
 
-			float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1] + 0.1f);
+			float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1] + 0.1f + magpickup_waypoints[wpt].duration_modifier);
 			float I_param = Aperaccel * param_accel;
 
 			float dir_sign[2];
@@ -683,6 +787,8 @@ int main()
 
 			float t = 0.0f;
 			float px = 0.0f;
+
+			float magpower = magpickup_waypoints[wpt].magStr;
 
 			//accelerate
 			do {
@@ -700,6 +806,8 @@ int main()
 					blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
 				}
 				dump_excess_current(IbusEst, numaxes);
+
+				set_mag_power(magpower);
 
 				t += dt;
 			} while( px < 0.5f );
@@ -722,13 +830,15 @@ int main()
 				}
 				dump_excess_current(IbusEst, numaxes);
 
+				set_mag_power(magpower);
+
 				t -= dt;
 			}
 
 		}
 
 		//idle
-		for(int i = 0; i < (5.0f*PWMFrequency); ++i){
+		for(int i = 0; i < (15.0f*PWMFrequency); ++i){
 
 			float IbusEst[numaxes];
 			for(int ax = 0; ax < numaxes; ++ax){
@@ -739,6 +849,8 @@ int main()
 				blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
 			}
 			dump_excess_current(IbusEst, numaxes);
+
+			set_mag_power(0.0f);
 
 		}
 

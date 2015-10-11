@@ -54,6 +54,9 @@ module FPGAServo(
 	assign STATUSLED_B = TX;
 	//assign TX = RX;
 	//assign CTS_n = 0;
+	
+	wire [2:0] bollocks;
+	wire [1:0] bollocks2;
 
 	qsystem u0 (
 		.clk_clk                          (CLK_50),                          //                        clk.clk
@@ -69,8 +72,11 @@ module FPGAServo(
 		.uart_0_external_connection_rxd   (RX),   // uart_0_external_connection.rxd
 		.uart_0_external_connection_txd   (TX),   //                           .txd
 		.uart_0_external_connection_cts_n (RTS_n), //                           .cts_n
-		.uart_0_external_connection_rts_n (CTS_n) //                           .rts_n
+		.uart_0_external_connection_rts_n (CTS_n), //                           .rts_n
+		.magnet_pwm_pwmout_ldrive         ({GPIO[20], bollocks2}),         //          magnet_pwm_pwmout.ldrive
+      .magnet_pwm_pwmout_udrive         (bollocks)          //                           .udrive
 	);
+
 
 //	reg [32:0] ctr = 0;
 //	reg blinkystate = 0;

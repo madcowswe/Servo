@@ -33,6 +33,22 @@
          type = "String";
       }
    }
+   element Magnet_PWM
+   {
+      datum _sortIndex
+      {
+         value = "22";
+         type = "int";
+      }
+   }
+   element Magnet_PWM.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "41216";
+         type = "String";
+      }
+   }
    element PWM_0
    {
       datum _sortIndex
@@ -50,7 +66,7 @@
    {
       datum baseAddress
       {
-         value = "41344";
+         value = "41408";
          type = "String";
       }
    }
@@ -66,7 +82,7 @@
    {
       datum baseAddress
       {
-         value = "41280";
+         value = "41344";
          type = "String";
       }
    }
@@ -82,7 +98,7 @@
    {
       datum baseAddress
       {
-         value = "41216";
+         value = "41280";
          type = "String";
       }
    }
@@ -103,7 +119,7 @@
    {
       datum baseAddress
       {
-         value = "41456";
+         value = "41520";
          type = "String";
       }
    }
@@ -119,7 +135,7 @@
    {
       datum baseAddress
       {
-         value = "41440";
+         value = "41504";
          type = "String";
       }
    }
@@ -446,7 +462,7 @@
    {
       datum baseAddress
       {
-         value = "41472";
+         value = "41536";
          type = "String";
       }
    }
@@ -462,7 +478,7 @@
    {
       datum baseAddress
       {
-         value = "41408";
+         value = "41472";
          type = "String";
       }
    }
@@ -494,6 +510,11 @@
    type="conduit"
    dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
+ <interface
+   name="magnet_pwm_pwmout"
+   internal="Magnet_PWM.PWMout"
+   type="conduit"
+   dir="end" />
  <interface name="pwm_1_pwmout" internal="PWM_1.PWMout" type="conduit" dir="end" />
  <interface name="pwm_2_pwmout" internal="PWM_2.PWMout" type="conduit" dir="end" />
  <interface
@@ -508,6 +529,7 @@
    type="conduit"
    dir="end" />
  <module name="Log_reg_0" kind="Log_reg" version="1.0" enabled="1" />
+ <module name="Magnet_PWM" kind="PWM" version="1.0" enabled="1" />
  <module name="PWM_0" kind="PWM" version="1.0" enabled="1" />
  <module name="PWM_1" kind="PWM" version="1.0" enabled="1" />
  <module name="PWM_2" kind="PWM" version="1.0" enabled="1" />
@@ -958,7 +980,7 @@
   <parameter name="dataAddrWidth" value="16" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='Log_reg_0.avalon_slave' start='0x8000' end='0x9000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x9800' end='0xA000' /><slave name='Triggered_ADC_Sequencer_1.avalon_slave' start='0xA000' end='0xA080' /><slave name='Triggered_ADC_Sequencer_0.avalon_slave' start='0xA080' end='0xA100' /><slave name='PWM_2.avalon_slave' start='0xA100' end='0xA140' /><slave name='PWM_1.avalon_slave' start='0xA140' end='0xA180' /><slave name='PWM_0.avalon_slave' start='0xA180' end='0xA1C0' /><slave name='uart_0.s1' start='0xA1C0' end='0xA1E0' /><slave name='QEI_1.mms' start='0xA1E0' end='0xA1F0' /><slave name='QEI_0.mms' start='0xA1F0' end='0xA200' /><slave name='sysid_qsys_0.control_slave' start='0xA200' end='0xA208' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='Log_reg_0.avalon_slave' start='0x8000' end='0x9000' /><slave name='nios2_qsys_0.debug_mem_slave' start='0x9800' end='0xA000' /><slave name='Triggered_ADC_Sequencer_1.avalon_slave' start='0xA000' end='0xA080' /><slave name='Triggered_ADC_Sequencer_0.avalon_slave' start='0xA080' end='0xA100' /><slave name='Magnet_PWM.avalon_slave' start='0xA100' end='0xA140' /><slave name='PWM_2.avalon_slave' start='0xA140' end='0xA180' /><slave name='PWM_1.avalon_slave' start='0xA180' end='0xA1C0' /><slave name='PWM_0.avalon_slave' start='0xA1C0' end='0xA200' /><slave name='uart_0.s1' start='0xA200' end='0xA220' /><slave name='QEI_1.mms' start='0xA220' end='0xA230' /><slave name='QEI_0.mms' start='0xA230' end='0xA240' /><slave name='sysid_qsys_0.control_slave' start='0xA240' end='0xA248' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -1221,7 +1243,7 @@
    start="nios2_qsys_0.data_master"
    end="PWM_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa180" />
+  <parameter name="baseAddress" value="0xa1c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1239,7 +1261,7 @@
    start="nios2_qsys_0.data_master"
    end="PWM_1.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa140" />
+  <parameter name="baseAddress" value="0xa180" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1248,7 +1270,7 @@
    start="nios2_qsys_0.data_master"
    end="PWM_2.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa100" />
+  <parameter name="baseAddress" value="0xa140" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1264,9 +1286,18 @@
    kind="avalon"
    version="15.0"
    start="nios2_qsys_0.data_master"
+   end="Magnet_PWM.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xa100" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_qsys_0.data_master"
    end="sysid_qsys_0.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa200" />
+  <parameter name="baseAddress" value="0xa240" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1284,7 +1315,7 @@
    start="nios2_qsys_0.data_master"
    end="QEI_0.mms">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa1f0" />
+  <parameter name="baseAddress" value="0xa230" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1293,7 +1324,7 @@
    start="nios2_qsys_0.data_master"
    end="QEI_1.mms">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa1e0" />
+  <parameter name="baseAddress" value="0xa220" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1302,7 +1333,7 @@
    start="nios2_qsys_0.data_master"
    end="uart_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa1c0" />
+  <parameter name="baseAddress" value="0xa200" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1470,6 +1501,11 @@
    version="15.0"
    start="altpll_0.c1"
    end="QEI_1.clock_sink" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="altpll_0.c1"
+   end="Magnet_PWM.clock_sink" />
  <connection
    kind="clock"
    version="15.0"
@@ -1646,6 +1682,11 @@
    version="15.0"
    start="clk_0.clk_reset"
    end="QEI_1.reset_sink" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="clk_0.clk_reset"
+   end="Magnet_PWM.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
