@@ -4,9 +4,17 @@ gcc
 *~
 
 *.cmp
-*.html
 *.sopcinfo
 *.rpt
+*.dpf
+*.qws
+
+PLLJ_PLLSPE_INFO.txt
+summary.html
+*.force_rebuild*
+*.force_relink
+*.settings
+*_db_list.ddb
 
 db/
 incremental_db/
@@ -14,7 +22,6 @@ output_files/
 simulation/
 
 qsystem/
-subsystemA/
 .qsys_edit/
 
 *.d
