@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "5";
          type = "int";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "22";
          type = "int";
       }
    }
@@ -53,7 +53,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "8";
          type = "int";
       }
       datum sopceditor_expanded
@@ -74,7 +74,7 @@
    {
       datum _sortIndex
       {
-         value = "19";
+         value = "20";
          type = "int";
       }
    }
@@ -90,7 +90,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "9";
          type = "int";
       }
    }
@@ -106,7 +106,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "10";
          type = "int";
       }
       datum sopceditor_expanded
@@ -127,7 +127,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "11";
          type = "int";
       }
    }
@@ -143,7 +143,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "15";
          type = "int";
       }
    }
@@ -151,7 +151,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "18";
          type = "int";
       }
    }
@@ -159,7 +159,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "12";
          type = "int";
       }
    }
@@ -175,7 +175,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "13";
          type = "int";
       }
    }
@@ -207,7 +207,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "19";
          type = "int";
       }
    }
@@ -215,7 +215,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "6";
          type = "int";
       }
       datum sopceditor_expanded
@@ -236,7 +236,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "16";
          type = "int";
       }
    }
@@ -244,7 +244,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "14";
          type = "int";
       }
    }
@@ -262,6 +262,14 @@
       {
          value = "38912";
          type = "String";
+      }
+   }
+   element nios_custom_instr_floating_point_2_NOSQRT_0
+   {
+      datum _sortIndex
+      {
+         value = "4";
+         type = "int";
       }
    }
    element onchip_memory2_0
@@ -433,7 +441,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "17";
          type = "int";
       }
    }
@@ -441,7 +449,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "7";
          type = "int";
       }
       datum sopceditor_expanded
@@ -462,7 +470,7 @@
    {
       datum _sortIndex
       {
-         value = "20";
+         value = "21";
          type = "int";
       }
    }
@@ -965,7 +973,7 @@
   <parameter name="cpuArchRev" value="1" />
   <parameter name="cpuID" value="0" />
   <parameter name="cpuReset" value="false" />
-  <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
+  <parameter name="customInstSlavesSystemInfo"><![CDATA[<info><slave name="nios_custom_instr_floating_point_2_nosqrt_0" baseAddress="224" addressSpan="16" clockCycleType="COMBINATORIAL" /><slave name="nios_custom_instr_floating_point_2_nosqrt_0_1" baseAddress="248" addressSpan="8" clockCycleType="VARIABLE" /></info>]]></parameter>
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
@@ -1127,6 +1135,15 @@
   <parameter name="tmr_enabled" value="false" />
   <parameter name="tracefilename" value="" />
   <parameter name="userDefinedSettings" value="" />
+ </module>
+ <module
+   name="nios_custom_instr_floating_point_2_NOSQRT_0"
+   kind="altera_nios_custom_instr_floating_point_2_NOSQRT"
+   version="15.0"
+   enabled="1">
+  <parameter name="AUTO_DEVICE" value="10M08SAE144C8GES" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
  </module>
  <module
    name="onchip_memory2_0"
@@ -1546,6 +1563,24 @@
    start="nios2_qsys_0.irq"
    end="uart_0.irq">
   <parameter name="irqNumber" value="2" />
+ </connection>
+ <connection
+   kind="nios_custom_instruction"
+   version="15.0"
+   start="nios2_qsys_0.custom_instruction_master"
+   end="nios_custom_instr_floating_point_2_NOSQRT_0.s1">
+  <parameter name="CIName">nios_custom_instr_floating_point_2_nosqrt_0</parameter>
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="224" />
+ </connection>
+ <connection
+   kind="nios_custom_instruction"
+   version="15.0"
+   start="nios2_qsys_0.custom_instruction_master"
+   end="nios_custom_instr_floating_point_2_NOSQRT_0.s2">
+  <parameter name="CIName">nios_custom_instr_floating_point_2_nosqrt_0_1</parameter>
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="248" />
  </connection>
  <connection
    kind="reset"
