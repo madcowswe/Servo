@@ -24,6 +24,8 @@ simulation/
 qsystem/
 .qsys_edit/
 
+ServoDrive_bsp/
+
 *.d
 
 *.objdump
