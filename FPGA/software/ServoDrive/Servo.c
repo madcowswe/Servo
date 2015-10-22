@@ -284,10 +284,13 @@ volatile struct axis_state_s axes[] = {
 	}
 };
 
-static const int numaxes = sizeof(axes)/sizeof(axes[0]);
+//static const int numaxes = sizeof(axes)/sizeof(axes[0]);
+//because c is annoying:
+#define numaxes (sizeof(axes)/sizeof(axes[0]))
+
 static const void* brake_res_base = (void*)PWM_1_BASE;
 
-void wait_for_ADC(struct axis_state_s* axis, float* Ia, float* Ib, float* Vbus){
+void wait_for_ADC(volatile struct axis_state_s* axis, float* Ia, float* Ib, float* Vbus){
 	while(!IORD(axis->tas_base, TADCS_REG_IRQFLAG));
 	IOWR(axis->tas_base, TADCS_REG_IRQFLAG, 0);
 
@@ -297,7 +300,7 @@ void wait_for_ADC(struct axis_state_s* axis, float* Ia, float* Ib, float* Vbus){
 	*Vbus = ADCtoVbusSF * IORD(axis->tas_base, TADCS_OFFSET_SAMPSTORE + 2);
 }
 
-void control_current(struct axis_state_s* axis, float targetId, float targetIq, float Ia, float Ib, float phase, float* IbusEst){
+void control_current(volatile struct axis_state_s* axis, float targetId, float targetIq, float Ia, float Ib, float phase, float* IbusEst){
 
 	float Ialpha = Ia;
 	float Ibeta = one_by_sqrt3 * Ia + two_by_sqrt3 * Ib;
@@ -340,13 +343,13 @@ void control_current(struct axis_state_s* axis, float targetId, float targetIq, 
 	IOWR(axis->pwm_base, PWM_REG_UPDATE, 1);
 }
 
-void blocking_polar_control_current(struct axis_state_s* axis, float phase, float mag){
+void blocking_polar_control_current(volatile struct axis_state_s* axis, float phase, float mag){
 	float Ia, Ib, Vbus, Ibusest;
 	wait_for_ADC(axis, &Ia, &Ib, &Vbus);
 	control_current(axis, mag, 0.0f, Ia, Ib, phase, &Ibusest);
 }
 
-void setup_axis(struct axis_state_s* axis_state){
+void setup_axis(volatile struct axis_state_s* axis_state){
 
 	IOWR(axis_state->qei_base, QEI_REG_revDir, axis_state->encrev);
 
@@ -553,7 +556,7 @@ void setup_mag_pwm(){
 	IOWR(MAGNET_PWM_BASE, PWM_REG_EN, 1);
 }
 
-void blocking_control_motor(struct axis_state_s* axis, float possetpoint, float omega_ff, float Iq_ff, float* IbusEst){
+void blocking_control_motor(volatile struct axis_state_s* axis, float possetpoint, float omega_ff, float Iq_ff, float* IbusEst){
 
 	float Ia, Ib, Vbus;
 	wait_for_ADC(axis, &Ia, &Ib, &Vbus);
@@ -774,14 +777,15 @@ void motor_control_ISR(int ax){
 	static float param_omega;
 	static float IbusEst[numaxes];
 
-	struct linemove* curr_move = &linemovebuffer[moveexec_idx];
+	//create an alias with a nice name
+	volatile struct linemove* curr_move = &linemovebuffer[moveexec_idx];
 
 	if (axis_done_bitmap == 0u) { //if we are at the start of the axes rotation we can update position
 		if (curr_move->valid == true) {
 			this_round_valid = true;
 
-			px = 0.5f*param_accel*t*t;
-			param_omega = param_accel*t;
+			px = 0.5f*curr_move->param_accel*t*t;
+			param_omega = curr_move->param_accel*t;
 
 		} else { //linemove not valid
 			this_round_valid = false;
@@ -803,7 +807,7 @@ void motor_control_ISR(int ax){
 			blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, curr_move->I_ffd[ax], &IbusEst[ax]);
 		}
 	} else {
-		blocking_control_motor(&axes[ax], lastpos[ax], 0.0f, 0.0f, &IbusEst[ax])
+		blocking_control_motor(&axes[ax], lastpos[ax], 0.0f, 0.0f, &IbusEst[ax]);
 	}
 	axis_done_bitmap |= (1u << ax);
 	
@@ -847,7 +851,7 @@ int main()
 	//printf("Hello from Nios II!\n");
 	//while(1);
 
-	for(int ax = 0; ax < numaxes; ++ax){
+	for(int ax = 0; ax < numaxes; ++ax)
 		setup_axis(&axes[ax]);
 
 	for (int i = 0; i < linemovebuffer_size; ++i)
@@ -877,7 +881,7 @@ int main()
 		for(int wpt = 1; wpt < num_mag_wpts; ++wpt){
 
 			//create an alias with a nice name
-			struct linemove* curr_move = &linemovebuffer[moveplan_idx];
+			volatile struct linemove* curr_move = &linemovebuffer[moveplan_idx];
 
 			//wait for next move slot to be free
 			while (curr_move->valid == true);
@@ -898,8 +902,8 @@ int main()
 			//Calculate current feedforwards during move
 			for(int ax = 0; ax < numaxes; ++ax){
 				float dir_sign = (curr_move->endpos[ax] >= curr_move->startpos[ax]) ? 1.0f : -1.0f;
-				curr_move->I_ffa[ax] = I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
-				curr_move->I_ffd[ax] = -I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
+				curr_move->I_ffa[ax] = I_param*curr_move->deltapos[ax] + frictionCurrent*dir_sign;
+				curr_move->I_ffd[ax] = -I_param*curr_move->deltapos[ax] + frictionCurrent*dir_sign;
 			}
 
 			//pass on application specific data
