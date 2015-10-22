@@ -251,7 +251,7 @@ struct axis_state_s {
 	float Iqintstate;
 };
 
-struct axis_state_s axes[] = {
+volatile struct axis_state_s axes[] = {
 	{	//Axis 0
 		.id = 0,
 		.pwm_base = (void*)PWM_0_BASE,
@@ -746,16 +746,113 @@ void set_mag_power(float power){
 }
 
 struct linemove {
-
+	bool valid;
+	float startpos[numaxes];
+	float endpos[numaxes];
+	float deltapos[numaxes];
+	float param_accel;
+	float I_ffa[numaxes];
+	float I_ffd[numaxes];
+	float magStr;
 };
+
+volatile struct linemove linemovebuffer[numaxes];
+static const int linemovebuffer_size = sizeof(linemovebuffer)/sizeof(linemovebuffer[0]);
+volatile int pwm_ticker = 0;
+
+void motor_control_ISR(int ax){
+	
+	static bool accel = true;
+	static int moveexec_idx = 0; //points to be executed/currently is executing 
+	static unsigned int axis_done_bitmap = 0u;
+	static const unsigned int all_axes_done_mask = (1u << numaxes) - 1u;
+	static bool this_round_valid = false;
+	static float lastpos[numaxes] = { 0.0f }; //used to hold position during command starvation
+
+	static float t = 0.0f;
+	static float px;
+	static float param_omega;
+	static float IbusEst[numaxes];
+
+	struct linemove* curr_move = &linemovebuffer[moveexec_idx];
+
+	if (axis_done_bitmap == 0u) { //if we are at the start of the axes rotation we can update position
+		if (curr_move->valid == true) {
+			this_round_valid = true;
+
+			px = 0.5f*param_accel*t*t;
+			param_omega = param_accel*t;
+
+		} else { //linemove not valid
+			this_round_valid = false;
+		}
+	}
+
+	if (this_round_valid) {
+		if (accel) { //accelerating portion
+			float abs_pos = curr_move->startpos[ax] + px*curr_move->deltapos[ax];
+			float setpoint_omega = param_omega*curr_move->deltapos[ax];
+			lastpos[ax] = abs_pos;
+
+			blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, curr_move->I_ffa[ax], &IbusEst[ax]);
+		} else { //decelerating portion
+			float abs_pos = curr_move->endpos[ax] - px*curr_move->deltapos[ax];
+			float setpoint_omega = param_omega*curr_move->deltapos[ax];
+			lastpos[ax] = abs_pos;
+
+			blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, curr_move->I_ffd[ax], &IbusEst[ax]);
+		}
+	} else {
+		blocking_control_motor(&axes[ax], lastpos[ax], 0.0f, 0.0f, &IbusEst[ax])
+	}
+	axis_done_bitmap |= (1u << ax);
+	
+	if (axis_done_bitmap == all_axes_done_mask){
+		dump_excess_current(IbusEst, numaxes);
+		
+		//update to next timestep
+		if (this_round_valid)
+		{
+			set_mag_power(curr_move->magStr);
+
+			if (accel) {
+				t += dt;
+				if (px >= 0.5f) {
+					t -= dt;
+					accel = false;
+				}
+			} else {
+				t -= dt;
+
+				if (t <= 0.0f) { //advance to next move
+					linemovebuffer[moveexec_idx].valid = false; //release this move slot to planner
+
+					if (++moveexec_idx == linemovebuffer_size) //advance idx circularly
+						moveexec_idx = 0;
+
+					t = 0.0f;
+				}
+			}
+
+		} else {
+			set_mag_power(0.0f);
+		}
+
+		++pwm_ticker;
+	}
+}
 
 int main()
 {
 	//printf("Hello from Nios II!\n");
 	//while(1);
 
-	setup_axis(&axes[0]);
-	setup_axis(&axes[1]);
+	for(int ax = 0; ax < numaxes; ++ax){
+		setup_axis(&axes[ax]);
+
+	for (int i = 0; i < linemovebuffer_size; ++i)
+		linemovebuffer[i].valid = false;
+
 	init_routine();
 
 	//Open loop spin
@@ -772,91 +869,53 @@ int main()
 	}
 	//TODO waypoints[0] = IORD(axis->qei_base, QEI_REG_COUNT) * encToPhasefactor
 
+	//TODO start motor control IRQ here
+
+	int moveplan_idx = 0; //points to be planned/curently is being planned
 	while(1){
 		for(int i = 0; i < 1; ++i)
 		for(int wpt = 1; wpt < num_mag_wpts; ++wpt){
 
-			float startpos[2] = {magpickup_waypoints[wpt-1].x, magpickup_waypoints[wpt-1].y};
-			float endpos[2] = {magpickup_waypoints[wpt].x, magpickup_waypoints[wpt].y};
-			float deltapos[2] = {endpos[0] - startpos[0], endpos[1] - startpos[1]};
+			//create an alias with a nice name
+			struct linemove* curr_move = &linemovebuffer[moveplan_idx];
 
-			float param_accel = profileAccel * Q_rsqrt(deltapos[0]*deltapos[0] + deltapos[1]*deltapos[1] + 0.1f + magpickup_waypoints[wpt].duration_modifier);
-			float I_param = Aperaccel * param_accel;
-
-			float dir_sign[2];
-			for(int dim = 0; dim < 2; ++dim){
-				dir_sign[dim] = (endpos[dim] >= startpos[dim]) ? 1.0f : -1.0f;
+			//wait for next move slot to be free
+			while (curr_move->valid == true);
+			
+			//find find length of all moves, and store start and end in move buffer
+			float deltapos_len_sq = 0.0f;
+			for(int ax = 0; ax < numaxes; ++ax){
+				curr_move->startpos[ax] = magpickup_waypoints[wpt-1].pos[ax];
+				curr_move->endpos[ax] = magpickup_waypoints[wpt].pos[ax];
+				curr_move->deltapos[ax] = curr_move->endpos[ax] - curr_move->startpos[ax];
+				deltapos_len_sq += curr_move->deltapos[ax]*curr_move->deltapos[ax];
 			}
 
-			float t = 0.0f;
-			float px = 0.0f;
+			//Calculate parametric acceleration through the move
+			curr_move->param_accel = profileAccel * Q_rsqrt(deltapos_len_sq + 0.1f + magpickup_waypoints[wpt].duration_modifier);
+			float I_param = Aperaccel * curr_move->param_accel;
 
-			float magpower = magpickup_waypoints[wpt].magStr;
-
-			//accelerate
-			do {
-
-				px = 0.5f*param_accel*t*t;
-				float param_omega = param_accel*t;
-
-				float IbusEst[numaxes];
-				for(int ax = 0; ax < numaxes; ++ax){
-
-					float abs_pos = startpos[ax] + px*deltapos[ax];
-					float setpoint_omega = param_omega*deltapos[ax];
-					float I_ff = I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
-
-					blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
-				}
-				dump_excess_current(IbusEst, numaxes);
-
-				set_mag_power(magpower);
-
-				t += dt;
-			} while( px < 0.5f );
-
-			t -= dt;
-
-			//decelerate
-			while(t > 0.0f){
-				px = 0.5f*param_accel*t*t;
-				float param_omega = param_accel*t;
-
-				float IbusEst[numaxes];
-				for(int ax = 0; ax < numaxes; ++ax){
-
-					float abs_pos = endpos[ax] - px*deltapos[ax];
-					float setpoint_omega = param_omega*deltapos[ax];
-					float I_ff = -I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
-
-					blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
-				}
-				dump_excess_current(IbusEst, numaxes);
-
-				set_mag_power(magpower);
-
-				t -= dt;
+			//Calculate current feedforwards during move
+			for(int ax = 0; ax < numaxes; ++ax){
+				float dir_sign = (curr_move->endpos[ax] >= curr_move->startpos[ax]) ? 1.0f : -1.0f;
+				curr_move->I_ffa[ax] = I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
+				curr_move->I_ffd[ax] = -I_param*deltapos[ax] + frictionCurrent*dir_sign[ax];
 			}
+
+			//pass on application specific data
+			curr_move->magStr = magpickup_waypoints[wpt].magStr;
+
+			//hand over current move to be executed
+			curr_move->valid = true;
+			if (++moveplan_idx == linemovebuffer_size) //advance idx circularly
+				moveplan_idx = 0;
 
 		}
 
 		//idle
-		for(int i = 0; i < (15.0f*PWMFrequency); ++i){
-
-			float IbusEst[numaxes];
-			for(int ax = 0; ax < numaxes; ++ax){
-				float abs_pos = 0.0f;
-				float setpoint_omega = 0.0f;
-				float I_ff = 0.0f;
-
-				blocking_control_motor(&axes[ax], abs_pos, setpoint_omega, I_ff, &IbusEst[ax]);
-			}
-			dump_excess_current(IbusEst, numaxes);
-
-			set_mag_power(0.0f);
-
-		}
-
+		int start_ticker_val = pwm_ticker;
+		int end_ticker_val = start_ticker_val + (int)(15.0f*PWMFrequency);
+		while(pwm_ticker != end_ticker_val);
 
 	}
 
