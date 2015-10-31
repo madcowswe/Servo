@@ -444,7 +444,8 @@ void init_routine(){
 #endif
 
 
-//go to rotor zero phase to get ready to scan
+	//go to rotor zero phase to get ready to scan
+	//TODO: maybe scan over a small angle range, to avoid the case when the rotor is stuck at exactly 180 degrees electrical.
 	for (int i = 0; i < (1.0f*PWMFrequency); ++i)
 	{
 		for(int ax = 0; ax < numaxes; ++ax){
