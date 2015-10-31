@@ -5,8 +5,10 @@
 static const float sensorless_gamma = 50.0f/motor.L;
 static const float sensorless_PLL_Kp = 40.0f;
 static const float sensorless_PLL_Ki = 40000.0f;
-static const float PLL_lock_lvl = 0.0075f;
-static const float PLL_unlock_lvl = 0.03f;
+static const float PLL_lock_var = 0.0075f;
+static const float PLL_unlock_var = (2.0f * 2.0f) * PLL_lock_var;
+static const float PLL_lock_magsqr =  0.2f;
+static const float PLL_unlock_magsqr = (0.5f * 0.5f) * PLL_lock_magsqr;
 
 static const float PLL_lockfilter_tau = 0.1f; //filter timeconstant, seconds
 static const float PLL_lockfilter_c = 2.0f / (1.0f + 2.0f * (PLL_lockfilter_tau / dt)); //discrete time filter constant
@@ -44,7 +46,8 @@ bool sensorless_estimate(float Ialpha, float Ibeta, float Valpha, float Vbeta, f
 
 
 	//PLL
-	float PM_flux_angle = fast_atan2( x[1] - motor.L * Ibeta, x[0] - motor.L * Ialpha);
+	float PM_flux_linkage[2] = { x[0] - motor.L * Ialpha, x[1] - motor.L * Ibeta };
+	float PM_flux_angle = fast_atan2(PM_flux_linkage[1], PM_flux_linkage[0]);
 	float delta_theta = wrap_pm_pi(PM_flux_angle - PLL_theta);
 	
 	PLL_theta += (PLL_omega + sensorless_PLL_Kp * delta_theta) * dt;
@@ -59,14 +62,16 @@ bool sensorless_estimate(float Ialpha, float Ibeta, float Valpha, float Vbeta, f
 	//variance LPF
 	PLL_var *= (1-PLL_lockfilter_c);
 	PLL_var += PLL_lockfilter_c * (delta_theta * delta_theta);
+
+	float PM_flux_magsqr = PM_flux_linkage[0] * PM_flux_linkage[0] + PM_flux_linkage[1] * PM_flux_linkage[1];
 	
 	//Hysteresis lock check
 	if (PLL_locked) {
-		if ( PLL_var > PLL_unlock_lvl ) {
+		if ( PLL_var > PLL_unlock_var || PM_flux_magsqr < PLL_unlock_magsqr) {
 			PLL_locked = false;
 		}
 	} else {
-		if ( PLL_var < PLL_lock_lvl ) {
+		if ( PLL_var < PLL_lock_var && PM_flux_magsqr > PLL_lock_magsqr) {
 			PLL_locked = true;
 		}
 	}
