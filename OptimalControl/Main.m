@@ -1,9 +1,9 @@
 %Params
-AccelPerA = 1000;
-phaseR = 0.050;
+AccelPerA = 3000;
+phaseR = 0.033;
 Ts = 0.001;
-N = 100;
-thetaFinal = 150;
+N = 50;
+thetaFinal = 200;
 x0 = [0;0];
 
 %system definition
@@ -24,3 +24,10 @@ ff = [thetaFinal; 0];
 
 H = 2*eye(N)*(3/2)*phaseR*Ts;
 [u, fval] = quadprog(H,[],[],[],Df,ff);
+
+xv = reshape(Gamma*u, 2,N)';
+x = xv(:,1);
+v = xv(:,2);
+
+kv350_lambda = 2.2e-3;
+power = u.*v.*(3/2)*kv350_lambda;
