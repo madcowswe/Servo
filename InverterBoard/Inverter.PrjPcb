@@ -37,40 +37,6 @@ PrefsVaultGUID=
 PrefsRevisionGUID=
 
 [Document1]
-DocumentPath=CustomFootprints.PcbLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=VFJLXYCW
-
-[Document2]
-DocumentPath=CustomComponents.SchLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=WDSAPHCW
-
-[Document3]
 DocumentPath=Top.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -87,7 +53,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NFICPHRL
 
-[Document4]
+[Document2]
 DocumentPath=M0.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -104,7 +70,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=APQXQPHI
 
-[Document5]
+[Document3]
 DocumentPath=AuxhalfH.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -121,7 +87,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=UOLHORVH
 
-[Document6]
+[Document4]
 DocumentPath=Analouge.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -138,7 +104,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DBLNDSEE
 
-[Document7]
+[Document5]
 DocumentPath=FPGA.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -155,7 +121,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=XQTSSLSR
 
-[Document8]
+[Document6]
 DocumentPath=Config.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -172,7 +138,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KJDDCBTI
 
-[Document9]
+[Document7]
 DocumentPath=Power.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -189,7 +155,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KHPBTAYW
 
-[Document10]
+[Document8]
 DocumentPath=MAX10 10M08SA Symbols\10M08SAREVERSIONTEST_Library.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -206,7 +172,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FEQNPRIF
 
-[Document11]
+[Document9]
 DocumentPath=Inverter.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -222,6 +188,57 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HKKOIEUO
+
+[Document10]
+DocumentPath=Inverter.Annotation
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document11]
+DocumentPath=..\Altium_libs\CustomComponents.SchLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document12]
+DocumentPath=..\Altium_libs\CustomFootprints.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
 
 [Configuration1]
 Name=Default Configuration
