@@ -31,3 +31,13 @@ v = xv(:,2);
 
 kv350_lambda = 2.2e-3;
 power = u.*v.*(3/2)*kv350_lambda;
+
+Vbus = 24;
+Ib = power/Vbus;
+Im = u;
+duty = Ib./Im;
+CapIsqr = (duty.*(Ib-Im)).^2 + ((1-duty).*Ib).^2;
+CapIrms = sqrt(sum(CapIsqr)/N);
+CapR = 0.08;
+Ncaps = 8;
+Cappow = (CapIrms/Ncaps)^2 * CapR
